@@ -1,0 +1,27 @@
+{% load i18n %}
+{% load static %}
+{% block content %}
+
+
+<nav id="navbar" class="navbar navbar-light navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'fh:home' %}">
+      {% trans 'Family History' %}
+  	</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon text-dark"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarScroll">
+      <ul class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll" >
+        <li class="nav-item {% if home_active == True %}active{% endif %}">
+          <a href="{% url 'fh:home' %}" class="nav-link">{% trans 'Home' %}</a>
+        </li>
+
+      </ul>
+
+    </div>
+  </div>
+</nav>
+	    
+	    
+{% endblock content %}

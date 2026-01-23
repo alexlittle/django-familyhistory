@@ -1,0 +1,201 @@
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+
+/*
+bf7c0b - mid brown
+e7d2a7 - light brown
+89a324 - mid green
+5c5441 - dark green/brown
+
+
+f8ffff - very light blue
+e0ffff - light blue
+2fcbfe - mid blue
+04689a - dark blue
+*/
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  padding-bottom: 40px;
+  color: #5a5a5a;
+  margin-bottom: 60px;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #f8ffff;
+  border-top: 1px solid #2fcbfe;
+  padding-top:10px;
+}
+
+/* Customise the navbar */
+
+.navbar-light {
+	background-color: #f8ffff;
+  	border-bottom: 1px solid #2fcbfe;
+}
+
+.navbar-light .navbar-brand {
+	color: #5a5a5a;
+}
+
+.navbar-brand {
+	padding: 5px 20px 3px 10px;
+}
+
+.navbar-light .navbar-nav > .nav-item > a:focus, 
+.navbar-light .navbar-nav > .nav-item > a:hover 
+{
+	color: #04689a;
+}
+
+.navbar-light .navbar-nav > .active  a.nav-link, 
+.navbar-light .navbar-nav > .nav-item .active > a.nav-link:focus, 
+.navbar-light .navbar-nav > .nav-item .active > a.nav-link:hover {
+    color: #04689a;
+}
+
+/* Mapping
+-------------------------------------------------- */
+#mapid { height: 300px; }
+
+
+/* h tags
+-------------------------------------------------- */
+
+.h1, .h2, .h3, h1, h2, h3 {
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+h1 {
+	color: #04689a;
+	font-size: 150%;
+}
+
+h2 {
+	color: #04689a;
+	font-size: 130%;
+}
+
+
+
+.content-text {
+    font-size: 120%;
+}
+
+.content-text img.profile {
+    margin: 0 20px 20px 0;
+    float:left;
+}
+
+.content-text p {
+	margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* page styles */
+.cv-row, .al-row{
+	margin: 10px 0;
+}
+.contact-type {
+	font-weight:bold;
+}
+
+.cv-date {
+	font-weight:normal;
+}
+
+.cv-title, .cv-p-title {
+	font-weight:bold;
+}
+
+.cv-organisation {
+	font-weight:normal;
+}
+
+.cv-description {
+	margin-top:10px;
+}
+
+.toggle-btn {
+    color: #5a5a5a;
+}
+.project-row  {
+	margin-top:30px;
+}
+
+.project-row h2 {
+	margin-top:10px;
+}
+
+.project-row img {
+	border: none ;
+}
+
+.blog-row  {
+	margin: 0 0 30px 0;
+}
+
+img.blog-single-image  {
+	margin: 50px 0 30px 0;
+}
+
+h3.blog {
+	margin-top: 0;
+	color: #04689a;
+	font-size: 120%;
+}
+
+p.company-reg {
+	padding-bottom: 20px;
+	text-align: center;
+	
+}
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+
+@media (min-width: 768px) {
+  .navbar-wrapper {
+    margin-top: 20px;
+  }
+  .navbar-wrapper .container {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+  .navbar-wrapper .navbar {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  /* The navbar becomes detached from the top, so we round the corners */
+  .navbar-wrapper .navbar {
+    border-radius: 4px;
+  }
+
+  /* Bump up size of carousel content */
+  .carousel-caption p {
+    margin-bottom: 20px;
+    font-size: 21px;
+    line-height: 1.4;
+  }
+
+  .featurette-heading {
+    font-size: 50px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container, .container-fluid {
+    max-width: 900px;
+  }
+}
