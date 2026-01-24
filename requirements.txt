@@ -3,3 +3,5 @@ django-tinymce==5.0.0
 mysqlclient==2.2.7
 pip-check-updates==0.28.0
 setuptools==80.9.0
+Pillow==12.1.0
+sorl-thumbnail>=12.4,<13.0
