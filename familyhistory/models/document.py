@@ -3,15 +3,22 @@ from django.utils.translation import gettext_lazy as _
 
 from tinymce.models import HTMLField
 
-from . import Person
-from .utils import DATE_MONTH_CHOICES, RELATIONSHIP_CHOICES, format_partial_date
+from .utils import DATE_MONTH_CHOICES, DOCUMENT_CHOICES, format_partial_date
+from .person import Person
+from .event import Event
 
+def doc_file_path(instance, filename):
+    return f"document/{instance.type}/{filename}"
 
-class Relationship(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='relationships_person')
-    related_person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='relationships_related_person')
-    type = models.CharField(choices=RELATIONSHIP_CHOICES, max_length=100)
+class Document(models.Model):
+    title = models.CharField(max_length=200)
     description = HTMLField(blank=True)
+    type = models.CharField(choices=DOCUMENT_CHOICES, max_length=100)
+    type_other = models.CharField(max_length=100, blank=True)
+    file = models.FileField(upload_to=doc_file_path)
+
+    person_involved = models.ManyToManyField(Person, related_name='document_people')
+    event_involved = models.ManyToManyField(Event, related_name='document_event')
 
     start_year = models.IntegerField(null=True, blank=True)
     start_month = models.IntegerField(null=True, blank=True, choices=DATE_MONTH_CHOICES)
@@ -36,8 +43,8 @@ class Relationship(models.Model):
         )
 
     def __str__(self):
-        return f"{self.person} {self.related_person}"
+        return f"{self.title}"
 
     class Meta:
-        verbose_name = _('Relationship')
-        verbose_name_plural = _('Relationships')
+        verbose_name = _('Document')
+        verbose_name_plural = _('Documents')

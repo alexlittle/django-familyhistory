@@ -87,79 +87,21 @@ h2 {
 }
 
 
-
-.content-text {
-    font-size: 120%;
+.card {
+  transition: transform 0.2s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+.card-img-top {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.list-group-item {
+  border: none;
+  padding: 0.25rem 0;
 }
 
-.content-text img.profile {
-    margin: 0 20px 20px 0;
-    float:left;
-}
-
-.content-text p {
-	margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-/* page styles */
-.cv-row, .al-row{
-	margin: 10px 0;
-}
-.contact-type {
-	font-weight:bold;
-}
-
-.cv-date {
-	font-weight:normal;
-}
-
-.cv-title, .cv-p-title {
-	font-weight:bold;
-}
-
-.cv-organisation {
-	font-weight:normal;
-}
-
-.cv-description {
-	margin-top:10px;
-}
-
-.toggle-btn {
-    color: #5a5a5a;
-}
-.project-row  {
-	margin-top:30px;
-}
-
-.project-row h2 {
-	margin-top:10px;
-}
-
-.project-row img {
-	border: none ;
-}
-
-.blog-row  {
-	margin: 0 0 30px 0;
-}
-
-img.blog-single-image  {
-	margin: 50px 0 30px 0;
-}
-
-h3.blog {
-	margin-top: 0;
-	color: #04689a;
-	font-size: 120%;
-}
-
-p.company-reg {
-	padding-bottom: 20px;
-	text-align: center;
-	
-}
 
 /* RESPONSIVE CSS
 -------------------------------------------------- */

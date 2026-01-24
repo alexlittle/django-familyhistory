@@ -1,5 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from tinymce.models import HTMLField
+
 from .utils import DATE_MONTH_CHOICES, format_partial_date
 
 
@@ -16,6 +19,7 @@ class Person(models.Model):
     current_surname = models.CharField(max_length=100, blank=True)
     other_surnames = models.JSONField(default=list, blank=True)
     known_as = models.CharField(max_length=100, blank=True)
+    description = HTMLField(blank=True)
     photo = models.ImageField(upload_to=photo_path, blank=True)
 
     # Birth date fields

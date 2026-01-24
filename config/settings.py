@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'tinymce',
+    'sorl.thumbnail',
     'familyhistory'
 ]
 

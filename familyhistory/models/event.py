@@ -9,7 +9,7 @@ from .person import Person
 
 class Event(models.Model):
     title = models.CharField(max_length=200)
-    description = HTMLField()
+    description = HTMLField(blank=True)
     involved = models.ManyToManyField(Person, related_name='events_involved')
 
     start_year = models.IntegerField(null=True, blank=True)

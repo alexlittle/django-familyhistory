@@ -24,6 +24,14 @@ RELATIONSHIP_CHOICES = [
 ]
 
 
+DOCUMENT_CHOICES = [
+    ('birth_certificate', _('Birth Certificate')),
+    ('marriage_certificate', _('Marriage Certificate')),
+    ('death_certificate', _('Death Certificate')),
+    ('other', _('Other')),
+]
+
+
 def format_partial_date(year, month, day, is_approx):
     parts = []
     if year:
