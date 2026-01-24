@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from tinymce.models import HTMLField
@@ -36,6 +37,11 @@ class Person(models.Model):
     death_is_approximate = models.BooleanField(default=False)
     death_date_description = models.CharField(max_length=100, blank=True)
 
+    class Meta:
+        verbose_name = _('Person')
+        verbose_name_plural = _('People')
+        ordering = ('birth_year', 'birth_month', 'birth_day')
+
     def format_birth_date(self):
         return format_partial_date(
             self.birth_year, self.birth_month, self.birth_day, self.birth_is_approximate
@@ -49,7 +55,33 @@ class Person(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.current_surname}"
 
-    class Meta:
-        verbose_name = _('Person')
-        verbose_name_plural = _('People')
-        ordering = ('birth_year', 'birth_month', 'birth_day')
+    def get_partners(self):
+        # Get the IDs of all partners
+        partner_ids = []
+        # Find relationships where self is the person
+        relationships_as_person = self.relationships_person.filter(
+            type__in=['is_married_to', 'in_relationship_with']
+        )
+        for relationship in relationships_as_person:
+            partner_ids.append(relationship.related_person.id)
+
+        # Find relationships where self is the related_person
+        relationships_as_related_person = self.relationships_related_person.filter(
+            type__in=['is_married_to', 'in_relationship_with']
+        )
+        for relationship in relationships_as_related_person:
+            partner_ids.append(relationship.person.id)
+
+        # Fetch the partner Person objects
+        partners = Person.objects.filter(id__in=partner_ids).distinct()
+        return partners
+
+    def get_parents(self):
+        # Get the IDs of all parents
+        parent_ids = self.relationships_related_person.filter(
+            type__in=['is_father_of', 'is_mother_of']
+        ).values_list('person_id', flat=True)
+
+        # Fetch the parent Person objects
+        parents = Person.objects.filter(id__in=parent_ids).distinct()
+        return parents
