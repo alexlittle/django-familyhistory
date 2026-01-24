@@ -72,7 +72,7 @@ body {
 -------------------------------------------------- */
 
 .h1, .h2, .h3, h1, h2, h3 {
-    margin-top: 50px;
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 
@@ -102,6 +102,16 @@ h2 {
   padding: 0.25rem 0;
 }
 
+.centered {
+  text-align: center;
+  margin: auto;
+}
+
+.centered > a {
+  text-decoration: none;
+  display: block;
+  margin: auto;
+}
 
 /* RESPONSIVE CSS
 -------------------------------------------------- */

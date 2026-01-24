@@ -1,6 +1,4 @@
-from django.conf import settings
-
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView, DetailView
 
 from .models import Person
 
@@ -12,4 +10,14 @@ class HomeView(ListView):
 
     def get_queryset(self):
         return Person.objects.all()
+
+
+class PersonView(DetailView):
+    model = Person
+    template_name = 'fh/person.html'
+    context_object_name = 'person'
+    pk_url_kwarg = 'person_id'
+
+    def get_queryset(self):
+        return Person.objects.all().prefetch_related('events_involved')
 

@@ -52,3 +52,4 @@ class Person(models.Model):
     class Meta:
         verbose_name = _('Person')
         verbose_name_plural = _('People')
+        ordering = ('birth_year', 'birth_month', 'birth_day')

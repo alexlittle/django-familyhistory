@@ -1,0 +1,302 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load thumbnail %}
+
+{% block content %}
+<div class="container my-4">
+    <!-- Person Header -->
+    <div class="row mb-4">
+        <div class="col-md-4 text-center">
+            <!-- Photo -->
+            {% if person.photo %}
+                {% thumbnail person.photo "200x200" as thumb %}
+                    <img
+                      src="{{ thumb.url }}"
+                      class="card-img-top img-fluid"
+                      alt="{{ person.first_name }} {{ person.current_surname }}"
+                      style="width: 200px; object-fit: cover;">
+                {% endthumbnail %}
+            {% else %}
+                <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mb-3" style="height: 250px; width: 250px; margin: 0 auto;">
+                  <i class="bi bi-person-fill text-muted" style="font-size: 4rem;"></i>
+                </div>
+            {% endif %}
+        </div>
+
+    <div class="col-md-8">
+      <!-- Basic Info -->
+        <h1>{{ person.first_name }} {{ person.middle_name }} {{ person.current_surname }}</h1>
+      <div class="card mb-4">
+        <div class="card-body">
+          <dl class="row">
+              {% if person.known_as %}
+              <dt class="col-sm-4">{% trans 'Known as:' %}</dt>
+              <dd class="col-sm-8">{{ person.known_as }}</dd>
+        {% endif %}
+              <dt class="col-sm-4">{% trans 'Date of Birth:' %}</dt>
+            <dd class="col-sm-8">
+                {% if person.format_birth_date %}
+                    {{ person.format_birth_date }}
+                {% else %}
+                    {% trans 'unknown' %}
+                {% endif %}
+            </dd>
+              <dt class="col-sm-4">{% trans 'Date of Death:' %}</dt>
+            <dd class="col-sm-8">
+                {% if person.format_death_date %}
+                    {{ person.format_death_date }}
+                {% endif %}
+            </dd>
+              {% if person.birth_surname and person.birth_surname != person.current_surname %}
+                <dt class="col-sm-4">Birth Surname:</dt>
+                <dd class="col-sm-8">{{ person.birth_surname }}</dd>
+                  {% endif %}
+              {% if person.other_surnames %}
+            <dt class="col-sm-4">Other Surnames: </dt>
+            <dd class="col-sm-8">
+              {% for surname in person.other_surnames %}{{ surname }}{% if not forloop.last %}, {% endif %}{% endfor %}
+            </dd>
+              {% endif %}
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Family Relationships -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <!-- Parents -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Parents</h5>
+          {% if person.parents.all %}
+            <div class="row">
+              {% for parent in person.parents.all %}
+                <div class="col-md-6 mb-3">
+                  <div class="card h-100">
+                    <div class="card-body text-center">
+                      <a href="{% url 'person_detail' parent.id %}">
+                        {% if parent.photo %}
+                          <img
+                            src="{{ parent.photo.url }}"
+                            alt="{{ parent.first_name }} {{ parent.current_surname }}"
+                            class="img-fluid rounded-circle mb-2"
+                            style="height: 80px; width: 80px; object-fit: cover;"
+                          >
+                        {% else %}
+                          <div class="bg-light rounded-circle mx-auto mb-2" style="height: 80px; width: 80px; line-height: 80px;">
+                            <i class="bi bi-person-fill"></i>
+                          </div>
+                        {% endif %}
+                        <h6 class="card-title mb-0">{{ parent.first_name }} {{ parent.current_surname }}</h6>
+                        <small class="text-muted">
+                          {{ parent.format_birth_date }} — {{ parent.format_death_date|default:"Present" }}
+                        </small>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-muted">No parents recorded.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Grandparents -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Grandparents</h5>
+          {% if grandparents %}
+            <div class="row">
+              {% for grandparent in grandparents %}
+                <div class="col-md-6 mb-3">
+                  <div class="card h-100">
+                    <div class="card-body text-center">
+                      <a href="{% url 'person_detail' grandparent.id %}">
+                        {% if grandparent.photo %}
+                          <img
+                            src="{{ grandparent.photo.url }}"
+                            alt="{{ grandparent.first_name }} {{ grandparent.current_surname }}"
+                            class="img-fluid rounded-circle mb-2"
+                            style="height: 60px; width: 60px; object-fit: cover;"
+                          >
+                        {% else %}
+                          <div class="bg-light rounded-circle mx-auto mb-2" style="height: 60px; width: 60px; line-height: 60px;">
+                            <i class="bi bi-person-fill" style="font-size: 1.5rem;"></i>
+                          </div>
+                        {% endif %}
+                        <h6 class="card-title mb-0">{{ grandparent.first_name }} {{ grandparent.current_surname }}</h6>
+                        <small class="text-muted">
+                          {{ grandparent.format_birth_date }} — {{ grandparent.format_death_date|default:"Present" }}
+                        </small>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-muted">No grandparents recorded.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <!-- Siblings -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Siblings</h5>
+          {% if siblings %}
+            <div class="row">
+              {% for sibling in siblings %}
+                <div class="col-md-6 mb-3">
+                  <div class="card h-100">
+                    <div class="card-body text-center">
+                      <a href="{% url 'person_detail' sibling.id %}">
+                        {% if sibling.photo %}
+                          <img
+                            src="{{ sibling.photo.url }}"
+                            alt="{{ sibling.first_name }} {{ sibling.current_surname }}"
+                            class="img-fluid rounded-circle mb-2"
+                            style="height: 60px; width: 60px; object-fit: cover;"
+                          >
+                        {% else %}
+                          <div class="bg-light rounded-circle mx-auto mb-2" style="height: 60px; width: 60px; line-height: 60px;">
+                            <i class="bi bi-person-fill" style="font-size: 1.5rem;"></i>
+                          </div>
+                        {% endif %}
+                        <h6 class="card-title mb-0">{{ sibling.first_name }} {{ sibling.current_surname }}</h6>
+                        <small class="text-muted">
+                          {{ sibling.format_birth_date }} — {{ sibling.format_death_date|default:"Present" }}
+                        </small>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-muted">No siblings recorded.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Children -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Children</h5>
+          {% if person.children.all %}
+            <div class="row">
+              {% for child in person.children.all %}
+                <div class="col-md-6 mb-3">
+                  <div class="card h-100">
+                    <div class="card-body text-center">
+                      <a href="{% url 'person_detail' child.id %}">
+                        {% if child.photo %}
+                          <img
+                            src="{{ child.photo.url }}"
+                            alt="{{ child.first_name }} {{ child.current_surname }}"
+                            class="img-fluid rounded-circle mb-2"
+                            style="height: 60px; width: 60px; object-fit: cover;"
+                          >
+                        {% else %}
+                          <div class="bg-light rounded-circle mx-auto mb-2" style="height: 60px; width: 60px; line-height: 60px;">
+                            <i class="bi bi-person-fill" style="font-size: 1.5rem;"></i>
+                          </div>
+                        {% endif %}
+                        <h6 class="card-title mb-0">{{ child.first_name }} {{ child.current_surname }}</h6>
+                        <small class="text-muted">
+                          {{ child.format_birth_date }} — {{ child.format_death_date|default:"Present" }}
+                        </small>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-muted">No children recorded.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Life Events -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Life Events</h5>
+      {% if person.events_involved.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Date</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for event in person.events_involved.all %}
+                <tr>
+                  <td>
+                    <a href="{% url 'event_detail' event.id %}">{{ event.title }}</a>
+                  </td>
+                  <td>
+                    {{ event.format_start_date }} — {{ event.format_end_date|default:"Present" }}
+                  </td>
+                  <td>{{ event.description|truncatechars:100 }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted">No life events recorded.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Documents -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Documents</h5>
+      {% if person.documents.all %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for document in person.documents.all %}
+                <tr>
+                  <td>{{ document.title }}</td>
+                  <td>{{ document.get_type_display }}</td>
+                  <td>{{ document.date|date:"d M Y" }}</td>
+                  <td>
+                    <a href="{{ document.file.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                      <i class="bi bi-download"></i> View
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted">No documents recorded.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
