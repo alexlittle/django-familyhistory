@@ -1,0 +1,60 @@
+{% load i18n %}
+{% load static %}
+{% load thumbnail %}
+
+{% block content %}
+ <div class="row g-0 align-items-center mb-3">
+    <!-- Photo Column -->
+    <div class="col-12 col-md-4">
+        {% if person.photo %}
+            {% thumbnail person.photo "100x100" as thumb %}
+            <img
+                src="{{ thumb.url }}"
+                class="img-fluid rounded"
+                alt="{{ person.first_name }} {{ person.current_surname }}"
+                style="width: 100px; height: 100px; object-fit: cover;">
+            {% endthumbnail %}
+        {% else %}
+            <div
+                class="d-flex align-items-center justify-content-center bg-light rounded"
+                style="width: 100px; height: 100px; color: #aaa;">
+                <i class="bi bi-person-fill" style="font-size: 2rem;"></i>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Name/DOB/DOD Column -->
+    <div class="col-12 col-md-6">
+        <h5 class="mb-1">
+            <a href="{% url 'fh:person_detail' person.id %}">
+                {{ person.first_name }} {{ person.middle_name }} {{ person.current_surname }}
+            </a>
+        </h5>
+        <small class="text-muted">
+            <strong>Born:</strong>
+            {% if person.format_birth_date %}
+                {{ person.format_birth_date }}
+            {% else %}
+                <span class="fst-italic">Unknown</span>
+            {% endif %}
+        </small>
+        <br>
+        <small class="text-muted">
+            <strong>Died:</strong>
+            {% if person.format_death_date %}
+                {{ person.format_death_date }}
+            {% else %}
+                <span class="fst-italic">Unknown</span>
+            {% endif %}
+        </small>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}
+
+
+

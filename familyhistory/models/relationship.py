@@ -36,7 +36,7 @@ class Relationship(models.Model):
         )
 
     def __str__(self):
-        return f"{self.person} {self.related_person}"
+        return f"{self.person} - {self.related_person}"
 
     class Meta:
         verbose_name = _('Relationship')

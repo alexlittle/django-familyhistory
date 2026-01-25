@@ -71,19 +71,35 @@ body {
 /* h tags
 -------------------------------------------------- */
 
-.h1, .h2, .h3, h1, h2, h3 {
-    margin-top: 20px;
-    margin-bottom: 20px;
+h1, h2, h3, h4, h5 {
+    margin: 20px 0;
+    color: #04689a;
+}
+
+h1, h2, h3, h4, h5 > a {
+    text-decoration: none;
 }
 
 h1 {
-	color: #04689a;
 	font-size: 150%;
 }
 
 h2 {
-	color: #04689a;
 	font-size: 130%;
+}
+
+h3 {
+	font-size: 120%;
+}
+
+h4 {
+	font-size: 110%;
+    margin: 0;
+}
+
+h5 {
+	font-size: 100%;
+    margin: 0;
 }
 
 

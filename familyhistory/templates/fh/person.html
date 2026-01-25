@@ -71,12 +71,13 @@
             <!-- Partner Card -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">{% trans 'Partner' %}</h5>
+                    <h4 class="card-title">{% trans 'Partner' %}</h4>
                     {% if person.get_partners %}
-                        <div class="row row-cols-1 row-cols-md-1 row-cols-lg-2 g-4">
-                            {% for person in person.get_partners %}
-
-                                {% include 'fh/includes/person-card.html' %}
+                        <div class="row row-cols-1 row-cols-md-1 row-cols-lg-1 g-1">
+                            {% for partner, relationship in person.get_partners %}
+                                {% include 'fh/includes/person-row-extra.html' with
+                                    person=partner
+                                    relationship=relationship %}
                             {% endfor %}
                         </div>
                     {% else %}
@@ -92,7 +93,7 @@
                     {% if siblings %}
                         <div class="row">
                             {% for sibling in siblings %}
-                                {% include 'fh/includes/person-card.html' %}
+                                {% include 'fh/includes/person-row.html' %}
                             {% endfor %}
                         </div>
                     {% else %}
@@ -110,16 +111,16 @@
                 <div class="card-body">
                     <h5 class="card-title">{% trans 'Parents' %}</h5>
                     {% if person.get_parents %}
-                        <div class="row">
-                            {% for person in person.get_parents %}
-                                {% include 'fh/includes/person-card.html' %}
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p class="text-muted">{% trans 'No parents recorded.' %}</p>
-                    {% endif %}
+                        {% for parent in person.get_parents %}
+                            {% include 'fh/includes/person-row.html' with
+                                    person=parent %}
+                        {% endfor %}
+                            {% else %}
+                                <p class="text-muted">{% trans 'No parents recorded.' %}</p>
+                            {% endif %}
                 </div>
             </div>
+
 
             <!-- Children Card -->
             <div class="card mb-4">

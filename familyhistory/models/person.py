@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from tinymce.models import HTMLField
@@ -53,28 +52,43 @@ class Person(models.Model):
         )
 
     def __str__(self):
-        return f"{self.first_name} {self.current_surname}"
+        return f"{self.first_name} {self.middle_name} {self.current_surname}"
 
     def get_partners(self):
-        # Get the IDs of all partners
-        partner_ids = []
+        # List to store tuples of (partner, relationship)
+        partner_relationships = []
+
         # Find relationships where self is the person
         relationships_as_person = self.relationships_person.filter(
             type__in=['is_married_to', 'in_relationship_with']
         )
         for relationship in relationships_as_person:
-            partner_ids.append(relationship.related_person.id)
+            partner = relationship.related_person
+            partner_relationships.append((partner, relationship))
 
         # Find relationships where self is the related_person
         relationships_as_related_person = self.relationships_related_person.filter(
             type__in=['is_married_to', 'in_relationship_with']
         )
         for relationship in relationships_as_related_person:
-            partner_ids.append(relationship.person.id)
+            partner = relationship.person
+            partner_relationships.append((partner, relationship))
 
-        # Fetch the partner Person objects
-        partners = Person.objects.filter(id__in=partner_ids).distinct()
-        return partners
+        # Sort by relationship start date, descending (most recent first)
+        # If no end date, assume it's the current relationship
+        # Sort by current first, then by start date (newest first)
+        partner_relationships.sort(
+            key=lambda x: (
+                x[1].end_year is None,
+                x[1].start_year or 9999,
+                x[1].start_month or 12,
+                x[1].start_day or 31
+            ),
+            reverse=True
+        )
+
+        # Return the sorted list of (partner, relationship) tuples
+        return partner_relationships
 
     def get_parents(self):
         # Get the IDs of all parents
