@@ -42,4 +42,4 @@ def format_partial_date(year, month, day, is_approx):
                 parts.append(f"-{day:02d}")
     if is_approx:
         return f"circa {''.join(parts)}" if parts else _("Unknown date")
-    return ''.join(parts) if parts else _("-")
+    return ''.join(parts) if parts else None

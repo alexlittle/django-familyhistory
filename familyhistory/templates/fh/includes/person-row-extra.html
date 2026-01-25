@@ -3,7 +3,19 @@
 {% load thumbnail %}
 
 {% block content %}
- <div class="row g-0 align-items-center mb-3">
+<div class="row g-0 align-items-center mb-3">
+
+    <div class="col-12 col-md-2">
+        <small class="text-muted">
+            {% if relationship.format_start_date %}
+                {{ relationship.format_start_date }}
+            {% endif %}
+            {% if relationship.format_end_date %}
+                {{ relationship.format_end_date }}
+            {% endif %}
+        </small>
+
+    </div>
     <!-- Photo Column -->
     <div class="col-12 col-md-4">
         {% if person.photo %}
@@ -27,7 +39,7 @@
     <div class="col-12 col-md-6">
         <h5 class="mb-1">
             <a href="{% url 'fh:person_detail' person.id %}">
-                {{ person.first_name }} {{ person.middle_name }} {{ person.current_surname }}
+                {{ person.get_display_name }}
             </a>
         </h5>
         <small class="text-muted">
@@ -44,7 +56,7 @@
             {% if person.format_death_date %}
                 {{ person.format_death_date }}
             {% else %}
-                <span class="fst-italic">Unknown</span>
+                <span class="fst-italic">-</span>
             {% endif %}
         </small>
     </div>

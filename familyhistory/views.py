@@ -9,7 +9,7 @@ class HomeView(ListView):
     context_object_name = 'people'
 
     def get_queryset(self):
-        return Person.objects.all()
+        return Person.objects.all().order_by('-updated_at')
 
 
 class PersonView(DetailView):

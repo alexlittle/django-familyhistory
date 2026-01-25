@@ -26,7 +26,7 @@
       <div class="card-body">
           <h5 class="card-title mb-1 centered">
               <a href="{% url 'fh:person_detail' person.id %}">
-                  {{ person.first_name }} {{ person.middle_name }} {{ person.current_surname }}
+                  {{ person.get_display_name }}
               </a>
           </h5>
         <ul class="list-group list-group-flush">
@@ -48,7 +48,7 @@
               {% if person.format_death_date %}
                 {{ person.format_death_date }}
               {% else %}
-                <span class="fst-italic">Unknown</span>
+                <span class="fst-italic">-</span>
               {% endif %}
             </small>
           </li>

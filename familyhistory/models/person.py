@@ -12,6 +12,7 @@ def photo_path(instance, filename):
     else:
         return f"person/unknown_birth_surname/{filename}"
 
+
 class Person(models.Model):
     first_name = models.CharField(max_length=100, blank=True)
     middle_name = models.CharField(max_length=100, blank=True)
@@ -47,6 +48,29 @@ class Person(models.Model):
         verbose_name_plural = _('People')
         ordering = ('birth_year', 'birth_month', 'birth_day')
 
+    def __str__(self):
+        return self.get_display_name()
+
+    def get_display_name(self):
+        if self.known_as:
+            if self.known_as != self.middle_name:
+                display_name = f"{self.known_as} {self.middle_name}"
+            else:
+                display_name = f"{self.known_as}"
+        else:
+            display_name = f"{self.first_name} {self.middle_name}"
+
+        if self.current_surname:
+            display_name += f" {self.current_surname}"
+        else:
+            display_name += f" {self.birth_surname}"
+
+        if self.second_surname:
+            display_name += f" {self.second_surname}"
+
+        return display_name
+
+
     def format_birth_date(self):
         return format_partial_date(
             self.birth_year, self.birth_month, self.birth_day, self.birth_is_approximate
@@ -56,9 +80,6 @@ class Person(models.Model):
         return format_partial_date(
             self.death_year, self.death_month, self.death_day, self.death_is_approximate
         )
-
-    def __str__(self):
-        return f"{self.first_name} {self.middle_name} {self.current_surname}"
 
     def get_partners(self):
         # List to store tuples of (partner, relationship)
@@ -105,3 +126,42 @@ class Person(models.Model):
         # Fetch the parent Person objects
         parents = Person.objects.filter(id__in=parent_ids).distinct()
         return parents
+
+    def get_siblings(self):
+        from .relationship import Relationship
+        # Get the IDs of all parents of the current person
+        parent_ids = self.relationships_related_person.filter(
+            type__in=['is_father_of', 'is_mother_of']
+        ).values_list('person_id', flat=True)
+
+        # If no parents, return an empty queryset
+        if not parent_ids:
+            return Person.objects.none()
+
+        # Find all children of these parents (siblings)
+        sibling_ids = Relationship.objects.filter(
+            person_id__in=parent_ids,
+            type__in=['is_father_of', 'is_mother_of']
+        ).values_list('related_person_id', flat=True)
+
+        # Exclude the current person from the siblings list
+        siblings = Person.objects.filter(id__in=sibling_ids).exclude(id=self.id).distinct()
+
+        return siblings
+
+    def get_children(self):
+        from .relationship import Relationship
+
+        # Find all relationships where the current person is the parent
+        children_relationships = Relationship.objects.filter(
+            person=self,
+            type__in=['is_father_of', 'is_mother_of']
+        )
+
+        # Extract the IDs of the children
+        children_ids = children_relationships.values_list('related_person_id', flat=True)
+
+        # Fetch the children Person objects
+        children = Person.objects.filter(id__in=children_ids).distinct()
+
+        return children

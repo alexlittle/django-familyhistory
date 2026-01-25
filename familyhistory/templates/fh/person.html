@@ -26,10 +26,38 @@
 
     <div class="col-md-8">
         <!-- Basic Info -->
-        <h1>{{ person.first_name }} {{ person.middle_name }} {{ person.current_surname }}</h1>
+        <h1>{{ person.get_display_name }}</h1>
         <div class="card mb-4">
             <div class="card-body">
                 <dl class="row">
+                    {% if person.first_name %}
+                        <dt class="col-sm-4">{% trans 'First name:' %}</dt>
+                        <dd class="col-sm-8">{{ person.first_name }}</dd>
+                    {% endif %}
+                    {% if person.middle_name %}
+                        <dt class="col-sm-4">{% trans 'Middle name:' %}</dt>
+                        <dd class="col-sm-8">{{ person.middle_name }}</dd>
+                    {% endif %}
+                    {% if person.birth_surname %}
+                        <dt class="col-sm-4">Birth Surname:</dt>
+                        <dd class="col-sm-8">{{ person.birth_surname }}</dd>
+                    {% endif %}
+                    {% if person.current_surname %}
+                        <dt class="col-sm-4">Current Surname:</dt>
+                        <dd class="col-sm-8">{{ person.current_surname }}</dd>
+                    {% endif %}
+                    {% if person.second_surname %}
+                        <dt class="col-sm-4">Second Surname:</dt>
+                        <dd class="col-sm-8">{{ person.second_surname }}</dd>
+                    {% endif %}
+
+                    {% if person.other_surnames %}
+                        <dt class="col-sm-4">Other Surnames: </dt>
+                        <dd class="col-sm-8">
+                            {% for surname in person.other_surnames %}{{ surname }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                        </dd>
+                    {% endif %}
+
                     {% if person.known_as %}
                         <dt class="col-sm-4">{% trans 'Known as:' %}</dt>
                         <dd class="col-sm-8">{{ person.known_as }}</dd>
@@ -59,17 +87,7 @@
                         <dd class="col-sm-8 text-muted">{{ person.death_location }}</dd>
                     {% endif %}
 
-                    {% if person.birth_surname and person.birth_surname != person.current_surname %}
-                        <dt class="col-sm-4">Birth Surname:</dt>
-                        <dd class="col-sm-8">{{ person.birth_surname }}</dd>
-                    {% endif %}
 
-                    {% if person.other_surnames %}
-                        <dt class="col-sm-4">Other Surnames: </dt>
-                        <dd class="col-sm-8">
-                            {% for surname in person.other_surnames %}{{ surname }}{% if not forloop.last %}, {% endif %}{% endfor %}
-                        </dd>
-                    {% endif %}
                 </dl>
             </div>
         </div>
@@ -96,21 +114,22 @@
                 </div>
             </div>
 
-            <!-- Siblings Card -->
+            <!-- Children Card -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">{% trans 'Siblings' %}</h5>
-                    {% if siblings %}
-                        <div class="row">
-                            {% for sibling in siblings %}
-                                {% include 'fh/includes/person-row.html' %}
+                    <h5 class="card-title">{% trans 'Children' %}</h5>
+                    {% if person.get_children %}
+                        <div class="row row-cols-1 row-cols-md-1 row-cols-lg-1 g-1">
+                            {% for child in person.get_children %}
+                                {% include 'fh/includes/person-row.html' with person=child %}
                             {% endfor %}
                         </div>
                     {% else %}
-                        <p class="text-muted">{% trans 'No siblings recorded.' %}</p>
+                        <p class="text-muted">{% trans 'No children recorded.' %}</p>
                     {% endif %}
                 </div>
             </div>
+
 
         </div>
 
@@ -121,31 +140,33 @@
                 <div class="card-body">
                     <h5 class="card-title">{% trans 'Parents' %}</h5>
                     {% if person.get_parents %}
-                        {% for parent in person.get_parents %}
-                            {% include 'fh/includes/person-row.html' with person=parent %}
-                        {% endfor %}
-                            {% else %}
-                                <p class="text-muted">{% trans 'No parents recorded.' %}</p>
-                            {% endif %}
-                </div>
-            </div>
-
-
-            <!-- Children Card -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">{% trans 'Children' %}</h5>
-                    {% if person.children.all %}
-                        <div class="row">
-                            {% for child in person.children.all %}
-                                {% include 'fh/includes/person-card.html' %}
+                        <div class="row row-cols-1 row-cols-md-1 row-cols-lg-1 g-1">
+                            {% for parent in person.get_parents %}
+                                {% include 'fh/includes/person-row.html' with person=parent %}
                             {% endfor %}
                         </div>
                     {% else %}
-                        <p class="text-muted">{% trans 'No children recorded.' %}</p>
+                        <p class="text-muted">{% trans 'No parents recorded.' %}</p>
                     {% endif %}
                 </div>
             </div>
+
+            <!-- Siblings Card -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans 'Siblings' %}</h5>
+                    {% if person.get_siblings %}
+                        <div class="row row-cols-1 row-cols-md-1 row-cols-lg-1 g-1">
+                            {% for sibling in person.get_siblings %}
+                                {% include 'fh/includes/person-row.html' with person=sibling %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">{% trans 'No siblings recorded.' %}</p>
+                    {% endif %}
+                </div>
+            </div>
+
         </div>
     </div>
 

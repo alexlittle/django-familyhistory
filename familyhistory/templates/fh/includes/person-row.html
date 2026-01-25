@@ -27,7 +27,7 @@
     <div class="col-12 col-md-6">
         <h5 class="mb-1">
             <a href="{% url 'fh:person_detail' person.id %}">
-                {{ person.first_name }} {{ person.middle_name }} {{ person.current_surname }}
+                {{ person.get_display_name }}
             </a>
         </h5>
         <small class="text-muted">
@@ -44,7 +44,7 @@
             {% if person.format_death_date %}
                 {{ person.format_death_date }}
             {% else %}
-                <span class="fst-italic">Unknown</span>
+                <span class="fst-italic">-</span>
             {% endif %}
         </small>
     </div>
