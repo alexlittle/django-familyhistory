@@ -34,6 +34,7 @@
                         <dt class="col-sm-4">{% trans 'Known as:' %}</dt>
                         <dd class="col-sm-8">{{ person.known_as }}</dd>
                     {% endif %}
+
                     <dt class="col-sm-4">{% trans 'Date of Birth:' %}</dt>
                     <dd class="col-sm-8">
                         {% if person.format_birth_date %}
@@ -42,16 +43,27 @@
                             {% trans 'unknown' %}
                         {% endif %}
                     </dd>
+                    {% if person.birth_location %}
+                        <dt class="col-sm-4">&nbsp;</dt>
+                        <dd class="col-sm-8 text-muted">{{ person.birth_location }}</dd>
+                    {% endif %}
+
                     <dt class="col-sm-4">{% trans 'Date of Death:' %}</dt>
                     <dd class="col-sm-8">
                         {% if person.format_death_date %}
                             {{ person.format_death_date }}
                         {% endif %}
                     </dd>
+                    {% if person.death_location %}
+                        <dt class="col-sm-4">&nbsp;</dt>
+                        <dd class="col-sm-8 text-muted">{{ person.death_location }}</dd>
+                    {% endif %}
+
                     {% if person.birth_surname and person.birth_surname != person.current_surname %}
                         <dt class="col-sm-4">Birth Surname:</dt>
                         <dd class="col-sm-8">{{ person.birth_surname }}</dd>
                     {% endif %}
+
                     {% if person.other_surnames %}
                         <dt class="col-sm-4">Other Surnames: </dt>
                         <dd class="col-sm-8">
@@ -75,9 +87,7 @@
                     {% if person.get_partners %}
                         <div class="row row-cols-1 row-cols-md-1 row-cols-lg-1 g-1">
                             {% for partner, relationship in person.get_partners %}
-                                {% include 'fh/includes/person-row-extra.html' with
-                                    person=partner
-                                    relationship=relationship %}
+                                {% include 'fh/includes/person-row-extra.html' with person=partner relationship=relationship %}
                             {% endfor %}
                         </div>
                     {% else %}
@@ -112,8 +122,7 @@
                     <h5 class="card-title">{% trans 'Parents' %}</h5>
                     {% if person.get_parents %}
                         {% for parent in person.get_parents %}
-                            {% include 'fh/includes/person-row.html' with
-                                    person=parent %}
+                            {% include 'fh/includes/person-row.html' with person=parent %}
                         {% endfor %}
                             {% else %}
                                 <p class="text-muted">{% trans 'No parents recorded.' %}</p>

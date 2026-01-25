@@ -16,18 +16,20 @@ class Person(models.Model):
     first_name = models.CharField(max_length=100, blank=True)
     middle_name = models.CharField(max_length=100, blank=True)
     birth_surname = models.CharField(max_length=100, blank=True)
+    second_surname = models.CharField(max_length=100, blank=True)
     current_surname = models.CharField(max_length=100, blank=True)
     other_surnames = models.JSONField(default=list, blank=True)
     known_as = models.CharField(max_length=100, blank=True)
     description = HTMLField(blank=True)
     photo = models.ImageField(upload_to=photo_path, blank=True)
 
-    # Birth date fields
+    # Birth fields
     birth_year = models.IntegerField(null=True, blank=True)
     birth_month = models.IntegerField(null=True, blank=True, choices=DATE_MONTH_CHOICES)
     birth_day = models.IntegerField(null=True, blank=True)
     birth_is_approximate = models.BooleanField(default=False)
     birth_date_description = models.CharField(max_length=100, blank=True)
+    birth_location = models.CharField(max_length=200, blank=True)
 
     # Death date fields
     death_year = models.IntegerField(null=True, blank=True)
@@ -35,6 +37,10 @@ class Person(models.Model):
     death_day = models.IntegerField(null=True, blank=True)
     death_is_approximate = models.BooleanField(default=False)
     death_date_description = models.CharField(max_length=100, blank=True)
+    death_location = models.CharField(max_length=200, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = _('Person')

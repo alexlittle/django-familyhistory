@@ -10,6 +10,7 @@ from .person import Person
 class Event(models.Model):
     title = models.CharField(max_length=200)
     description = HTMLField(blank=True)
+    location = models.CharField(max_length=200, blank=True)
     involved = models.ManyToManyField(Person, related_name='events_involved')
 
     start_year = models.IntegerField(null=True, blank=True)
@@ -23,6 +24,9 @@ class Event(models.Model):
     end_day = models.IntegerField(null=True, blank=True)
     end_date_is_approximate = models.BooleanField(default=False)
     end_date_description = models.CharField(max_length=100, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def format_start_date(self):
         return format_partial_date(

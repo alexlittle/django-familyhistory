@@ -24,6 +24,7 @@ class EventAdmin(admin.ModelAdmin):
             'fields': (
                 'title',
                 'description',
+                'location',
             ),
         }),
         (_('Start Date'), {

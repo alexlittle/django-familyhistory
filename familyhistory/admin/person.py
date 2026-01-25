@@ -32,6 +32,7 @@ class PersonAdmin(admin.ModelAdmin):
                 'first_name',
                 'middle_name',
                 'birth_surname',
+                'second_surname',
                 'current_surname',
                 'known_as',
                 'photo'
@@ -40,11 +41,13 @@ class PersonAdmin(admin.ModelAdmin):
         (_('Birth Date'), {
             'fields': (
                 ('birth_year', 'birth_month', 'birth_day', 'birth_is_approximate', 'birth_date_description'),
+                'birth_location',
             ),
         }),
         (_('Death Date'), {
             'fields': (
                 ('death_year', 'death_month', 'death_day', 'death_is_approximate', 'death_date_description'),
+                'death_location',
             ),
         }),
     )

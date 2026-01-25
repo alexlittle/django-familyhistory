@@ -32,6 +32,10 @@ class Document(models.Model):
     end_date_is_approximate = models.BooleanField(default=False)
     end_date_description = models.CharField(max_length=100, blank=True)
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
     def format_start_date(self):
         return format_partial_date(
             self.start_year, self.start_month, self.start_day, self.start_date_is_approximate
