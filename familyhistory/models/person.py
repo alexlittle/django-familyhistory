@@ -49,16 +49,22 @@ class Person(models.Model):
         ordering = ('birth_year', 'birth_month', 'birth_day')
 
     def __str__(self):
-        return self.get_display_name()
+        return self.get_list_display_name()
+
+    def get_list_display_name(self):
+        display_name = self.get_display_name()
+        if self.birth_year:
+            display_name += f" (b.{self.birth_year})"
+        return display_name
 
     def get_display_name(self):
         if self.known_as:
             if self.known_as != self.middle_name:
-                display_name = f"{self.known_as} {self.middle_name}"
+                display_name = f"{self.known_as} {self.middle_name}" if self.middle_name else f"{self.known_as}"
             else:
                 display_name = f"{self.known_as}"
         else:
-            display_name = f"{self.first_name} {self.middle_name}"
+            display_name = f"{self.first_name} {self.middle_name}" if self.middle_name else f"{self.first_name}"
 
         if self.current_surname:
             display_name += f" {self.current_surname}"
