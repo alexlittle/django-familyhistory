@@ -3,35 +3,46 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.management.base import BaseCommand
 from django.db.models import Q
+from django.utils.translation import gettext_lazy as _
 
-from familyhistory.models import Person, Relationship
+from familyhistory.models import Person, Relationship, TreeCache
 
 
 class Command(BaseCommand):
-    help = "Builds a JSON object of a persons descendants to create the family tree diagram"
+    help = _("Builds a JSON object of a persons descendants to create the family tree diagram")
 
     def add_arguments(self, parser):
         parser.add_argument(
             '-p',
             '--person_id',
             dest='person_id',
-            required=True,
-            help='Person ID to create the tree for',
+            help=_('Person ID to create the tree for')
         )
 
 
     def handle(self, *args, **options):
-        person_id = options['person_id']  # Access the argument here
-        self.stdout.write(f"Generating family tree for person ID: {person_id}")
 
-        root_person = Person.objects.get(id=person_id)
-        tree = {
-            'id': root_person.id,
-            'name': root_person.get_display_name(),
-            'families': self.get_families(root_person.id)
-        }
-        tree_json = json.dumps(tree, cls=DjangoJSONEncoder, indent=4)
-        print(tree_json)
+        if options.get('person_id'):
+            person_id = options.get('person_id')
+            people = Person.objects.filter(id=person_id)
+        else:
+            people = Person.objects.all()
+
+        for person in people:
+            self.stdout.write(_(f"Generating family tree for: {person}"))
+
+            root_person = Person.objects.get(id=person.id)
+            tree = {
+                'id': root_person.id,
+                'name': root_person.get_display_name(),
+                'families': self.get_families(root_person.id)
+            }
+            tree_json = json.dumps(tree, cls=DjangoJSONEncoder, indent=4)
+
+            tc, created = TreeCache.objects.get_or_create(person=person)
+            tc.tree = tree_json
+            tc.save()
+
 
     def get_families(self, person_id):
         families = []
