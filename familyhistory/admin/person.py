@@ -32,6 +32,7 @@ class PersonAdmin(admin.ModelAdmin):
                 'second_surname',
                 'current_surname',
                 'known_as',
+                'is_unknown',
                 'photo'
             ),
         }),

@@ -21,6 +21,8 @@ class Person(models.Model):
     current_surname = models.CharField(max_length=100, blank=True)
     other_surnames = models.JSONField(default=list, blank=True)
     known_as = models.CharField(max_length=100, blank=True)
+    is_unknown = models.BooleanField(default=False)
+    birth_year = models.IntegerField(null=True, blank=True)
     description = HTMLField(blank=True)
     photo = models.ImageField(upload_to=photo_path, blank=True)
 

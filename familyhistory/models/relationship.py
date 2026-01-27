@@ -28,6 +28,16 @@ class Relationship(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name = _('Relationship')
+        verbose_name_plural = _('Relationships')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['person', 'type', 'related_person'],
+                name='unique_relationship',
+            )
+        ]
+
     def format_start_date(self):
         return format_partial_date(
             self.start_year, self.start_month, self.start_day, self.start_date_is_approximate
@@ -41,6 +51,3 @@ class Relationship(models.Model):
     def __str__(self):
         return f"{self.person} - {self.related_person}"
 
-    class Meta:
-        verbose_name = _('Relationship')
-        verbose_name_plural = _('Relationships')
