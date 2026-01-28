@@ -24,7 +24,9 @@ body {
   padding-bottom: 40px;
   color: #5a5a5a;
   margin-bottom: 60px;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: "Faculty Glyphic", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .footer {
