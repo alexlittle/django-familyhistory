@@ -173,3 +173,13 @@ class Person(models.Model):
         children = Person.objects.filter(id__in=children_ids).distinct()
 
         return children
+
+    def get_tree(self):
+        from .treecache import TreeCache
+        try:
+            tree_obj = TreeCache.objects.get(person=self)
+            return tree_obj.tree
+        except TreeCache.DoesNotExist:
+            return None
+
+

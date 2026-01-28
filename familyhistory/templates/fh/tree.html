@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load thumbnail %}
+
+{% block extra_scripts %}
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+{% endblock extra_scripts %}
+
+{% block content %}
+
+<div id="family-tree"></div>
+<script>
+  // Fetch the data from your Django view
+  fetch("/api/tree/{{ person.id }}")
+    .then(response => response.json())
+    .then(data => {
+      // Transform the data into a D3 hierarchy
+      const root = d3.hierarchy(transformData(data));
+
+      // Set up the D3 tree layout
+      const margin = { top: 20, right: 90, bottom: 30, left: 90 };
+      const width = 800 - margin.left - margin.right;
+      const height = 500 - margin.top - margin.bottom;
+
+      const svg = d3.select("#family-tree")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+      // Create a tree layout
+      const treeLayout = d3.tree().size([width, height]);
+      treeLayout(root);
+
+      // Draw links (lines between nodes)
+      svg.selectAll(".link")
+        .data(root.links())
+        .enter()
+        .append("path")
+        .attr("class", "link")
+        .attr("d", d3.linkVertical()
+          .x(d => d.x)
+          .y(d => d.y));
+
+      // Draw nodes (circles for each person)
+      const node = svg.selectAll(".node")
+        .data(root.descendants())
+        .enter()
+        .append("g")
+        .attr("class", "node")
+        .attr("transform", d => `translate(${d.x},${d.y})`);
+
+      node.append("circle").attr("r", 10);
+      node.append("text")
+        .attr("dy", ".35em")
+        .attr("y", d => d.children ? -20 : 20)
+        .style("text-anchor", "middle")
+        .text(d => d.data.name);
+    });
+
+  // Function to transform the data into a D3 hierarchy (recursive)
+  function transformData(person) {
+    const node = {
+      id: person.id,
+      name: person.name,
+      children: []
+    };
+
+    // Process families (spouses and children)
+    if (person.families && person.families.length > 0) {
+      person.families.forEach(family => {
+        // Add spouse as a child
+        const spouseNode = {
+          id: family.spouse.id,
+          name: family.spouse.name,
+          children: []
+        };
+        node.children.push(spouseNode);
+
+        // Recursively process children
+        if (family.children && family.children.length > 0) {
+          family.children.forEach(child => {
+            // Recursively transform child data
+            const childNode = transformData(child);
+            spouseNode.children.push(childNode);
+          });
+        }
+      });
+    }
+
+    return node;
+  }
+</script>
+
+{% endblock %}

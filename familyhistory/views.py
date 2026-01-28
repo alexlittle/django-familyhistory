@@ -21,3 +21,13 @@ class PersonView(DetailView):
     def get_queryset(self):
         return Person.objects.all().prefetch_related('events_involved')
 
+
+class TreeView(DetailView):
+    model = Person
+    template_name = 'fh/tree.html'
+    context_object_name = 'person'
+    pk_url_kwarg = 'person_id'
+
+    def get_queryset(self):
+        return Person.objects.all()
+

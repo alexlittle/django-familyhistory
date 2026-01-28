@@ -19,7 +19,6 @@ class Command(BaseCommand):
             help=_('Person ID to create the tree for')
         )
 
-
     def handle(self, *args, **options):
 
         if options.get('person_id'):
@@ -37,7 +36,7 @@ class Command(BaseCommand):
                 'name': root_person.get_display_name(),
                 'families': self.get_families(root_person.id)
             }
-            tree_json = json.dumps(tree, cls=DjangoJSONEncoder, indent=4)
+            tree_json = json.dumps(tree, cls=DjangoJSONEncoder)
 
             tc, created = TreeCache.objects.get_or_create(person=person)
             tc.tree = tree_json
