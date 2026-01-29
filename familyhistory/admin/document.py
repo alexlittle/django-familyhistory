@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from familyhistory.models import Document
+from familyhistory.models import Document, DocumentFile
 
+
+class DocumentFileInline(admin.TabularInline):
+    model = DocumentFile
 
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
@@ -25,7 +28,6 @@ class DocumentAdmin(admin.ModelAdmin):
                 'title',
                 'type',
                 'type_other',
-                'file',
                 'description',
             ),
         }),
@@ -49,3 +51,7 @@ class DocumentAdmin(admin.ModelAdmin):
 
     # Use filter_horizontal for a user-friendly widget
     filter_horizontal = ('person_involved','event_involved')
+
+    inlines = [
+        DocumentFileInline,
+    ]
