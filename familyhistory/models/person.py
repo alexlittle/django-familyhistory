@@ -80,6 +80,14 @@ class Person(models.Model):
 
         return display_name
 
+    def get_tree_display_name(self):
+        if self.is_unknown:
+            return _("Unknown")
+
+        display_name = f"{self.first_name} {self.birth_surname}"
+        if self.second_surname:
+            display_name += f" {self.second_surname}"
+        return display_name
 
     def format_birth_date(self):
         return format_partial_date(

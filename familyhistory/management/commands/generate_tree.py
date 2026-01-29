@@ -25,7 +25,7 @@ class Command(BaseCommand):
             person_id = options.get('person_id')
             people = Person.objects.filter(id=person_id)
         else:
-            people = Person.objects.all()
+            people = Person.objects.filter(is_unknown=False)
 
         for person in people:
             self.stdout.write(_(f"Generating family tree for: {person}"))
@@ -33,7 +33,7 @@ class Command(BaseCommand):
             root_person = Person.objects.get(id=person.id)
             tree = {
                 'id': root_person.id,
-                'name': root_person.get_display_name(),
+                'name': root_person.get_tree_display_name(),
                 'families': self.get_families(root_person.id)
             }
             tree_json = json.dumps(tree, cls=DjangoJSONEncoder)
@@ -61,7 +61,7 @@ class Command(BaseCommand):
             child_rels = Relationship.objects.filter(
                 Q(type__in=['is_father_of', 'is_mother_of']),
                 Q(person_id=person_id)
-            )
+            ).order_by('related_person__birth_year')
             for child_rel in child_rels:
                 child = Person.objects.get(id=child_rel.related_person_id)
                 # Check if the spouse is also a parent of this child
@@ -73,13 +73,15 @@ class Command(BaseCommand):
                 if is_spouse_parent:
                     children.append({
                         'id': child.id,
-                        'name': child.get_display_name(),
-                        'families': self.get_families(child.id)
+                        'name': child.get_tree_display_name(),
+                        'families': self.get_families(child.id),
+                        'is_unknown': child.is_unknown,
                     })
             families.append({
                 'spouse': {
                     'id': spouse.id,
-                    'name': spouse.get_display_name()
+                    'name': spouse.get_tree_display_name(),
+                    'is_unknown': spouse.is_unknown,
                 },
                 'children': children
             })
