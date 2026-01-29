@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import F, Func
+from collections import Counter
 from django.utils.translation import gettext_lazy as _
 
 from tinymce.models import HTMLField
@@ -182,4 +184,39 @@ class Person(models.Model):
         except TreeCache.DoesNotExist:
             return None
 
+    @staticmethod
+    def get_surname_counts():
+        known_people = Person.objects.filter(is_unknown=False)
+        # Fetch all surnames from birth_surname, second_surname, and current_surname
+        surnames = (
+            known_people.values_list('birth_surname', flat=True)
+            .union(
+                known_people.values_list('second_surname', flat=True),
+                known_people.values_list('current_surname', flat=True),
+                all=True
+            )
+        )
+
+        # Fetch all other_surnames as lists
+        other_surnames_lists = known_people.values_list('other_surnames', flat=True)
+
+        # Flatten the lists of other_surnames
+        other_surnames = []
+        for surnames_list in other_surnames_lists:
+            if surnames_list:  # Check if the list is not empty
+                other_surnames.extend(surnames_list)
+
+        # Combine all surnames
+        all_surnames = list(surnames) + other_surnames
+
+        # Filter out None/empty values
+        all_surnames = [surname for surname in all_surnames if surname]
+
+        # Count occurrences of each surname
+        surname_counts = Counter(all_surnames)
+
+        # Sort the surnames alphabetically
+        sorted_surname_counts = sorted(surname_counts.items(), key=lambda x: x[0])
+
+        return sorted_surname_counts
 

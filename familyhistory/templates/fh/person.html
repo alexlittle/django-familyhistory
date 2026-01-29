@@ -39,20 +39,20 @@
                         <dd class="col-sm-8">{{ person.middle_name }}</dd>
                     {% endif %}
                     {% if person.birth_surname %}
-                        <dt class="col-sm-4">Birth Surname:</dt>
+                        <dt class="col-sm-4">{% trans 'Birth Surname:' %}</dt>
                         <dd class="col-sm-8">{{ person.birth_surname }}</dd>
                     {% endif %}
                     {% if person.current_surname %}
-                        <dt class="col-sm-4">Current Surname:</dt>
+                        <dt class="col-sm-4">{% trans 'Current Surname:' %}</dt>
                         <dd class="col-sm-8">{{ person.current_surname }}</dd>
                     {% endif %}
                     {% if person.second_surname %}
-                        <dt class="col-sm-4">Second Surname:</dt>
+                        <dt class="col-sm-4">{% trans 'Second Surname:' %}</dt>
                         <dd class="col-sm-8">{{ person.second_surname }}</dd>
                     {% endif %}
 
                     {% if person.other_surnames %}
-                        <dt class="col-sm-4">Other Surnames: </dt>
+                        <dt class="col-sm-4">{% trans 'Other Surnames:' %} </dt>
                         <dd class="col-sm-8">
                             {% for surname in person.other_surnames %}{{ surname }}{% if not forloop.last %}, {% endif %}{% endfor %}
                         </dd>
@@ -68,7 +68,7 @@
                         {% if person.format_birth_date %}
                             {{ person.format_birth_date }}
                         {% else %}
-                            {% trans 'unknown' %}
+                            {% trans 'Unknown' %}
                         {% endif %}
                     </dd>
                     {% if person.birth_location %}
@@ -173,34 +173,34 @@
     <!-- Life Events -->
     <div class="card mb-4">
     <div class="card-body">
-      <h5 class="card-title">Life Events</h5>
+      <h5 class="card-title">{% trans 'Life Events' %}</h5>
       {% if person.events_involved.all %}
         <div class="table-responsive">
           <table class="table table-hover">
             <thead>
               <tr>
-                <th>Event</th>
-                <th>Date</th>
-                <th>Description</th>
+                <th>{% trans 'Event' %}</th>
+                <th>{% trans 'Date' %}</th>
+                <th>{% trans 'Description' %}</th>
               </tr>
             </thead>
             <tbody>
               {% for event in person.events_involved.all %}
                 <tr>
                   <td>
-                    <a href="{% url 'event_detail' event.id %}">{{ event.title }}</a>
+                    {{ event.title }}
                   </td>
                   <td>
                     {{ event.format_start_date }} — {{ event.format_end_date|default:"Present" }}
                   </td>
-                  <td>{{ event.description|truncatechars:100 }}</td>
+                  <td>{{ event.description|safe }}</td>
                 </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
       {% else %}
-        <p class="text-muted">No life events recorded.</p>
+        <p class="text-muted">{% trans 'No life events recorded.' %}</p>
       {% endif %}
     </div>
   </div>
@@ -208,28 +208,32 @@
     <!-- Documents -->
     <div class="card mb-4">
     <div class="card-body">
-      <h5 class="card-title">Documents</h5>
-      {% if person.documents.all %}
+      <h5 class="card-title">{% trans 'Documents' %}</h5>
+      {% if person.document_people.all %}
         <div class="table-responsive">
           <table class="table table-hover">
             <thead>
               <tr>
-                <th>Title</th>
-                <th>Type</th>
-                <th>Date</th>
-                <th>Actions</th>
+                <th>{% trans 'Title' %}</th>
+                <th>{% trans 'Type' %}</th>
+                <th>{% trans 'Date' %}</th>
+                <th>{% trans 'Files' %}</th>
               </tr>
             </thead>
             <tbody>
-              {% for document in person.documents.all %}
+              {% for document in person.document_people.all %}
                 <tr>
                   <td>{{ document.title }}</td>
                   <td>{{ document.get_type_display }}</td>
-                  <td>{{ document.date|date:"d M Y" }}</td>
+                  <td>{{ document.format_start_date }}</td>
                   <td>
-                    <a href="{{ document.file.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
-                      <i class="bi bi-download"></i> View
-                    </a>
+                      <ul>
+                          {% for df in document.document_file.all %}
+                              <li>
+                                  <a href="{{ df.file.url }}" target="_blank">{{ df.get_filename }}</a>
+                              </li>
+                          {% endfor %}
+                      </ul>
                   </td>
                 </tr>
               {% endfor %}
@@ -237,7 +241,7 @@
           </table>
         </div>
       {% else %}
-        <p class="text-muted">No documents recorded.</p>
+        <p class="text-muted">{% trans 'No documents recorded.' %}</p>
       {% endif %}
     </div>
   </div>

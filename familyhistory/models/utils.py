@@ -25,21 +25,35 @@ RELATIONSHIP_CHOICES = [
 
 
 DOCUMENT_CHOICES = [
+    ('research', _('Research')),
     ('birth_certificate', _('Birth Certificate')),
     ('marriage_certificate', _('Marriage Certificate')),
     ('death_certificate', _('Death Certificate')),
+    ('obituary', _('Obituary')),
+    ('identity_doc', _('Passport/ID')),
     ('other', _('Other')),
 ]
 
 
 def format_partial_date(year, month, day, is_approx):
+    if not year and not month and not day:
+        return None
+
+    month_names = [
+        "", "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ]
+
     parts = []
     if year:
         parts.append(str(year))
-        if month:
-            parts.append(f"-{month:02d}")
-            if day:
-                parts.append(f"-{day:02d}")
+    if month:
+        parts.insert(0, month_names[month])
+    if day:
+        parts.insert(0, str(day))
+
+    formatted = " ".join(parts)
+
     if is_approx:
-        return f"circa {''.join(parts)}" if parts else _("Unknown date")
-    return ''.join(parts) if parts else None
+        return f"c. {formatted}" if formatted else _("Unknown date")
+    return formatted if formatted else None

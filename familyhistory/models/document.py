@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -7,8 +9,10 @@ from .utils import DATE_MONTH_CHOICES, DOCUMENT_CHOICES, format_partial_date
 from .person import Person
 from .event import Event
 
+
 def doc_file_path(instance, filename):
     return f"document/{instance.document.type}/{filename}"
+
 
 class Document(models.Model):
     title = models.CharField(max_length=200)
@@ -16,8 +20,8 @@ class Document(models.Model):
     type = models.CharField(choices=DOCUMENT_CHOICES, max_length=100)
     type_other = models.CharField(max_length=100, blank=True)
 
-    person_involved = models.ManyToManyField(Person, related_name='document_people')
-    event_involved = models.ManyToManyField(Event, related_name='document_event')
+    person_involved = models.ManyToManyField(Person, related_name='document_people', blank=True)
+    event_involved = models.ManyToManyField(Event, related_name='document_event', blank=True)
 
     start_year = models.IntegerField(null=True, blank=True)
     start_month = models.IntegerField(null=True, blank=True, choices=DATE_MONTH_CHOICES)
@@ -54,7 +58,7 @@ class Document(models.Model):
 
 
 class DocumentFile(models.Model):
-    document = models.ForeignKey(Document, on_delete=models.CASCADE)
+    document = models.ForeignKey(Document, on_delete=models.CASCADE, related_name='document_file')
     file = models.FileField(upload_to=doc_file_path)
     title = models.CharField(max_length=200, blank=True)
 
@@ -67,3 +71,6 @@ class DocumentFile(models.Model):
     class Meta:
         verbose_name = _('Document File')
         verbose_name_plural = _('Document Files')
+
+    def get_filename(self):
+        return os.path.basename(self.file.name)

@@ -65,10 +65,6 @@ body {
     color: #04689a;
 }
 
-/* Mapping
--------------------------------------------------- */
-#mapid { height: 300px; }
-
 
 /* h tags
 -------------------------------------------------- */
@@ -127,7 +123,6 @@ h5 {
 
 .centered > a {
   text-decoration: none;
-  display: block;
   margin: auto;
 }
 
@@ -169,3 +164,17 @@ h5 {
     max-width: 900px;
   }
 }
+
+ .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
+  }
+  .node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 3px;
+  }
+  .node text {
+    font: 12px sans-serif;
+  }

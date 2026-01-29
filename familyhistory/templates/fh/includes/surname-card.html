@@ -1,0 +1,16 @@
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<div class="col">
+    <div class="card h-100 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-1 centered">
+                <a href="{% url 'fh:surname_detail' surname %}">{{ surname }}</a>
+                <span class="text-muted"> - {{ count }}</span>
+            </h5>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

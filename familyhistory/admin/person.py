@@ -6,6 +6,7 @@ from familyhistory.models import Person
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('get_display_name',
+                    'is_unknown',
                     'format_birth_date',
                     'format_death_date')
     search_fields = ['first_name',
