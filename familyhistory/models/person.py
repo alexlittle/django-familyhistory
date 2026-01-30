@@ -195,33 +195,25 @@ class Person(models.Model):
     @staticmethod
     def get_surname_counts():
         known_people = Person.objects.filter(is_unknown=False)
-        # Fetch all surnames from birth_surname, second_surname, and current_surname
-        surnames = (
-            known_people.values_list('birth_surname', flat=True)
-            .union(
-                known_people.values_list('second_surname', flat=True),
-                known_people.values_list('current_surname', flat=True),
-                all=True
-            )
-        )
+        # For each person, collect all unique surnames
+        person_surnames = []
+        for person in known_people:
+            surnames = set()
+            if person.birth_surname:
+                surnames.add(person.birth_surname)
+            if person.second_surname:
+                surnames.add(person.second_surname)
+            if person.current_surname:
+                surnames.add(person.current_surname)
+            if person.other_surnames:
+                surnames.update(person.other_surnames)
+            person_surnames.append(surnames)
 
-        # Fetch all other_surnames as lists
-        other_surnames_lists = known_people.values_list('other_surnames', flat=True)
-
-        # Flatten the lists of other_surnames
-        other_surnames = []
-        for surnames_list in other_surnames_lists:
-            if surnames_list:  # Check if the list is not empty
-                other_surnames.extend(surnames_list)
-
-        # Combine all surnames
-        all_surnames = list(surnames) + other_surnames
-
-        # Filter out None/empty values
-        all_surnames = [surname for surname in all_surnames if surname]
-
-        # Count occurrences of each surname
-        surname_counts = Counter(all_surnames)
+        # Count how many people have each surname
+        surname_counts = Counter()
+        for surnames in person_surnames:
+            for surname in surnames:
+                surname_counts[surname] += 1
 
         # Sort the surnames alphabetically
         sorted_surname_counts = sorted(surname_counts.items(), key=lambda x: x[0])
