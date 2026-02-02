@@ -8,7 +8,7 @@ class PersonSearchForm(forms.Form):
                 'id': 'search',
                 'type': 'text',
                 'placeholder': 'Search for a name...',
-                'class': 'form-control',  # Optional: for styling
+                'class': 'form-control search-field',
             }
         ),
         required=False  # Optional: if you want to allow empty searches

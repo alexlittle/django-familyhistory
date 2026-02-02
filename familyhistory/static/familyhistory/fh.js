@@ -1,12 +1,16 @@
+const apiUrls = document.getElementById('api-urls').dataset;
+const personDetailBase = apiUrls.personDetailUrl.replace(/\/0\/?$/, '/');
+
 $(document).ready(function() {
     $('#search').on('input', function() {
         let query = $(this).val();
-        if (query.length > 2) {  // Only search after 3 characters
-            $.get('/api/person/search', {q: query}, function(data) {
+        if (query.length > 3) {  // Only search after 4 characters
+            $.get(apiUrls.personSearch, {q: query}, function(data) {
                 let results = $('#results');
                 results.empty();
                 data.forEach(function(person) {
-                    results.append(`<li>${person.first_name} ${person.current_surname}</li>`);
+                    personDetailUrl = personDetailBase + person.id;
+                    results.append(`<li><a href="${personDetailUrl}">${person.display_name}</a> b.${person.birth_year}</li>`);
                 });
             });
         } else {
