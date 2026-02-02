@@ -2,7 +2,11 @@ import json
 from django.views import View
 from django.http import JsonResponse
 from django.utils.translation import gettext_lazy as _
-
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.db.models import Q
+from familyhistory.models import Person
+from .serializers import PersonSerializer
 from familyhistory.models import Person
 
 class FamilyTreeDataView(View):
@@ -29,3 +33,13 @@ class FamilyTreeDataView(View):
             tree = json.loads(tree)
 
         return JsonResponse(tree)
+
+
+@api_view(['GET'])
+def search_people(request):
+    query = request.GET.get('q', '')
+    if query:
+        people = Person.search(query)
+        serializer = PersonSerializer(people, many=True)
+        return Response(serializer.data)
+    return Response([])

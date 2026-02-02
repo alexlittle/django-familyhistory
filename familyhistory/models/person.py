@@ -220,3 +220,12 @@ class Person(models.Model):
 
         return sorted_surname_counts
 
+    @staticmethod
+    def search(query):
+        return Person.objects.extra(
+            where=[
+                "MATCH(first_name, middle_name, birth_surname, second_surname, current_surname, known_as) AGAINST (%s IN NATURAL LANGUAGE MODE)"],
+            params=[query]
+        )
+
+

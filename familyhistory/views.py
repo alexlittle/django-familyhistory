@@ -1,8 +1,9 @@
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
+from django.shortcuts import render
 
 from .models import Person
-
+from .forms import PersonSearchForm
 
 class HomeView(ListView):
     template_name = 'fh/home.html'
@@ -15,6 +16,7 @@ class HomeView(ListView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         context['surnames'] = Person.get_surname_counts()
+        context['searchform'] = PersonSearchForm(self.request.GET or None)
         return context
 
 
@@ -64,3 +66,7 @@ class SurnameView(ListView):
             queryset = Person.objects.all().order_by('-updated_at')
 
         return queryset
+
+
+def search_page(request):
+    return render(request, 'fh/search.html')

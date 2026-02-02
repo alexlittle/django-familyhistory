@@ -39,8 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'tinymce',
+    'rest_framework',
     'sorl.thumbnail',
-    'familyhistory'
+    'familyhistory',
+    'api',
 ]
 
 

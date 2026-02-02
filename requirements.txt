@@ -5,3 +5,5 @@ pip-check-updates==0.28.0
 setuptools==80.9.0
 Pillow==12.1.0
 sorl-thumbnail>=12.4,<13.0
+djangorestframework==3.16.1
+djangorestframework-stubs==3.16.7
