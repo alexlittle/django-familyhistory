@@ -9,6 +9,8 @@ class DocumentFileInline(admin.TabularInline):
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
     list_display = ('title',
+                    'type',
+                    'type_other',
                     'format_start_date',
                     'format_end_date')
 

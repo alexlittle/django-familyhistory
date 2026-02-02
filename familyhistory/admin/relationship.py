@@ -10,6 +10,18 @@ class RelationshipAdmin(admin.ModelAdmin):
                     'related_person',
                     'format_start_date',
                     'format_end_date')
+    search_fields = ['person__first_name',
+                     'person__middle_name',
+                     'person__birth_surname',
+                     'person__second_surname',
+                     'person__current_surname',
+                     'person__known_as',
+                     'related_person__first_name',
+                     'related_person__middle_name',
+                     'related_person__birth_surname',
+                     'related_person__second_surname',
+                     'related_person__current_surname',
+                     'related_person__known_as']
 
     def format_start_date(self, obj):
         return obj.format_start_date()

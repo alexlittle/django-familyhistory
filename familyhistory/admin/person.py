@@ -11,6 +11,8 @@ class PersonAdmin(admin.ModelAdmin):
                     'format_death_date')
     search_fields = ['first_name',
                     'middle_name',
+                    'birth_surname',
+                    'second_surname',
                     'current_surname',
                     'known_as']
 
