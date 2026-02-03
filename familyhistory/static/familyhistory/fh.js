@@ -4,7 +4,7 @@ const personDetailBase = apiUrls.personDetailUrl.replace(/\/0\/?$/, '/');
 $(document).ready(function() {
     $('#search').on('input', function() {
         let query = $(this).val();
-        if (query.length > 3) {  // Only search after 4 characters
+        if (query.length > 1) {  // Only search after 2 characters
             $.get(apiUrls.personSearch, {q: query}, function(data) {
                 let results = $('#results');
                 results.empty();

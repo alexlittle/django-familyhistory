@@ -1,9 +1,10 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.db.models import Q
-from django.shortcuts import render
+from django.urls import reverse_lazy
 
-from .models import Person
-from .forms import PersonSearchForm
+from .models import Person, Relationship
+from .forms import PersonSearchForm, RelationshipForm
+
 
 class HomeView(ListView):
     template_name = 'fh/home.html'
@@ -68,5 +69,43 @@ class SurnameView(ListView):
         return queryset
 
 
-def search_page(request):
-    return render(request, 'fh/search.html')
+class SearchPageView(TemplateView):
+    template_name = 'fh/search.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchPageView, self).get_context_data(**kwargs)
+        context['searchform'] = PersonSearchForm(self.request.GET or None)
+        return context
+
+
+class AddRelationshipView(CreateView):
+    model = Relationship
+    form_class = RelationshipForm
+    template_name = 'fh/forms/add_relationship.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['person_id'] = self.kwargs['person_id']
+        return kwargs
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['person'] = self.kwargs['person_id']
+        initial['type'] = self.request.GET.get('type', '')
+        return initial
+
+    def form_valid(self, form):
+        form.instance.person_id = self.kwargs['person_id']
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('fh:person_detail', kwargs={'person_id': self.kwargs['person_id']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['person'] = Person.objects.get(id=self.kwargs['person_id'])
+        context['relationship_type'] = self.request.GET.get('type', '')
+        return context
+
+
+

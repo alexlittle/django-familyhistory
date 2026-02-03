@@ -89,6 +89,14 @@
 
 
                 </dl>
+
+                <div class="actions">
+                   <ul class="list-group list-group-flush">
+                      <li class="list-group-item p-0 text-end">
+                        <a href="{% url 'admin:familyhistory_person_change' person.id %}"
+                          class="btn btn-sm btn-outline-primary" target="_blank">{% trans 'Edit' %}</a></li>
+                  </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -101,7 +109,7 @@
             <!-- Partner Card -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <h4 class="card-title">{% trans 'Partner' %}</h4>
+                    <h4 class="card-title">{% trans 'Spouse/Partner' %}</h4>
                     {% if person.get_partners %}
                         <div class="row row-cols-1 row-cols-md-1 row-cols-lg-1 g-1">
                             {% for partner, relationship in person.get_partners %}
@@ -111,6 +119,13 @@
                     {% else %}
                         <p class="text-muted">{% trans 'No partner(s) recorded' %}</p>
                     {% endif %}
+                    <div class="actions">
+                       <ul class="list-group list-group-flush">
+                          <li class="list-group-item p-0 text-end">
+                            <a href="{% url 'fh:add_relationship' person.id %}?type=is_married_to"
+                              class="btn btn-sm btn-outline-primary">{% trans 'Add' %}</a></li>
+                      </ul>
+                    </div>
                 </div>
             </div>
 
@@ -127,6 +142,13 @@
                     {% else %}
                         <p class="text-muted">{% trans 'No children recorded.' %}</p>
                     {% endif %}
+                    <div class="actions">
+                       <ul class="list-group list-group-flush">
+                          <li class="list-group-item p-0 text-end">
+                            <a href="{% url 'fh:add_relationship' person.id %}?type=is_father_of"
+                              class="btn btn-sm btn-outline-primary">{% trans 'Add' %}</a></li>
+                      </ul>
+                    </div>
                 </div>
             </div>
 
@@ -173,35 +195,31 @@
     <!-- Life Events -->
     <div class="card mb-4">
     <div class="card-body">
-      <h5 class="card-title">{% trans 'Life Events' %}</h5>
-      {% if person.events_involved.all %}
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>{% trans 'Event' %}</th>
-                <th>{% trans 'Date' %}</th>
-                <th>{% trans 'Description' %}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for event in person.events_involved.all %}
-                <tr>
-                  <td>
-                    {{ event.title }}
-                  </td>
-                  <td>
-                    {{ event.format_start_date }} — {{ event.format_end_date|default:"Present" }}
-                  </td>
-                  <td>{{ event.description|safe }}</td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      {% else %}
-        <p class="text-muted">{% trans 'No life events recorded.' %}</p>
-      {% endif %}
+        <h5 class="card-title">{% trans 'Life Events' %}</h5>
+        {% if person.events_involved.all %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>{% trans 'Event' %}</th>
+                            <th>{% trans 'Date' %}</th>
+                            <th>{% trans 'Description' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for event in person.events_involved.all %}
+                        <tr>
+                          <td>{{ event.title }}</td>
+                          <td>{{ event.format_start_date }} — {{ event.format_end_date|default:"Present" }}</td>
+                          <td>{{ event.description|safe }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted">{% trans 'No life events recorded.' %}</p>
+        {% endif %}
     </div>
   </div>
 

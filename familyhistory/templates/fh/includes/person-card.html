@@ -33,7 +33,7 @@
           <li class="list-group-item">
             <small class="text-muted">
               <i class="bi bi-calendar-heart me-2"></i>
-              <strong>Born:</strong>
+              <strong>{% trans 'Born:' %}</strong>
               {% if person.format_birth_date %}
                 {{ person.format_birth_date }}
               {% else %}
@@ -44,7 +44,7 @@
           <li class="list-group-item">
             <small class="text-muted">
               <i class="bi bi-calendar-x me-2"></i>
-              <strong>Died:</strong>
+              <strong>{% trans 'Died:' %}</strong>
               {% if person.format_death_date %}
                 {{ person.format_death_date }}
               {% else %}
@@ -58,7 +58,7 @@
            <ul class="list-group list-group-flush">
               <li class="list-group-item p-0 text-end">
                 <a href="{% url 'admin:familyhistory_person_change' person.id %}"
-                  class="btn btn-sm btn-outline-primary" target="_blank">Edit</a></li>
+                  class="btn btn-sm btn-outline-primary" target="_blank">{% trans 'Edit' %}</a></li>
           </ul>
 
         </div>

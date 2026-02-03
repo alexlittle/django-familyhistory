@@ -5,7 +5,10 @@
 
 {% block content %}
 
-<input type="text" id="search" placeholder="Search for a name...">
+<form method="GET" action="/">
+	{% csrf_token %}
+	{{ searchform }}
+</form>
 <ul id="results"></ul>
 
 {% endblock %}
