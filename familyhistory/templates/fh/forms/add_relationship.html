@@ -2,17 +2,18 @@
 {% load static %}
 {% load i18n %}
 
-
 {% block content %}
 <h2>Add Relationship for {{ person.get_display_name }}</h2>
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form.as_div }}
+    <input type="text" id="searchPerson"  class="form-control search-field" placeholder="Search for a person...">
+    <div id="searchResults"></div>
+
+    <div id="selectedPerson"></div>
+
     <button type="submit">Save</button>
 </form>
-
-<input type="text" id="searchPerson" placeholder="Search for a person...">
-<div id="searchResults"></div>
 
 
 <script>
@@ -26,9 +27,12 @@ document.getElementById('searchPerson').addEventListener('input', function() {
                 resultsDiv.innerHTML = '';
                 data.forEach(person => {
                     const div = document.createElement('div');
-                    div.textContent = person.display_name + "b." + person.birth_year;
+                    div.textContent = person.display_name + " b." + person.birth_year;
                     div.onclick = () => {
                         document.getElementById('id_related_person').value = person.id;
+                        // Display the selected person's name
+                        document.getElementById('selectedPerson').textContent =
+                            "Selected: " + person.display_name + " (b. " + person.birth_year + ")";
                         resultsDiv.innerHTML = '';
                     };
                     resultsDiv.appendChild(div);
@@ -37,5 +41,4 @@ document.getElementById('searchPerson').addEventListener('input', function() {
     }
 });
 </script>
-
 {% endblock %}

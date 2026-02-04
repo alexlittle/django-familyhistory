@@ -23,5 +23,4 @@ class RelationshipForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         person_id = kwargs.pop('person_id', None)
         super(RelationshipForm, self).__init__(*args, **kwargs)
-        if person_id:
-            self.fields['related_person'].queryset = Person.objects.exclude(id=person_id)
+        self.fields['related_person'].widget = forms.HiddenInput()
