@@ -6,6 +6,7 @@ from familyhistory.models import Person
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('get_display_name',
+                    'gender',
                     'is_unknown',
                     'format_birth_date',
                     'format_death_date')
@@ -36,6 +37,7 @@ class PersonAdmin(admin.ModelAdmin):
                 'current_surname',
                 'known_as',
                 'is_unknown',
+                'gender',
                 'photo'
             ),
         }),

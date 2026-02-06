@@ -49,6 +49,8 @@ class FamilyTreeDataView(View):
             pdata['fn'] = person.first_name
             pdata['ln'] = person.birth_surname
             pdata['label'] = person.get_display_name()
+            pdata['avatar'] = person.photo.url if person.photo else None
+            pdata['gender'] = "M" if person.gender == "male" else "F" if person.gender == "female" else None
             pobj['data'] = pdata
             prels = {}
             prels['father'] = str(person.get_parent_id(type="is_father_of") or "")

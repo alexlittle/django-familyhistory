@@ -34,6 +34,12 @@ DOCUMENT_CHOICES = [
     ('other', _('Other')),
 ]
 
+GENDER_CHOICES = [
+    ('male', _('male')),
+    ('female', _('female')),
+    ('other', _('other')),
+    ('unknown', _('unknown'))
+]
 
 def format_partial_date(year, month, day, is_approx):
     if not year and not month and not day:

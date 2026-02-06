@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from tinymce.models import HTMLField
 
-from .utils import DATE_MONTH_CHOICES, format_partial_date
+from .utils import DATE_MONTH_CHOICES, format_partial_date, GENDER_CHOICES
 
 
 def photo_path(instance, filename):
@@ -24,9 +24,12 @@ class Person(models.Model):
     other_surnames = models.JSONField(default=list, blank=True)
     known_as = models.CharField(max_length=100, blank=True)
     is_unknown = models.BooleanField(default=False)
+    gender = models.CharField(choices=GENDER_CHOICES, default="unknown", max_length=20)
+
     birth_year = models.IntegerField(null=True, blank=True)
     description = HTMLField(blank=True)
     photo = models.ImageField(upload_to=photo_path, blank=True)
+
 
     # Birth fields
     birth_year = models.IntegerField(null=True, blank=True)
