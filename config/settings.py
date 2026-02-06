@@ -181,6 +181,8 @@ TINYMCE_DEFAULT_CONFIG = {
     "custom_undo_redo_levels": 10,
 }
 
+TREE_START_PERSON_ID = None
+
 try:
     from config.local_settings import *  # noqa
 except ImportError:

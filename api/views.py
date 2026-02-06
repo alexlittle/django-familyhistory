@@ -1,10 +1,12 @@
-import json
+
 from django.views import View
 from django.http import JsonResponse
-from django.utils.translation import gettext_lazy as _
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import PersonSerializer
+
+from django.conf import settings
 from familyhistory.models import Person
 
 class FamilyTreeDataView(View):
@@ -40,15 +42,17 @@ class FamilyTreeDataView(View):
 
     def get(self, request, *args, **kwargs):
         data = []
+        start_person_id = self.kwargs.get('start_person_id', settings.TREE_START_PERSON_ID)
         people = Person.objects.all()
         for person in people:
             pobj = {}
             pobj['id'] = str(person.id)
-            pobj['main'] = False
+            pobj['main'] = True if start_person_id == person.id else False
             pdata = {}
             pdata['fn'] = person.first_name
             pdata['ln'] = person.birth_surname
             pdata['label'] = person.get_display_name()
+            pdata['desc'] = f"{person.birth_year} - {person.death_year}"
             pdata['avatar'] = person.photo.url if person.photo else None
             pdata['gender'] = "M" if person.gender == "male" else "F" if person.gender == "female" else None
             pobj['data'] = pdata

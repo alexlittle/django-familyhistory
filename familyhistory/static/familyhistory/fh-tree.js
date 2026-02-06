@@ -1,7 +1,10 @@
-fetch('/api/tree')
-  .then(res => res.json())
-  .then(data => create(data))
-  .catch(err => console.error(err))
+  const apiUrls = document.getElementById('api-urls').dataset;
+
+
+  fetch(apiUrls.treeUrl)
+    .then(res => res.json())
+    .then(data => create(data))
+    .catch(err => console.error(err))
 
 function create(data) {
   const f3Chart = f3.createChart('#FamilyChart', data)
@@ -13,19 +16,24 @@ function create(data) {
     .setCardDisplay([["label"]])
     .setCardDim({h:70})
 
-  f3Chart.updateMainId('Q43274')  // Charles III
+  const mainPerson = data.find(node => node.main === true);
+  if (mainPerson) {
+    f3Chart.updateMainId(mainPerson.id);
+  }
 
   f3Chart.updateTree({initial: true})
 
-
   // with person_id this function will update the tree
+  /*
   function updateTreeWithNewMainPerson(person_id, animation_initial = true) {
     f3Chart.updateMainId(person_id)
     f3Chart.updateTree({initial: animation_initial})
   }
 
-  // random person
+   */
 
+  // random person
+  /*
   d3.select(document.querySelector("#FamilyChart"))
     .append("button")
     .text("Random Person")
@@ -35,11 +43,11 @@ function create(data) {
       const person_id = random_person["id"]
       updateTreeWithNewMainPerson(person_id, false)
     })
-
+  */
 
   // setup search dropdown
   // this is basic showcase, please use some autocomplete component and style it as you want
-
+  /*
   const all_select_options = []
   data.forEach(d => {
     if (all_select_options.find(d0 => d0.value === d["id"])) return
@@ -81,4 +89,5 @@ function create(data) {
       })
       .text(d => d.label)
   }
+  */
 }

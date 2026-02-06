@@ -160,7 +160,7 @@ form div {
 /* For family tree display */
  .link {
     fill: none;
-    stroke: #ccc;
+    stroke: #666;
     stroke-width: 2px;
   }
   .node circle {

@@ -7,6 +7,7 @@ urlpatterns = [
 
     path('person/<int:person_id>', views.PersonView.as_view(), name="person_detail"),
     path('tree', views.TreeView.as_view(), name="tree"),
+    path('tree/<int:start_person_id>', views.TreeView.as_view(), name="tree_person"),
     path('person/search', views.SearchPageView.as_view(), name="person_search"),
     path('person/<int:person_id>/add-relationship/', views.AddRelationshipView.as_view(), name='add_relationship'),
     path('person/<int:related_person_id>/add-parent/', views.AddParentView.as_view(), name='add_parent'),
