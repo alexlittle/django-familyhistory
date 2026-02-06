@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 
 from .models import Person, Relationship
-from .forms import PersonSearchForm, RelationshipForm
+from .forms import PersonSearchForm, RelationshipForm, ParentForm
 
 
 class HomeView(ListView):
@@ -31,14 +31,9 @@ class PersonView(DetailView):
         return Person.objects.all().prefetch_related('events_involved', 'document_people')
 
 
-class TreeView(DetailView):
-    model = Person
+class TreeView(TemplateView):
     template_name = 'fh/tree.html'
-    context_object_name = 'person'
-    pk_url_kwarg = 'person_id'
 
-    def get_queryset(self):
-        return Person.objects.all()
 
 class SurnameView(ListView):
     template_name = 'fh/surname.html'
@@ -104,6 +99,35 @@ class AddRelationshipView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['person'] = Person.objects.get(id=self.kwargs['person_id'])
+        context['relationship_type'] = self.request.GET.get('type', '')
+        return context
+
+class AddParentView(CreateView):
+    model = Relationship
+    form_class = ParentForm
+    template_name = 'fh/forms/add_parent.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['related_person_id'] = self.kwargs['related_person_id']
+        return kwargs
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['related_person'] = self.kwargs['related_person_id']
+        initial['type'] = self.request.GET.get('type', '')
+        return initial
+
+    def form_valid(self, form):
+        form.instance.related_person_id = self.kwargs['related_person_id']
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('fh:person_detail', kwargs={'person_id': self.kwargs['related_person_id']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['related_person'] = Person.objects.get(id=self.kwargs['related_person_id'])
         context['relationship_type'] = self.request.GET.get('type', '')
         return context
 

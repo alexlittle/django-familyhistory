@@ -109,7 +109,7 @@
             <!-- Partner Card -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <h4 class="card-title">{% trans 'Spouse/Partner' %}</h4>
+                    <h4 class="card-title">{% trans 'Spouse/Partner(s)' %}</h4>
                     {% if person.get_partners %}
                         <div class="row row-cols-1 row-cols-md-1 row-cols-lg-1 g-1">
                             {% for partner, relationship in person.get_partners %}
@@ -117,7 +117,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <p class="text-muted">{% trans 'No partner(s) recorded' %}</p>
+                        <p class="text-muted">{% trans 'No spouse/partner(s) recorded' %}</p>
                     {% endif %}
                     <div class="actions">
                        <ul class="list-group list-group-flush">
@@ -169,6 +169,15 @@
                         </div>
                     {% else %}
                         <p class="text-muted">{% trans 'No parents recorded.' %}</p>
+                    {% endif %}
+                    {% if person.get_parents|length < 2 %}
+                        <div class="actions">
+                       <ul class="list-group list-group-flush">
+                          <li class="list-group-item p-0 text-end">
+                            <a href="{% url 'fh:add_parent' person.id %}?type=is_father_of"
+                              class="btn btn-sm btn-outline-primary">{% trans 'Add' %}</a></li>
+                      </ul>
+                    </div>
                     {% endif %}
                 </div>
             </div>

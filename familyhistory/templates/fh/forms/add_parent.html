@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<h2>Add Parent for {{ related_person.get_display_name }}</h2>
+<form method="post">
+    {% csrf_token %}
+
+    <input type="text" id="searchPerson"  class="form-control search-field" placeholder="Search for a person...">
+    <div id="searchResults"></div>
+
+    <div id="selectedPerson"></div>
+
+    {{ form.as_div }}
+
+    <div>{{ related_person.get_display_name }}</div>
+
+    <button type="submit">Save</button>
+</form>
+
+
+<script>
+document.getElementById('searchPerson').addEventListener('input', function() {
+    const query = this.value;
+    if (query.length > 1) {
+        fetch(`{% url 'fh_data:person_search' %}?q=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultsDiv = document.getElementById('searchResults');
+                resultsDiv.innerHTML = '';
+                data.forEach(person => {
+                    const div = document.createElement('div');
+                    div.textContent = person.display_name + " b." + person.birth_year;
+                    div.onclick = () => {
+                        document.getElementById('id_person').value = person.id;
+                        // Display the selected person's name
+                        document.getElementById('selectedPerson').textContent =
+                            "Selected: " + person.display_name + " (b. " + person.birth_year + ")";
+                        resultsDiv.innerHTML = '';
+                    };
+                    resultsDiv.appendChild(div);
+                });
+            });
+    }
+});
+</script>
+{% endblock %}

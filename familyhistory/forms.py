@@ -21,6 +21,17 @@ class RelationshipForm(forms.ModelForm):
         fields = ['type', 'related_person']
 
     def __init__(self, *args, **kwargs):
-        person_id = kwargs.pop('person_id', None)
+        kwargs.pop('person_id', None)
         super(RelationshipForm, self).__init__(*args, **kwargs)
         self.fields['related_person'].widget = forms.HiddenInput()
+
+
+class ParentForm(forms.ModelForm):
+    class Meta:
+        model = Relationship
+        fields = ['type', 'person']
+
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('related_person_id', None)
+        super(ParentForm, self).__init__(*args, **kwargs)
+        self.fields['person'].widget = forms.HiddenInput()

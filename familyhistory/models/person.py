@@ -99,8 +99,7 @@ class Person(models.Model):
             self.death_year, self.death_month, self.death_day, self.death_is_approximate
         )
 
-    def get_partners(self):
-        # List to store tuples of (partner, relationship)
+    def get_partners(self, as_id_list=False):
         partner_relationships = []
 
         # Find relationships where self is the person
@@ -111,7 +110,6 @@ class Person(models.Model):
             partner = relationship.related_person
             partner_relationships.append((partner, relationship))
 
-        # Find relationships where self is the related_person
         relationships_as_related_person = self.relationships_related_person.filter(
             type__in=['is_married_to', 'in_relationship_with']
         )
@@ -119,9 +117,6 @@ class Person(models.Model):
             partner = relationship.person
             partner_relationships.append((partner, relationship))
 
-        # Sort by relationship start date, descending (most recent first)
-        # If no end date, assume it's the current relationship
-        # Sort by current first, then by start date (newest first)
         partner_relationships.sort(
             key=lambda x: (
                 x[1].end_year is None,
@@ -132,7 +127,9 @@ class Person(models.Model):
             reverse=True
         )
 
-        # Return the sorted list of (partner, relationship) tuples
+        if as_id_list:
+            # Extract the ID from the partner object and convert to string
+            return [str(partner.id) for partner, relationship in partner_relationships]
         return partner_relationships
 
     def get_parents(self):
@@ -167,7 +164,17 @@ class Person(models.Model):
 
         return siblings
 
-    def get_children(self):
+    def get_parent_id(self, type="is_mother_of"):
+        from .relationship import Relationship
+        try:
+            father = Relationship.objects.get(
+                related_person=self,
+                type=type)
+            return father.person.id
+        except Relationship.DoesNotExist:
+            return None
+
+    def get_children(self, as_id_list=False):
         from .relationship import Relationship
 
         # Find all relationships where the current person is the parent
@@ -181,7 +188,8 @@ class Person(models.Model):
 
         # Fetch the children Person objects
         children = Person.objects.filter(id__in=children_ids).distinct()
-
+        if as_id_list:
+            return [str(c_id) for c_id in children.values_list('id', flat=True)]
         return children
 
     def get_tree(self):
