@@ -10,35 +10,6 @@ from django.conf import settings
 from familyhistory.models import Person
 
 class FamilyTreeDataView(View):
-    """
-    {
-    "id": "Q508525",
-    "data": {
-      "fn": "Mary",
-      "ln": "Soames",
-      "desc": "British aristocrat, daughter of Winston Churchill and his wife Clementine (1922–2014)",
-      "label": "Mary Soames",
-      "avatar": "https://upload.wikimedia.org/wikipedia/commons/6/69/Mary_Soames_%281965%29.jpg",
-      "gender": "F"
-    },
-    "rels": {
-      "father": "Q8016",
-      "mother": "Q263454",
-      "spouses": [
-        "Q336050"
-      ],
-      "children": [
-        "Q390192",
-        "Q3052477",
-        "Q3453283",
-        "Q13408312",
-        "Q75386090"
-      ]
-    },
-    "main": false
-  },
-
-    """
 
     def get(self, request, *args, **kwargs):
         data = []

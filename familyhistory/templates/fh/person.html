@@ -3,6 +3,16 @@
 {% load i18n %}
 {% load thumbnail %}
 
+{% block extra_scripts %}
+    <script src="{% static 'familyhistory/d3-v7.min.js' %}"></script>
+    <script type="module" src="{% static 'familyhistory/family-chart-v0.9.0.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'familyhistory/family-chart-v0.9.0.css' %}">
+
+    <script>
+        const personId = "{{ person.id }}";
+    </script>
+{% endblock extra_scripts %}
+
 {% block content %}
 <div class="container my-4">
     <!-- Person Header -->
@@ -24,83 +34,91 @@
             {% endif %}
         </div>
 
-    <div class="col-md-8">
+        <div class="col-md-8">
         <!-- Basic Info -->
-        <h1>{{ person.get_display_name }}</h1>
-        <div class="card mb-4">
-            <div class="card-body">
-                <dl class="row">
-                    {% if person.first_name %}
-                        <dt class="col-sm-4">{% trans 'First name:' %}</dt>
-                        <dd class="col-sm-8">{{ person.first_name }}</dd>
-                    {% endif %}
-                    {% if person.middle_name %}
-                        <dt class="col-sm-4">{% trans 'Middle name:' %}</dt>
-                        <dd class="col-sm-8">{{ person.middle_name }}</dd>
-                    {% endif %}
-                    {% if person.birth_surname %}
-                        <dt class="col-sm-4">{% trans 'Birth Surname:' %}</dt>
-                        <dd class="col-sm-8">{{ person.birth_surname }}</dd>
-                    {% endif %}
-                    {% if person.current_surname %}
-                        <dt class="col-sm-4">{% trans 'Current Surname:' %}</dt>
-                        <dd class="col-sm-8">{{ person.current_surname }}</dd>
-                    {% endif %}
-                    {% if person.second_surname %}
-                        <dt class="col-sm-4">{% trans 'Second Surname:' %}</dt>
-                        <dd class="col-sm-8">{{ person.second_surname }}</dd>
-                    {% endif %}
+            <h1>{{ person.get_display_name }}</h1>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <dl class="row">
+                        {% if person.first_name %}
+                            <dt class="col-sm-4">{% trans 'First name:' %}</dt>
+                            <dd class="col-sm-8">{{ person.first_name }}</dd>
+                        {% endif %}
+                        {% if person.middle_name %}
+                            <dt class="col-sm-4">{% trans 'Middle name:' %}</dt>
+                            <dd class="col-sm-8">{{ person.middle_name }}</dd>
+                        {% endif %}
+                        {% if person.birth_surname %}
+                            <dt class="col-sm-4">{% trans 'Birth Surname:' %}</dt>
+                            <dd class="col-sm-8">{{ person.birth_surname }}</dd>
+                        {% endif %}
+                        {% if person.current_surname %}
+                            <dt class="col-sm-4">{% trans 'Current Surname:' %}</dt>
+                            <dd class="col-sm-8">{{ person.current_surname }}</dd>
+                        {% endif %}
+                        {% if person.second_surname %}
+                            <dt class="col-sm-4">{% trans 'Second Surname:' %}</dt>
+                            <dd class="col-sm-8">{{ person.second_surname }}</dd>
+                        {% endif %}
 
-                    {% if person.other_surnames %}
-                        <dt class="col-sm-4">{% trans 'Other Surnames:' %} </dt>
+                        {% if person.other_surnames %}
+                            <dt class="col-sm-4">{% trans 'Other Surnames:' %} </dt>
+                            <dd class="col-sm-8">
+                                {% for surname in person.other_surnames %}{{ surname }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                            </dd>
+                        {% endif %}
+
+                        {% if person.known_as %}
+                            <dt class="col-sm-4">{% trans 'Known as:' %}</dt>
+                            <dd class="col-sm-8">{{ person.known_as }}</dd>
+                        {% endif %}
+
+                        <dt class="col-sm-4">{% trans 'Date of Birth:' %}</dt>
                         <dd class="col-sm-8">
-                            {% for surname in person.other_surnames %}{{ surname }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                            {% if person.format_birth_date %}
+                                {{ person.format_birth_date }}
+                            {% else %}
+                                {% trans 'Unknown' %}
+                            {% endif %}
                         </dd>
-                    {% endif %}
-
-                    {% if person.known_as %}
-                        <dt class="col-sm-4">{% trans 'Known as:' %}</dt>
-                        <dd class="col-sm-8">{{ person.known_as }}</dd>
-                    {% endif %}
-
-                    <dt class="col-sm-4">{% trans 'Date of Birth:' %}</dt>
-                    <dd class="col-sm-8">
-                        {% if person.format_birth_date %}
-                            {{ person.format_birth_date }}
-                        {% else %}
-                            {% trans 'Unknown' %}
+                        {% if person.birth_location %}
+                            <dt class="col-sm-4">&nbsp;</dt>
+                            <dd class="col-sm-8 text-muted">{{ person.birth_location }}</dd>
                         {% endif %}
-                    </dd>
-                    {% if person.birth_location %}
-                        <dt class="col-sm-4">&nbsp;</dt>
-                        <dd class="col-sm-8 text-muted">{{ person.birth_location }}</dd>
-                    {% endif %}
 
-                    <dt class="col-sm-4">{% trans 'Date of Death:' %}</dt>
-                    <dd class="col-sm-8">
-                        {% if person.format_death_date %}
-                            {{ person.format_death_date }}
+                        <dt class="col-sm-4">{% trans 'Date of Death:' %}</dt>
+                        <dd class="col-sm-8">
+                            {% if person.format_death_date %}
+                                {{ person.format_death_date }}
+                            {% endif %}
+                        </dd>
+                        {% if person.death_location %}
+                            <dt class="col-sm-4">&nbsp;</dt>
+                            <dd class="col-sm-8 text-muted">{{ person.death_location }}</dd>
                         {% endif %}
-                    </dd>
-                    {% if person.death_location %}
-                        <dt class="col-sm-4">&nbsp;</dt>
-                        <dd class="col-sm-8 text-muted">{{ person.death_location }}</dd>
-                    {% endif %}
 
 
-                </dl>
+                    </dl>
 
-                <div class="actions">
-                   <ul class="list-group list-group-flush">
-                      <li class="list-group-item p-0 text-end">
-                        <a href="{% url 'admin:familyhistory_person_change' person.id %}"
-                          class="btn btn-sm btn-outline-primary" target="_blank">{% trans 'Edit' %}</a></li>
-                  </ul>
+                    <div class="actions">
+                       <ul class="list-group list-group-flush">
+                          <li class="list-group-item p-0 text-end">
+                            <a href="{% url 'admin:familyhistory_person_change' person.id %}"
+                              class="btn btn-sm btn-outline-primary" target="_blank">{% trans 'Edit' %}</a></li>
+                      </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="row mb-4">
+        <div class="card card-body">
+            <h4 class="card-title">{% trans 'Tree' %}</h4>
+            <div id="FamilyChart" class="f3" style="width:100%;height:250px;margin:auto;background-color:#fff;color:#000;"></div>
+            <script type="module" src="{% static 'familyhistory/fh-tree.js' %}" defer></script>
+        </div>
+    </div>
 
     <!-- Family Relationships -->
     <div class="row mb-4">

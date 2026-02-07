@@ -1,7 +1,15 @@
-  const apiUrls = document.getElementById('api-urls').dataset;
+const apiUrls = document.getElementById('api-urls').dataset;
+const treeUrlBase = apiUrls.treeUrl;
+let treeUrl
+if (typeof personId !== 'undefined' && personId !== null){
+  treeUrl = `${treeUrlBase}/${personId}`;
+} else {
+  treeUrl = treeUrlBase
+}
 
 
-  fetch(apiUrls.treeUrl)
+
+fetch(treeUrl)
     .then(res => res.json())
     .then(data => create(data))
     .catch(err => console.error(err))
