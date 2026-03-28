@@ -207,3 +207,6 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 /.idea/.gitignore
+/familyhistory/static/django_tinymce/
+/familyhistory/static/rest_framework/
+/familyhistory/static/tinymce/

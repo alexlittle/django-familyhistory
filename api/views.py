@@ -23,7 +23,7 @@ class FamilyTreeDataView(View):
             pdata['fn'] = person.first_name
             pdata['ln'] = person.birth_surname
             pdata['label'] = person.get_display_name()
-            pdata['desc'] = f"{person.birth_year} - {person.death_year}"
+            pdata['desc'] = person.get_birth_death_date()
             pdata['avatar'] = person.photo.url if person.photo else None
             pdata['gender'] = "M" if person.gender == "male" else "F" if person.gender == "female" else None
             pobj['data'] = pdata

@@ -4,6 +4,7 @@ from familyhistory.models import Person
 
 class PersonSerializer(serializers.ModelSerializer):
     display_name = serializers.SerializerMethodField()
+    birth_death_date = serializers.SerializerMethodField()
 
     class Meta:
         model = Person
@@ -17,7 +18,10 @@ class PersonSerializer(serializers.ModelSerializer):
                   'other_surnames',
                   'known_as',
                   'birth_year',
-                  ]
+                  'birth_death_date',]
 
     def get_display_name(self, obj):
         return obj.get_display_name()
+
+    def get_birth_death_date(self, obj):
+        return obj.get_birth_death_date()
