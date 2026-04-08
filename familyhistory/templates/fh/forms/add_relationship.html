@@ -27,12 +27,12 @@ document.getElementById('searchPerson').addEventListener('input', function() {
                 resultsDiv.innerHTML = '';
                 data.forEach(person => {
                     const div = document.createElement('div');
-                    div.textContent = person.display_name + " b." + person.birth_year;
+                    div.textContent = person.display_name + " " + person.birth_death_date;
                     div.onclick = () => {
                         document.getElementById('id_related_person').value = person.id;
                         // Display the selected person's name
                         document.getElementById('selectedPerson').textContent =
-                            "Selected: " + person.display_name + " (b. " + person.birth_year + ")";
+                            "Selected: " + person.display_name + " " + person.birth_death_date;
                         resultsDiv.innerHTML = '';
                     };
                     resultsDiv.appendChild(div);

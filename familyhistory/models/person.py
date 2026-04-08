@@ -102,6 +102,28 @@ class Person(models.Model):
             self.death_year, self.death_month, self.death_day, self.death_is_approximate
         )
 
+    def get_birth_death_date(self):
+        if self.birth_year:
+            if self.birth_is_approximate:
+                disp_birth_str = f"c.{self.birth_year}"
+            else:
+                disp_birth_str = self.birth_year
+        else:
+            disp_birth_str = _("Unknown")
+
+        if self.death_year:
+            if self.death_is_approximate:
+                disp_death_str = f"c.{self.death_year}"
+            else:
+                disp_death_str = self.death_year
+        else:
+            if self.death_is_approximate:
+                disp_death_str = _("Unknown")
+            else:
+                disp_death_str = ""
+        return f"{disp_birth_str} - {disp_death_str}"
+
+
     def get_partners(self, as_id_list=False):
         partner_relationships = []
 

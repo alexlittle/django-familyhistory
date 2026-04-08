@@ -10,7 +10,7 @@ $(document).ready(function() {
                 results.empty();
                 data.forEach(function(person) {
                     personDetailUrl = personDetailBase + person.id;
-                    results.append(`<li><a href="${personDetailUrl}">${person.display_name}</a> b.${person.birth_year}</li>`);
+                    results.append(`<li><a href="${personDetailUrl}">${person.display_name}</a> ${person.birth_death_date}</li>`);
                 });
             });
         } else {

@@ -5,19 +5,22 @@
 {% block content %}
 <div class="row g-0 align-items-center mb-3">
 
-    <div class="col-12 col-md-2">
+    <div class="col-12 col-md-3">
         <small class="text-muted">
-            {% if relationship.format_start_date %}
-                {{ relationship.format_start_date }}
-            {% endif %}
-            {% if relationship.format_end_date %}
-                {{ relationship.format_end_date }}
-            {% endif %}
+             <a href="{% url 'admin:familyhistory_relationship_change' relationship.id %}"
+                      target="_blank" class="btn btn-sm btn-outline-primary">
+                {% if relationship.format_start_date %}
+                    {{ relationship.format_start_date }}
+                {% endif %}
+                {% if relationship.format_end_date %}
+                    {{ relationship.format_end_date }}
+                {% endif %}
+             </a>
         </small>
-
     </div>
+
     <!-- Photo Column -->
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-md-3">
         {% if person.photo %}
             {% thumbnail person.photo "100x100" as thumb %}
             <img
@@ -61,11 +64,6 @@
         </small>
     </div>
 </div>
-
-
-
-
-
 {% endblock %}
 
 
