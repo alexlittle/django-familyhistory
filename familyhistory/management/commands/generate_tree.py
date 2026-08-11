@@ -1,12 +1,10 @@
-import json
 
-from django.core.serializers.json import DjangoJSONEncoder
 from django.core.management.base import BaseCommand
-from django.db.models import Q
+
 from django.utils.translation import gettext_lazy as _
 
-from familyhistory.models import Person, Relationship, TreeCache
-
+from familyhistory.models import Person, TreeCache
+from familyhistory.helpers.tree import create_tree
 
 class Command(BaseCommand):
     help = _("Builds a JSON object of a persons descendants to create the family tree diagram")
@@ -30,7 +28,7 @@ class Command(BaseCommand):
         for person in people:
             self.stdout.write(_(f"Generating family tree for: {person}"))
 
-            tree_json = None
+            tree_json = create_tree(person.id)
 
             tc, created = TreeCache.objects.get_or_create(person=person)
             tc.tree = tree_json

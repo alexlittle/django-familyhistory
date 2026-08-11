@@ -6,4 +6,4 @@ setuptools==83.0.0
 Pillow==12.3.0
 sorl-thumbnail>=12.4,<13.0
 djangorestframework==3.17.1
-djangorestframework-stubs==3.17.0
+djangorestframework-stubs==3.17.0deac
