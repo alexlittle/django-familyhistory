@@ -38,7 +38,8 @@ class PersonAdmin(admin.ModelAdmin):
                 'known_as',
                 'is_unknown',
                 'gender',
-                'photo'
+                'photo',
+                'description'
             ),
         }),
         (_('Birth Date'), {

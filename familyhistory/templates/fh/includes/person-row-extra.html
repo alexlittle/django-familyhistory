@@ -9,12 +9,7 @@
         <small class="text-muted">
              <a href="{% url 'admin:familyhistory_relationship_change' relationship.id %}"
                       target="_blank" class="btn btn-sm btn-outline-primary">
-                {% if relationship.format_start_date %}
-                    {{ relationship.format_start_date }}
-                {% endif %}
-                {% if relationship.format_end_date %}
-                    {{ relationship.format_end_date }}
-                {% endif %}
+                 {{ relationship.format_date }}
              </a>
         </small>
     </div>
