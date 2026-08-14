@@ -7,12 +7,11 @@
     <div class="card h-100 shadow-sm">
       <!-- Photo -->
       {% if person.photo %}
-        {% thumbnail person.photo "200x200" as thumb %}
+        {% thumbnail person.photo "250x250" as thumb %}
         <img
           src="{{ thumb.url }}"
           class="card-img-top img-fluid"
-          alt="{{ person.first_name }} {{ person.current_surname }}"
-          style="width: 200px; object-fit: cover;">
+          alt="{{ person.first_name }} {{ person.current_surname }}">
         {% endthumbnail %}
       {% else %}
         <div

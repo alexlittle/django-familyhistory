@@ -1,13 +1,16 @@
-/* GLOBAL STYLES
--------------------------------------------------- */
-/* Padding below the footer and lighter body text */
+:root {
+    --text-color: #5a5a5a;
+    --bg-color: #f8ffff;
+    --border-color: #2fcbfe;
+    --primary-color: #04689a;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --tree-link: #fff;
+    --tree-link-bg: rgba(0, 0, 0, 0.22);
+    --tree-link-bg-hover: rgba(0, 0, 0, 0.45);
+}
+
 
 /*
-bf7c0b - mid brown
-e7d2a7 - light brown
-89a324 - mid green
-5c5441 - dark green/brown
-
 
 f8ffff - very light blue
 e0ffff - light blue
@@ -16,37 +19,37 @@ e0ffff - light blue
 */
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  padding-bottom: 40px;
-  color: #5a5a5a;
-  margin-bottom: 60px;
-  font-family: "Faculty Glyphic", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+    padding-bottom: 40px;
+    color: var(--text-color);
+    margin-bottom: 60px;
+    font-family: "Faculty Glyphic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  background-color: #f8ffff;
-  border-top: 1px solid #2fcbfe;
+  background-color: var(--bg-color);
+  border-top: 1px solid var(--border-color);
   padding-top:10px;
 }
 
 /* Customise the navbar */
 
 .navbar-light {
-	background-color: #f8ffff;
-  	border-bottom: 1px solid #2fcbfe;
+	background-color: var(--bg-color);
+  	border-bottom: 1px solid var(--border-color);
 }
 
 .navbar-light .navbar-brand {
-	color: #5a5a5a;
+	color: var(--text-color);
 }
 
 .navbar-brand {
@@ -56,13 +59,13 @@ body {
 .navbar-light .navbar-nav > .nav-item > a:focus, 
 .navbar-light .navbar-nav > .nav-item > a:hover 
 {
-	color: #04689a;
+	color: var(--primary-color);
 }
 
 .navbar-light .navbar-nav > .active  a.nav-link, 
 .navbar-light .navbar-nav > .nav-item .active > a.nav-link:focus, 
 .navbar-light .navbar-nav > .nav-item .active > a.nav-link:hover {
-    color: #04689a;
+    color: var(--primary-color);
 }
 
 
@@ -71,7 +74,7 @@ body {
 
 h1, h2, h3, h4, h5 {
     margin: 20px 0;
-    color: #04689a;
+    color: var(--primary-color);
 }
 
 h1, h2, h3, h4, h5 > a {
@@ -102,18 +105,21 @@ h5 {
 
 
 .card {
-  transition: transform 0.2s;
+    transition: transform 0.2s;
 }
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px var(--shadow-color) !important;
 }
+
 .card-img-top {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid var(--shadow-color);
+    object-fit: cover;
+    max-height:250px;
 }
 .list-group-item {
-  border: none;
-  padding: 0.25rem 0;
+    border: none;
+    padding: 0.25rem 0;
 }
 
 .centered {
@@ -160,12 +166,12 @@ form div {
 /* For family tree display */
  .link {
     fill: none;
-    stroke: #666;
+    stroke: #666; /* breaks if var used for some reason */
     stroke-width: 2px;
   }
   .node circle {
-    fill: #fff;
-    stroke: steelblue;
+    fill: var(--tree-link);
+    stroke: var(--primary-color);
     stroke-width: 3px;
   }
   .node text {
@@ -183,8 +189,8 @@ form div {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.22);
-  color: #fff;
+  background: var(--tree-link-bg);
+  color: var(--tree-link);
   font-size: 15px;
   font-weight: bold;
   line-height: 1;
@@ -194,5 +200,5 @@ form div {
 }
 .card-person-link:hover {
   opacity: 1;
-  background: rgba(0, 0, 0, 0.45);
+  background: var(--tree-link-bg-hover);
 }
