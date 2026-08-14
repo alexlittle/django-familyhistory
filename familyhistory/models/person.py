@@ -1,11 +1,11 @@
 from django.db import models
-from django.db.models import F, Func
 from collections import Counter
 from django.utils.translation import gettext_lazy as _
+from django.utils.dates import MONTHS
 
 from tinymce.models import HTMLField
 
-from .utils import DATE_MONTH_CHOICES, format_partial_date, GENDER_CHOICES
+from .utils import format_partial_date, GENDER_CHOICES, LIVING, DECEASED, UNKNOWN
 
 
 def photo_path(instance, filename):
@@ -26,14 +26,13 @@ class Person(models.Model):
     is_unknown = models.BooleanField(default=False)
     gender = models.CharField(choices=GENDER_CHOICES, default="unknown", max_length=20)
 
-    birth_year = models.IntegerField(null=True, blank=True)
     description = HTMLField(blank=True)
     photo = models.ImageField(upload_to=photo_path, blank=True)
 
 
     # Birth fields
     birth_year = models.IntegerField(null=True, blank=True)
-    birth_month = models.IntegerField(null=True, blank=True, choices=DATE_MONTH_CHOICES)
+    birth_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
     birth_day = models.IntegerField(null=True, blank=True)
     birth_is_approximate = models.BooleanField(default=False)
     birth_date_description = models.CharField(max_length=100, blank=True)
@@ -41,11 +40,12 @@ class Person(models.Model):
 
     # Death date fields
     death_year = models.IntegerField(null=True, blank=True)
-    death_month = models.IntegerField(null=True, blank=True, choices=DATE_MONTH_CHOICES)
+    death_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
     death_day = models.IntegerField(null=True, blank=True)
     death_is_approximate = models.BooleanField(default=False)
     death_date_description = models.CharField(max_length=100, blank=True)
     death_location = models.CharField(max_length=200, blank=True)
+    is_deceased = models.BooleanField(null=True, blank=True, default=None)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -57,6 +57,22 @@ class Person(models.Model):
 
     def __str__(self):
         return self.get_list_display_name()
+
+    @property
+    def death_status(self):
+        # Hard evidence first — a date or place of death settles it
+        if self.death_year or self.death_month or self.death_day:
+            return DECEASED
+        if self.death_location:
+            return DECEASED
+
+        # No death data — fall back to the flag
+        if self.is_deceased is True:
+            return DECEASED
+        if self.is_deceased is False:
+            return LIVING
+
+        return UNKNOWN
 
     def get_list_display_name(self):
         display_name = self.get_display_name()
@@ -93,35 +109,46 @@ class Person(models.Model):
         return display_name
 
     def format_birth_date(self):
-        return format_partial_date(
-            self.birth_year, self.birth_month, self.birth_day, self.birth_is_approximate
-        )
+        response = format_partial_date(self.birth_day,
+                                       self.birth_month,
+                                       self.birth_year,
+                                       self.birth_is_approximate)
+        return response if response else "?"
+
 
     def format_death_date(self):
-        return format_partial_date(
-            self.death_year, self.death_month, self.death_day, self.death_is_approximate
-        )
+        response = format_partial_date(self.death_day,
+                                       self.death_month,
+                                       self.death_year,
+                                       self.death_is_approximate)
+        return response if response else "?"
 
     def get_birth_death_date(self):
-        if self.birth_year:
-            if self.birth_is_approximate:
-                disp_birth_str = f"c.{self.birth_year}"
-            else:
-                disp_birth_str = self.birth_year
-        else:
-            disp_birth_str = _("Unknown")
+        """Compact lifespan for tree nodes and list views."""
+        status = self.death_status
 
-        if self.death_year:
-            if self.death_is_approximate:
-                disp_death_str = f"c.{self.death_year}"
-            else:
-                disp_death_str = self.death_year
+        if self.birth_year:
+            birth = format_partial_date(
+                None, None, self.birth_year, self.birth_is_approximate
+            )
         else:
-            if self.death_is_approximate:
-                disp_death_str = _("Unknown")
-            else:
-                disp_death_str = ""
-        return f"{disp_birth_str} - {disp_death_str}"
+            birth = "?"
+
+        if status == LIVING:
+            death = ""
+        elif self.death_year:
+            death = format_partial_date(
+                None, None, self.death_year, self.death_is_approximate
+            )
+        elif status == DECEASED:
+            death = "?"
+        else:
+            death = ""
+
+        if death:
+            return f"{birth}–{death}"
+        return birth
+
 
 
     def get_partners(self, as_id_list=False):

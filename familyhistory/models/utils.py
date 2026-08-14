@@ -1,20 +1,5 @@
 from django.utils.translation import gettext_lazy as _
-
-
-DATE_MONTH_CHOICES = [
-    (1, _('January')),
-    (2, _('February')),
-    (3, _('March')),
-    (4, _('April')),
-    (5, _('May')),
-    (6, _('June')),
-    (7, _('July')),
-    (8, _('August')),
-    (9, _('September')),
-    (10, _('October')),
-    (11, _('November')),
-    (12, _('December'))
-]
+from django.utils.dates import MONTHS_3
 
 RELATIONSHIP_CHOICES = [
     ('is_father_of', _('is father of')),
@@ -41,25 +26,22 @@ GENDER_CHOICES = [
     ('unknown', _('unknown'))
 ]
 
-def format_partial_date(year, month, day, is_approx):
-    if not year and not month and not day:
+
+LIVING, DECEASED, UNKNOWN = "living", "deceased", "unknown"
+
+
+def format_partial_date(day, month, year, approximate=False):
+    """Format day/month/year where any part may be missing."""
+    if not (day or month or year):
         return None
 
-    month_names = [
-        "", "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ]
-
     parts = []
+    if day and month:          # a day without a month is meaningless
+        parts.append(str(day))
+    if month:
+        parts.append(str(MONTHS_3[month].title()))
     if year:
         parts.append(str(year))
-    if month:
-        parts.insert(0, month_names[month])
-    if day:
-        parts.insert(0, str(day))
 
-    formatted = " ".join(parts)
-
-    if is_approx:
-        return f"c. {formatted}" if formatted else _("Unknown date")
-    return formatted if formatted else None
+    text = " ".join(parts)
+    return _("c. %(date)s") % {"date": text} if approximate else text

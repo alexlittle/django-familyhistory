@@ -15,31 +15,32 @@
 
 {% block content %}
 <div class="container my-4">
-    <!-- Person Header -->
-    <div class="row mb-4">
-        <div class="col-md-4 text-center">
-            <!-- Photo -->
-            {% if person.photo %}
-                {% thumbnail person.photo "200x200" as thumb %}
-                    <img
-                      src="{{ thumb.url }}"
-                      class="card-img-top img-fluid"
-                      alt="{{ person.first_name }} {{ person.current_surname }}"
-                      style="width: 200px; object-fit: cover;">
-                {% endthumbnail %}
-            {% else %}
-                <div class="bg-light d-flex align-items-center justify-content-center mb-3" style="height: 200px; width: 200px; margin: 0 auto;">
-                  <i class="bi bi-person-fill text-muted" style="font-size: 4rem;"></i>
-                </div>
-            {% endif %}
-        </div>
 
-        <div class="col-md-8">
-        <!-- Basic Info -->
-            <h1>{{ person.get_display_name }}</h1>
-            <div class="card mb-4">
-                <div class="card-body">
-                    <dl class="row">
+    <h1>{{ person.get_display_name }}</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+
+                <!-- Photo -->
+                <div class="col-md-4 text-center mb-3 mb-md-0">
+                    {% if person.photo %}
+                        {% thumbnail person.photo "200x200" as thumb %}
+                            <img
+                              src="{{ thumb.url }}"
+                              class="img-fluid rounded"
+                              alt="{{ person.first_name }} {{ person.current_surname }}"
+                              style="width: 200px; object-fit: cover;">
+                        {% endthumbnail %}
+                    {% else %}
+                        <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 200px; width: 200px; margin: 0 auto;">
+                          <i class="bi bi-person-fill text-muted" style="font-size: 4rem;"></i>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Basic Info -->
+                <div class="col-md-8">
+                    <dl class="row mb-0">
                         {% if person.first_name %}
                             <dt class="col-sm-4">{% trans 'First name:' %}</dt>
                             <dd class="col-sm-8">{{ person.first_name }}</dd>
@@ -73,7 +74,7 @@
                             <dd class="col-sm-8">{{ person.known_as }}</dd>
                         {% endif %}
 
-                        <dt class="col-sm-4">{% trans 'Date of Birth:' %}</dt>
+                        <dt class="col-sm-4">{% trans 'Born:' %}</dt>
                         <dd class="col-sm-8">
                             {% if person.format_birth_date %}
                                 {{ person.format_birth_date }}
@@ -86,38 +87,40 @@
                             <dd class="col-sm-8 text-muted">{{ person.birth_location }}</dd>
                         {% endif %}
 
-                        <dt class="col-sm-4">{% trans 'Date of Death:' %}</dt>
-                        <dd class="col-sm-8">
-                            {% if person.format_death_date %}
-                                {{ person.format_death_date }}
+                        {% if person.death_status == "deceased" %}
+                            <dt class="col-sm-4">{% trans 'Died:' %}</dt>
+                            <dd class="col-sm-8">
+                                {% if person.format_death_date %}
+                                    {{ person.format_death_date }}
+                                {% else %}
+                                    {% trans 'Unknown' %}
+                                {% endif %}
+                            </dd>
+                            {% if person.death_location %}
+                                <dt class="col-sm-4">&nbsp;</dt>
+                                <dd class="col-sm-8 text-muted">{{ person.death_location }}</dd>
                             {% endif %}
-                        </dd>
-                        {% if person.death_location %}
-                            <dt class="col-sm-4">&nbsp;</dt>
-                            <dd class="col-sm-8 text-muted">{{ person.death_location }}</dd>
                         {% endif %}
-
-
                     </dl>
-
-                    <div class="actions">
-                       <ul class="list-group list-group-flush">
-                          <li class="list-group-item p-0 text-end">
-                            <a href="{% url 'admin:familyhistory_person_change' person.id %}"
-                              class="btn btn-sm btn-outline-primary" target="_blank">{% trans 'Edit' %}</a></li>
-                      </ul>
-                    </div>
                 </div>
+
             </div>
+
+            <div class="actions">
+               <ul class="list-group list-group-flush">
+                  <li class="list-group-item p-0 text-end">
+                    <a href="{% url 'admin:familyhistory_person_change' person.id %}"
+                      class="btn btn-sm btn-outline-primary" target="_blank">{% trans 'Edit' %}</a></li>
+               </ul>
+            </div>
+
         </div>
     </div>
 
-    <div class="row mb-4">
-        <div class="card card-body">
+    <div class="card mb-4 card-body">
             <h4 class="card-title">{% trans 'Tree' %}</h4>
             <div id="FamilyChart" class="f3" style="width:100%;height:250px;margin:auto;background-color:#fff;color:#000;"></div>
             <script type="module" src="{% static 'familyhistory/fh-tree.js' %}" defer></script>
-        </div>
     </div>
 
     <!-- Family Relationships -->

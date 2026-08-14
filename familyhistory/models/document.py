@@ -1,11 +1,12 @@
 import os
 
 from django.db import models
+from django.utils.dates import MONTHS
 from django.utils.translation import gettext_lazy as _
 
 from tinymce.models import HTMLField
 
-from .utils import DATE_MONTH_CHOICES, DOCUMENT_CHOICES, format_partial_date
+from .utils import DOCUMENT_CHOICES, format_partial_date
 from .person import Person
 from .event import Event
 
@@ -24,13 +25,13 @@ class Document(models.Model):
     event_involved = models.ManyToManyField(Event, related_name='document_event', blank=True)
 
     start_year = models.IntegerField(null=True, blank=True)
-    start_month = models.IntegerField(null=True, blank=True, choices=DATE_MONTH_CHOICES)
+    start_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
     start_day = models.IntegerField(null=True, blank=True)
     start_date_is_approximate = models.BooleanField(default=False)
     start_date_description = models.CharField(max_length=100, blank=True)
 
     end_year = models.IntegerField(null=True, blank=True)
-    end_month = models.IntegerField(null=True, blank=True, choices=DATE_MONTH_CHOICES)
+    end_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
     end_day = models.IntegerField(null=True, blank=True)
     end_date_is_approximate = models.BooleanField(default=False)
     end_date_description = models.CharField(max_length=100, blank=True)

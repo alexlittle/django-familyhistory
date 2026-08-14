@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.dates import MONTHS
 
 from tinymce.models import HTMLField
 
 from . import Person
-from .utils import DATE_MONTH_CHOICES, RELATIONSHIP_CHOICES, format_partial_date
+from .utils import RELATIONSHIP_CHOICES, format_partial_date
 
 
 class Relationship(models.Model):
@@ -14,13 +15,13 @@ class Relationship(models.Model):
     description = HTMLField(blank=True)
 
     start_year = models.IntegerField(null=True, blank=True)
-    start_month = models.IntegerField(null=True, blank=True, choices=DATE_MONTH_CHOICES)
+    start_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
     start_day = models.IntegerField(null=True, blank=True)
     start_date_is_approximate = models.BooleanField(default=False)
     start_date_description = models.CharField(max_length=100, blank=True)
 
     end_year = models.IntegerField(null=True, blank=True)
-    end_month = models.IntegerField(null=True, blank=True, choices=DATE_MONTH_CHOICES)
+    end_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
     end_day = models.IntegerField(null=True, blank=True)
     end_date_is_approximate = models.BooleanField(default=False)
     end_date_description = models.CharField(max_length=100, blank=True)
@@ -40,13 +41,13 @@ class Relationship(models.Model):
 
     def format_date(self):
 
-        start = format_partial_date(self.start_year,
+        start = format_partial_date(self.start_day,
                                     self.start_month,
-                                    self.start_day,
+                                    self.start_year,
                                     self.start_date_is_approximate)
-        end = format_partial_date(self.end_year,
+        end = format_partial_date(self.end_day,
                                   self.end_month,
-                                  self.end_day,
+                                  self.end_year,
                                   self.end_date_is_approximate)
 
         if start and end:
@@ -54,7 +55,7 @@ class Relationship(models.Model):
         elif start:
             return start
         else:
-            return 'unknown date'
+            return _('?')
 
     def __str__(self):
         return f"{self.person} - {self.related_person}"

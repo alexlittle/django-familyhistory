@@ -50,8 +50,8 @@ class PersonAdmin(admin.ModelAdmin):
         }),
         (_('Death Date'), {
             'fields': (
-                ('death_year', 'death_month', 'death_day', 'death_is_approximate', 'death_date_description'),
-                'death_location',
+                ('death_year', 'death_month', 'death_day', 'death_is_approximate', 'is_deceased'),
+                ('death_date_description', 'death_location'),
             ),
         }),
     )

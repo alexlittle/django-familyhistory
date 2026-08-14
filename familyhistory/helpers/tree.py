@@ -14,8 +14,7 @@ def create_tree(start_person_id:int):
         pdata['label'] = person.get_display_name()
         pdata['desc'] = person.get_birth_death_date()
         pdata['avatar'] = person.photo.url if person.photo else None
-        pdata[
-            'gender'] = "M" if person.gender == "male" else "F" if person.gender == "female" else None
+        pdata['gender'] = "M" if person.gender == "male" else "F" if person.gender == "female" else None
         pobj['data'] = pdata
         prels = {}
         prels['father'] = str(person.get_parent_id(type="is_father_of") or "")

@@ -5,11 +5,11 @@ from familyhistory.models import Relationship
 
 @admin.register(Relationship)
 class RelationshipAdmin(admin.ModelAdmin):
+
     list_display = ('person',
                     'type',
                     'related_person',
-                    'format_start_date',
-                    'format_end_date')
+                    'format_date')
     search_fields = ['person__first_name',
                      'person__middle_name',
                      'person__birth_surname',
@@ -23,15 +23,11 @@ class RelationshipAdmin(admin.ModelAdmin):
                      'related_person__current_surname',
                      'related_person__known_as']
 
-    def format_start_date(self, obj):
-        return obj.format_start_date()
+    def format_date(self, obj):
+        return obj.format_date()
 
-    format_start_date.short_description = _('Start Date')
+    format_date.short_description = _('Dates')
 
-    def format_end_date(self, obj):
-        return obj.format_end_date()
-
-    format_end_date.short_description = _('End Date')
 
     fieldsets = (
         (None, {

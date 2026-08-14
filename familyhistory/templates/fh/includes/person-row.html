@@ -38,15 +38,13 @@
                     <span class="fst-italic">{% trans 'Unknown' %}</span>
                 {% endif %}
             </small>
-            <br>
-            <small class="text-muted">
-                <strong>Died:</strong>
-                {% if person.format_death_date %}
-                    {{ person.format_death_date }}
-                {% else %}
-                    <span class="fst-italic">-</span>
-                {% endif %}
-            </small>
+
+            {% if person.death_status == "deceased" %}
+                <br>
+                <small class="text-muted">
+                    <strong>Died:</strong> {{ person.format_death_date }}
+                </small>
+            {% endif %}
         </div>
     </div>
 
