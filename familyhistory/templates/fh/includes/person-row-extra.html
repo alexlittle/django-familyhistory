@@ -5,7 +5,7 @@
 {% block content %}
 <div class="row g-0 align-items-center mb-3">
 
-    <div class="col-12 col-md-3">
+    <div class="col-12 col-md-4">
         <small class="text-muted">
              <a href="{% url 'admin:familyhistory_relationship_change' relationship.id %}"
                       target="_blank" class="btn btn-sm btn-outline-primary">
@@ -34,7 +34,7 @@
     </div>
 
     <!-- Name/DOB/DOD Column -->
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-5">
         <h5 class="mb-1">
             <a href="{% url 'fh:person_detail' person.id %}">
                 {{ person.get_display_name }}

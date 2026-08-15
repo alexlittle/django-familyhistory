@@ -42,12 +42,12 @@ class Document(models.Model):
 
     def format_start_date(self):
         return format_partial_date(
-            self.start_year, self.start_month, self.start_day, self.start_date_is_approximate
+            self.start_day, self.start_month, self.start_year, self.start_date_is_approximate
         )
 
     def format_end_date(self):
         return format_partial_date(
-            self.end_year, self.end_month, self.end_day, self.end_date_is_approximate
+            self.end_day, self.end_month, self.end_year, self.end_date_is_approximate
         )
 
     def __str__(self):

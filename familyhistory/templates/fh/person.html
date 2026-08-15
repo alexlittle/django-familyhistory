@@ -275,10 +275,16 @@
                   <td>{{ document.get_type_display }}</td>
                   <td>{{ document.format_start_date }}</td>
                   <td>
-                      <ul>
+                      <ul   >
                           {% for df in document.document_file.all %}
                               <li>
-                                  <a href="{{ df.file.url }}" target="_blank">{{ df.get_filename }}</a>
+                                  <a href="{{ df.file.url }}" target="_blank">
+                                      {% if df.title %}
+                                        {{ df.title }}
+                                      {% else %}
+                                        {{ df.get_filename }}
+                                      {% endif %}
+                                  </a>
                               </li>
                           {% endfor %}
                       </ul>
