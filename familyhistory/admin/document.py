@@ -39,9 +39,11 @@ class DocumentAdmin(admin.ModelAdmin):
 
         (_('People'), {
             'fields': ('person_involved',),
+            'classes': ('collapse',),
         }),
         (_('Events'), {
             'fields': ('event_involved',),
+            'classes': ('collapse',),
         }),
     )
 

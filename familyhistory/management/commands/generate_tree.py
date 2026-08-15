@@ -30,6 +30,6 @@ class Command(BaseCommand):
 
             tree_json = create_tree(person.id)
 
-            tc, created = TreeCache.objects.get_or_create(person=person)
+            tc, _ = TreeCache.objects.get_or_create(person=person)
             tc.tree = tree_json
             tc.save()

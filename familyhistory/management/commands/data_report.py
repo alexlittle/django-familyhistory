@@ -28,7 +28,7 @@ class Command(BaseCommand):
 
     def person_link(self, person):
         path = reverse("admin:familyhistory_person_change", args=[person.pk])
-        url = f"http://{Site.objects.get_current().domain}{path}"
+        url = f"https://{Site.objects.get_current().domain}{path}"
         name = self.style.NOTICE(person.get_display_name())
         if not self.stdout.isatty():
             return f"{name} <{url}>"

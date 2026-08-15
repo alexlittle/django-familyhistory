@@ -3,6 +3,7 @@ import os
 from django.db import models
 from django.utils.dates import MONTHS
 from django.utils.translation import gettext_lazy as _
+from django.db.models import F
 
 from tinymce.models import HTMLField
 
@@ -45,6 +46,11 @@ class Document(models.Model):
     class Meta:
         verbose_name = _('Document')
         verbose_name_plural = _('Documents')
+        ordering = [
+            F("doc_year").asc(nulls_last=True),
+            F("doc_month").asc(nulls_last=True),
+            F("doc_day").asc(nulls_last=True),
+        ]
 
 
 class DocumentFile(models.Model):

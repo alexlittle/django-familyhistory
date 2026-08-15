@@ -273,9 +273,9 @@
                 <tr>
                   <td>{{ document.title }}</td>
                   <td>{{ document.get_type_display }}</td>
-                  <td>{{ document.format_start_date }}</td>
+                  <td>{{ document.format_doc_date }}</td>
                   <td>
-                      <ul   >
+                      <ul>
                           {% for df in document.document_file.all %}
                               <li>
                                   <a href="{{ df.file.url }}" target="_blank">
