@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load thumbnail %}
+{% load sanitize %}
 
 {% block extra_scripts %}
     <script src="{% static 'familyhistory/d3-v7.min.js' %}"></script>
@@ -42,39 +43,39 @@
                 <div class="col-md-8">
                     <dl class="row mb-0">
                         {% if person.first_name %}
-                            <dt class="col-sm-4">{% trans 'First name:' %}</dt>
+                            <dt class="col-sm-3">{% trans 'First name:' %}</dt>
                             <dd class="col-sm-8">{{ person.first_name }}</dd>
                         {% endif %}
                         {% if person.middle_name %}
-                            <dt class="col-sm-4">{% trans 'Middle name:' %}</dt>
+                            <dt class="col-sm-3">{% trans 'Middle name:' %}</dt>
                             <dd class="col-sm-8">{{ person.middle_name }}</dd>
                         {% endif %}
                         {% if person.birth_surname %}
-                            <dt class="col-sm-4">{% trans 'Birth Surname:' %}</dt>
+                            <dt class="col-sm-3">{% trans 'Birth Surname:' %}</dt>
                             <dd class="col-sm-8">{{ person.birth_surname }}</dd>
                         {% endif %}
                         {% if person.current_surname %}
-                            <dt class="col-sm-4">{% trans 'Current Surname:' %}</dt>
+                            <dt class="col-sm-3">{% trans 'Current Surname:' %}</dt>
                             <dd class="col-sm-8">{{ person.current_surname }}</dd>
                         {% endif %}
                         {% if person.second_surname %}
-                            <dt class="col-sm-4">{% trans 'Second Surname:' %}</dt>
+                            <dt class="col-sm-3">{% trans 'Second Surname:' %}</dt>
                             <dd class="col-sm-8">{{ person.second_surname }}</dd>
                         {% endif %}
 
                         {% if person.other_surnames %}
-                            <dt class="col-sm-4">{% trans 'Other Surnames:' %} </dt>
+                            <dt class="col-sm-3">{% trans 'Other Surnames:' %} </dt>
                             <dd class="col-sm-8">
                                 {% for surname in person.other_surnames %}{{ surname }}{% if not forloop.last %}, {% endif %}{% endfor %}
                             </dd>
                         {% endif %}
 
                         {% if person.known_as %}
-                            <dt class="col-sm-4">{% trans 'Known as:' %}</dt>
+                            <dt class="col-sm-3">{% trans 'Known as:' %}</dt>
                             <dd class="col-sm-8">{{ person.known_as }}</dd>
                         {% endif %}
 
-                        <dt class="col-sm-4">{% trans 'Born:' %}</dt>
+                        <dt class="col-sm-3">{% trans 'Born:' %}</dt>
                         <dd class="col-sm-8">
                             {% if person.format_birth_date %}
                                 {{ person.format_birth_date }}
@@ -83,12 +84,12 @@
                             {% endif %}
                         </dd>
                         {% if person.birth_location %}
-                            <dt class="col-sm-4">&nbsp;</dt>
+                            <dt class="col-sm-3">&nbsp;</dt>
                             <dd class="col-sm-8 text-muted">{{ person.birth_location }}</dd>
                         {% endif %}
 
                         {% if person.death_status == "deceased" %}
-                            <dt class="col-sm-4">{% trans 'Died:' %}</dt>
+                            <dt class="col-sm-3">{% trans 'Died:' %}</dt>
                             <dd class="col-sm-8">
                                 {% if person.format_death_date %}
                                     {{ person.format_death_date }}
@@ -97,10 +98,15 @@
                                 {% endif %}
                             </dd>
                             {% if person.death_location %}
-                                <dt class="col-sm-4">&nbsp;</dt>
+                                <dt class="col-sm-3">&nbsp;</dt>
                                 <dd class="col-sm-8 text-muted">{{ person.death_location }}</dd>
                             {% endif %}
                         {% endif %}
+                        {% if person.biography %}
+                            <dt class="col-sm-3">{% trans 'Biography:' %}</dt>
+                            <dd class="col-sm-8 text-muted">{{ person.biography|sanitize }}</dd>
+                        {% endif %}
+
                     </dl>
                 </div>
 
@@ -241,7 +247,7 @@
                         <tr>
                           <td>{{ event.title }}</td>
                           <td>{{ event.format_start_date }} — {{ event.format_end_date|default:"Present" }}</td>
-                          <td>{{ event.description|safe }}</td>
+                          <td>{{ event.description|sanitize }}</td>
                         </tr>
                       {% endfor %}
                     </tbody>

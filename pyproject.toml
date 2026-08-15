@@ -19,7 +19,8 @@ dependencies = [
     "mysqlclient==2.2.8",
     "Pillow==12.3.0",
     "sorl-thumbnail>=12.4,<13.0",
-    "djangorestframework==3.17.1"
+    "djangorestframework==3.17.1",
+    "nh3==0.3.6"
 ]
 
 # Tell setuptools where to find code and how to determine the version

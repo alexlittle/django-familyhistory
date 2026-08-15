@@ -42,9 +42,9 @@ class PersonAdmin(admin.ModelAdmin):
                 'photo'
             ),
         }),
-        (_('Description'), {
+        (_('Biography'), {
             'fields': (
-                'description',
+                'biography',
             ),
             'classes': ('collapse',),
         }),

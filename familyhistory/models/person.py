@@ -26,7 +26,7 @@ class Person(models.Model):
     is_unknown = models.BooleanField(default=False)
     gender = models.CharField(choices=GENDER_CHOICES, default="unknown", max_length=20)
 
-    description = HTMLField(blank=True)
+    biography = HTMLField(blank=True)
     photo = models.ImageField(upload_to=photo_path, blank=True)
 
 
