@@ -11,18 +11,15 @@ class DocumentAdmin(admin.ModelAdmin):
     list_display = ('title',
                     'type',
                     'type_other',
-                    'format_start_date',
-                    'format_end_date')
+                    'format_doc_date')
+    search_fields = ['title',
+                     'type',
+                     'type_other']
 
-    def format_start_date(self, obj):
-        return obj.format_start_date()
+    def format_doc_date(self, obj):
+         return obj.format_doc_date()
 
-    format_start_date.short_description = _('Start Date')
-
-    def format_end_date(self, obj):
-        return obj.format_end_date()
-
-    format_end_date.short_description = _('End Date')
+    format_doc_date.short_description = _('Date')
 
     fieldsets = (
         (None, {
@@ -33,16 +30,13 @@ class DocumentAdmin(admin.ModelAdmin):
                 'description',
             ),
         }),
-        (_('Start Date'), {
+
+        (_('Date'), {
             'fields': (
-                ('start_year', 'start_month', 'start_day', 'start_date_is_approximate', 'start_date_description'),
+                ('doc_year', 'doc_month', 'doc_day', 'doc_date_is_approximate', 'doc_date_description'),
             ),
         }),
-        (_('End Date'), {
-            'fields': (
-                ('end_year', 'end_month', 'end_day', 'end_date_is_approximate', 'end_date_description'),
-            ),
-        }),
+
         (_('People'), {
             'fields': ('person_involved',),
         }),

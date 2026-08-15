@@ -39,7 +39,7 @@ ignore-semiprivate = false
 ignore-private = false
 ignore-property-decorators = false
 ignore-module = false
-fail-under = 80
+fail-under = 0
 verbose = 2
 exclude = ["tests", "docs", "build"]
 

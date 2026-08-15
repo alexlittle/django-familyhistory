@@ -9,7 +9,8 @@ class PersonAdmin(admin.ModelAdmin):
                     'gender',
                     'is_unknown',
                     'format_birth_date',
-                    'format_death_date')
+                    'format_death_date',
+                    'is_deceased',)
     search_fields = ['first_name',
                     'middle_name',
                     'birth_surname',
@@ -38,9 +39,14 @@ class PersonAdmin(admin.ModelAdmin):
                 'known_as',
                 'is_unknown',
                 'gender',
-                'photo',
-                'description'
+                'photo'
             ),
+        }),
+        (_('Description'), {
+            'fields': (
+                'description',
+            ),
+            'classes': ('collapse',),
         }),
         (_('Birth Date'), {
             'fields': (

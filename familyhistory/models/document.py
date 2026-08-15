@@ -24,30 +24,19 @@ class Document(models.Model):
     person_involved = models.ManyToManyField(Person, related_name='document_people', blank=True)
     event_involved = models.ManyToManyField(Event, related_name='document_event', blank=True)
 
-    start_year = models.IntegerField(null=True, blank=True)
-    start_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
-    start_day = models.IntegerField(null=True, blank=True)
-    start_date_is_approximate = models.BooleanField(default=False)
-    start_date_description = models.CharField(max_length=100, blank=True)
-
-    end_year = models.IntegerField(null=True, blank=True)
-    end_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
-    end_day = models.IntegerField(null=True, blank=True)
-    end_date_is_approximate = models.BooleanField(default=False)
-    end_date_description = models.CharField(max_length=100, blank=True)
+    doc_year = models.IntegerField(null=True, blank=True)
+    doc_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
+    doc_day = models.IntegerField(null=True, blank=True)
+    doc_date_is_approximate = models.BooleanField(default=False)
+    doc_date_description = models.CharField(max_length=100, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
 
-    def format_start_date(self):
+    def format_doc_date(self):
         return format_partial_date(
-            self.start_day, self.start_month, self.start_year, self.start_date_is_approximate
-        )
-
-    def format_end_date(self):
-        return format_partial_date(
-            self.end_day, self.end_month, self.end_year, self.end_date_is_approximate
+            self.doc_day, self.doc_month, self.doc_year, self.doc_date_is_approximate
         )
 
     def __str__(self):
