@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "familyhistory"
+dynamic = ["version"]
+description = "Family history web application"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+    { name = "Alex Little", email = "alex@alexlittle.net" }
+]
+
+dependencies = [
+    "django==6.0.7",
+    "django-tinymce==5.0.0",
+    "mysqlclient==2.2.8",
+    "Pillow==12.3.0",
+    "sorl-thumbnail>=12.4,<13.0",
+    "djangorestframework==3.17.1"
+]
+
+# Tell setuptools where to find code and how to determine the version
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["familyhistory*", "api*"]
+
+# Interrogate settings for checking existence of doc strings
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = true
+ignore-magic = true
+ignore-semiprivate = false
+ignore-private = false
+ignore-property-decorators = false
+ignore-module = false
+fail-under = 80
+verbose = 2
+exclude = ["tests", "docs", "build"]
+
+# pydoclint settings for checking correctness and consistency of docstrings
+[tool.pydoclint]
+style = "google"
+exclude = "tests|docs"
+
+# Read version from familyhistory/_version.py
+[tool.setuptools.dynamic]
+version = { attr = "familyhistory._version.__version__" }
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+python_files = ["test_*.py"]
+
+[tool.coverage.run]
+relative_files = true
+source = ["familyhistory", "api"]
+omit = ["*/migrations/*", "*/tests/*", "*/settings*.py", "manage.py"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.0.3",
+    "pytest-django==4.14.0",
+    "twine==6.2.0",
+    "build==1.4.0",
+    "wheel==0.46.3",
+    "pytest-cov==7.1.0",
+    "Sphinx==9.1.0",
+    "sphinx_rtd_theme==3.1.0",
+    "interrogate==1.7.0",
+    "pydoclint==0.9.1",
+    "pip-check-updates==0.29.0",
+    "setuptools==83.0.0",
+    "djangorestframework-stubs==3.17.0"
+]
+
