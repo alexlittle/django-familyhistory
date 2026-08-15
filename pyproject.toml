@@ -59,8 +59,8 @@ python_files = ["test_*.py"]
 
 [tool.coverage.run]
 relative_files = true
-source = ["familyhistory", "api"]
-omit = ["*/migrations/*", "*/tests/*", "*/settings*.py", "manage.py"]
+source = ["."]
+omit = ["*/migrations/*", "*/tests/*", "*/settings*.py", "manage.py", "env/*", "docs/*"]
 
 [project.optional-dependencies]
 dev = [
