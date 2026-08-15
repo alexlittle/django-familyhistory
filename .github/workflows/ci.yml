@@ -61,16 +61,16 @@ jobs:
       # -------------------------
       # Docstring coverage and consistency
       # -------------------------
-      #- name: Install doc-check tools
-      #  run: pip install interrogate pydoclint
+      - name: Install doc-check tools
+        run: pip install interrogate pydoclint
 
-      #- name: Docstring coverage report
-      #  run: interrogate -v familyhistory/
-      #  continue-on-error: true # so won't fail the action
+      - name: Docstring coverage report
+        run: interrogate -v familyhistory/
+        continue-on-error: true # so won't fail the action
 
-      #- name: Docstring/signature consistency report
-      #  run: pydoclint familyhistory/
-      #  continue-on-error: true # so won't fail the action
+      - name: Docstring/signature consistency report
+        run: pydoclint familyhistory/
+        continue-on-error: true # so won't fail the action
 
       # -------------------------
       # SonarQube Cloud scan
