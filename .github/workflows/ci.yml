@@ -46,7 +46,7 @@ jobs:
       # -------------------------
       - name: Run tests
         run: |
-          pytest --cov=xailens --cov-report=xml --cov-report=term
+          pytest --cov --cov-report=xml --cov-report=term
 
       # -------------------------
       # Upload coverage as artifact
