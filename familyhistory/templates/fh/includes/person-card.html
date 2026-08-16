@@ -40,17 +40,19 @@
               {% endif %}
             </small>
           </li>
-          <li class="list-group-item">
-            <small class="text-muted">
-              <i class="bi bi-calendar-x me-2"></i>
-              <strong>{% trans 'Died:' %}</strong>
-              {% if person.format_death_date %}
-                {{ person.format_death_date }}
-              {% else %}
-                <span class="fst-italic">-</span>
-              {% endif %}
-            </small>
-          </li>
+          {% if person.death_status == "deceased" %}
+            <li class="list-group-item">
+              <small class="text-muted">
+                <i class="bi bi-calendar-x me-2"></i>
+                <strong>{% trans 'Died:' %}</strong>
+                {% if person.format_death_date %}
+                  {{ person.format_death_date }}
+                {% else %}
+                  <span class="fst-italic">-</span>
+                {% endif %}
+              </small>
+            </li>
+          {% endif %}
         </ul>
 
         <div class="actions">

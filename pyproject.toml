@@ -78,4 +78,11 @@ dev = [
     "setuptools==83.0.0",
     "djangorestframework-stubs==3.17.0"
 ]
-
+local = [
+    "django-extensions==4.1",
+    "Werkzeug==3.1.8",
+    "pyOpenSSL==26.4.0"
+]
+deploy = [
+    "mod-wsgi==6.0.5"
+]
