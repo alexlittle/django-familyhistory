@@ -20,8 +20,6 @@ if BASE_DIR not in sys.path:
 ADMINS = (
 )
 
-DEBUG = True
-
 SITE_ID = 1
 
 ROOT_URLCONF = 'config.urls'
@@ -104,11 +102,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'media')
 
 
 #####################################################################
-# Email
-SERVER_EMAIL = ''
-EMAIL_SUBJECT_PREFIX = ''
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_FILE_PATH = '/tmp/'
+# Email not configured as not used
 #####################################################################
 
 
