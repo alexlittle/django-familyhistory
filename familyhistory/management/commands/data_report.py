@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils.translation import ngettext, gettext, gettext_lazy as _
 
 from familyhistory.models import Person
-
+from familyhistory.models.utils import DECEASED
 
 def hyperlink(text, url):
     """Wrap text in an OSC 8 terminal hyperlink."""
@@ -79,7 +79,7 @@ class Command(BaseCommand):
         counter_missing = counter_approx = 0
         self.stdout.write(self.style.MIGRATE_HEADING(gettext("Checking missing date of death")))
         for person in Person.objects.all():
-            if person.death_year is None and person.is_deceased:
+            if person.death_year is None and person.death_status == DECEASED:
                 self.stdout.write(gettext("%(name)s missing year of death") % {"name": self.person_link(person)})
                 counter_missing += 1
             elif person.death_is_approximate:
