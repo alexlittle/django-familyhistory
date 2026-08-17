@@ -1,8 +1,7 @@
 # config/settings_ci.py
-import os
-from config import settings  # noqa: F401,F403
+from config.settings import *  # noqa: F401,F403
 
-settings.DATABASES = {
+DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": os.environ.get("DB_NAME", "familyhistory"),
@@ -14,5 +13,5 @@ settings.DATABASES = {
     }
 }
 
-settings.SECRET_KEY = "ci-only-not-a-real-secret"
-settings.DEBUG = False
+SECRET_KEY = "ci-only-not-a-real-secret"
+DEBUG = False
