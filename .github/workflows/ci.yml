@@ -61,21 +61,14 @@ jobs:
       # -------------------------
       # Run tests + collect coverage
       # -------------------------
-      - name: Check DB env is populated
-        run: |
-          if [ -z "$DB_PASSWORD" ]; then
-            echo "DB_PASSWORD is empty — secret missing or misnamed"; exit 1
-          fi
-          echo "DB_PASSWORD length: ${#DB_PASSWORD}"
-        env:
-          DB_PASSWORD: ${{ secrets.CI_MYSQL_ROOT_PASSWORD }}
-
-
-
       - name: Run tests
         run: uv run --frozen pytest --cov --cov-report=xml --cov-report=term
         env:
           DJANGO_SETTINGS_MODULE: config.settings_ci
+          DB_HOST: 127.0.0.1
+          DB_PORT: "3306"
+          DB_USER: root
+          DB_PASSWORD: ${{ secrets.CI_MYSQL_ROOT_PASSWORD }}
 
       # -------------------------
       # Upload coverage as artifact
