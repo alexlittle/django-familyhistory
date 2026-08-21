@@ -219,9 +219,7 @@ class Person(models.Model):
     def get_parent_id(self, type="is_mother_of"):
         from .relationship import Relationship
         try:
-            father = Relationship.objects.get(
-                related_person=self,
-                type=type)
+            father = Relationship.objects.get(related_person=self, type=type)
             return father.person.id
         except Relationship.DoesNotExist:
             return None

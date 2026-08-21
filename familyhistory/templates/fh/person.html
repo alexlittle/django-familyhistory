@@ -278,7 +278,7 @@
               {% for document in person.document_people.all %}
                 <tr>
                   <td>{{ document.title }}</td>
-                  <td>{{ document.get_type_display }}</td>
+                  <td>{{ document.get_doc_type }}</td>
                   <td>{{ document.format_doc_date }}</td>
                   <td>
                       <ul>

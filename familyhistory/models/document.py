@@ -35,14 +35,6 @@ class Document(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-    def format_doc_date(self):
-        return format_partial_date(
-            self.doc_day, self.doc_month, self.doc_year, self.doc_date_is_approximate
-        )
-
-    def __str__(self):
-        return f"{self.title}"
-
     class Meta:
         verbose_name = _('Document')
         verbose_name_plural = _('Documents')
@@ -51,6 +43,20 @@ class Document(models.Model):
             F("doc_month").asc(nulls_last=True),
             F("doc_day").asc(nulls_last=True),
         ]
+
+    def format_doc_date(self):
+        return format_partial_date(
+            self.doc_day, self.doc_month, self.doc_year, self.doc_date_is_approximate
+        )
+
+    def __str__(self):
+        return f"{self.title}"
+
+    def get_doc_type(self):
+        if self.type_other:
+            return self.type_other
+        else:
+            return self.get_type_display()
 
 
 class DocumentFile(models.Model):

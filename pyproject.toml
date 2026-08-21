@@ -62,7 +62,9 @@ relative_files = true
 source = ["."]
 omit = ["*/migrations/*", "*/tests/*", "*/settings*.py", "manage.py", "env/*", "docs/*"]
 
-[project.optional-dependencies]
+
+
+[dependency-groups]
 dev = [
     "pytest==9.0.3",
     "pytest-django==4.14.0",
@@ -86,3 +88,6 @@ local = [
 deploy = [
     "mod-wsgi==6.0.5"
 ]
+
+[tool.uv]
+default-groups = ["local", "deploy"]
