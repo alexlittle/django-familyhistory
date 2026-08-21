@@ -583,7 +583,7 @@ dependencies = [
     { name = "sorl-thumbnail" },
 ]
 
-[package.optional-dependencies]
+[package.dev-dependencies]
 deploy = [
     { name = "mod-wsgi" },
 ]
@@ -610,32 +610,37 @@ local = [
 
 [package.metadata]
 requires-dist = [
-    { name = "build", marker = "extra == 'dev'", specifier = "==1.4.0" },
     { name = "django", specifier = "==6.0.7" },
-    { name = "django-extensions", marker = "extra == 'local'", specifier = "==4.1" },
     { name = "django-tinymce", specifier = "==5.0.0" },
     { name = "djangorestframework", specifier = "==3.17.1" },
-    { name = "djangorestframework-stubs", marker = "extra == 'dev'", specifier = "==3.17.0" },
-    { name = "interrogate", marker = "extra == 'dev'", specifier = "==1.7.0" },
-    { name = "mod-wsgi", marker = "extra == 'deploy'", specifier = "==6.0.5" },
     { name = "mysqlclient", specifier = "==2.2.8" },
     { name = "nh3", specifier = "==0.3.6" },
     { name = "pillow", specifier = "==12.3.0" },
-    { name = "pip-check-updates", marker = "extra == 'dev'", specifier = "==0.29.0" },
-    { name = "pydoclint", marker = "extra == 'dev'", specifier = "==0.9.1" },
-    { name = "pyopenssl", marker = "extra == 'local'", specifier = "==26.4.0" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = "==9.0.3" },
-    { name = "pytest-cov", marker = "extra == 'dev'", specifier = "==7.1.0" },
-    { name = "pytest-django", marker = "extra == 'dev'", specifier = "==4.14.0" },
-    { name = "setuptools", marker = "extra == 'dev'", specifier = "==83.0.0" },
     { name = "sorl-thumbnail", specifier = ">=12.4,<13.0" },
-    { name = "sphinx", marker = "extra == 'dev'", specifier = "==9.1.0" },
-    { name = "sphinx-rtd-theme", marker = "extra == 'dev'", specifier = "==3.1.0" },
-    { name = "twine", marker = "extra == 'dev'", specifier = "==6.2.0" },
-    { name = "werkzeug", marker = "extra == 'local'", specifier = "==3.1.8" },
-    { name = "wheel", marker = "extra == 'dev'", specifier = "==0.46.3" },
 ]
-provides-extras = ["dev", "local", "deploy"]
+
+[package.metadata.requires-dev]
+deploy = [{ name = "mod-wsgi", specifier = "==6.0.5" }]
+dev = [
+    { name = "build", specifier = "==1.4.0" },
+    { name = "djangorestframework-stubs", specifier = "==3.17.0" },
+    { name = "interrogate", specifier = "==1.7.0" },
+    { name = "pip-check-updates", specifier = "==0.29.0" },
+    { name = "pydoclint", specifier = "==0.9.1" },
+    { name = "pytest", specifier = "==9.0.3" },
+    { name = "pytest-cov", specifier = "==7.1.0" },
+    { name = "pytest-django", specifier = "==4.14.0" },
+    { name = "setuptools", specifier = "==83.0.0" },
+    { name = "sphinx", specifier = "==9.1.0" },
+    { name = "sphinx-rtd-theme", specifier = "==3.1.0" },
+    { name = "twine", specifier = "==6.2.0" },
+    { name = "wheel", specifier = "==0.46.3" },
+]
+local = [
+    { name = "django-extensions", specifier = "==4.1" },
+    { name = "pyopenssl", specifier = "==26.4.0" },
+    { name = "werkzeug", specifier = "==3.1.8" },
+]
 
 [[package]]
 name = "id"
