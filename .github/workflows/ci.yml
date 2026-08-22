@@ -12,6 +12,7 @@ jobs:
   build-test-sonar:
     name: Build, Test, Analyze
     runs-on: ubuntu-24.04
+    UV_NO_SYNC: "1"
     permissions:
       contents: read
       pull-requests: write
