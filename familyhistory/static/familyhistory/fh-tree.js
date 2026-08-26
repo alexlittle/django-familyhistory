@@ -11,10 +11,13 @@ if (typeof personId !== 'undefined' && personId !== null){
   treeUrl = treeUrlBase
 }
 
-fetch(treeUrl)
-    .then(res => res.json())
-    .then(data => create(data))
-    .catch(err => console.error(err))
+try {
+    const res = await fetch(treeUrl);
+    const data = await res.json();
+    create(data);
+} catch (err) {
+    console.error(err);
+}
 
 function addPersonLinks(container) {
   container.querySelectorAll('.card').forEach(card => {
@@ -27,8 +30,8 @@ function addPersonLinks(container) {
       el = el.parentElement;
     }
 
-    const person = node && node.data;
-    if (!person || !person.id || person.to_add) return;
+    const person = node?.data;
+    if (!person?.id || person.to_add) return;
 
     if (getComputedStyle(card).position === 'static') {
       card.style.position = 'relative';

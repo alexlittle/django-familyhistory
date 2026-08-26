@@ -174,7 +174,7 @@ TINYMCE_DEFAULT_CONFIG = {
 TREE_START_PERSON_ID = None
 
 try:
-    from config.local_settings import *
+    from config.local_settings import *  # NOSONAR
 except ImportError:
     import warnings
 

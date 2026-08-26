@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "familyhistory"
-dynamic = ["version"]
+version = "0.1.0"
 description = "Family history web application"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -54,9 +54,6 @@ exclude = ["tests", "docs", "build"]
 style = "google"
 exclude = "tests|docs"
 
-# Read version from familyhistory/_version.py
-[tool.setuptools.dynamic]
-version = { attr = "familyhistory._version.__version__" }
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings"
@@ -81,7 +78,6 @@ dev = [
     "sphinx_rtd_theme==3.1.0",
     "interrogate==1.7.0",
     "pydoclint==0.9.1",
-    "pip-check-updates==0.29.0",
     "setuptools==83.0.0",
     "djangorestframework-stubs==3.17.0"
 ]
@@ -91,7 +87,7 @@ local = [
     "pyOpenSSL==26.4.0"
 ]
 deploy = [
-    "mod-wsgi==6.0.5"
+    "mod-wsgi==6.0.6"
 ]
 
 [tool.uv]
