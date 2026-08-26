@@ -16,7 +16,7 @@ Very happy for anyone to reuse and/or send any pull requests etc
 
 ### Continuous Integration
 
-[![CI](https://github.com/alexlittle/django-familyhistory/actions/workflows/ci.yml/badge.svg)](https://github.com/alexlittle/django-familyhistory/actions)
+[![CI](https://github.com/alexlittle/django-familyhistory/actions/workflows/workflow.yml/badge.svg)](https://github.com/alexlittle/django-familyhistory/actions)
 
 ### SonarCloud - Quality Overview
 
