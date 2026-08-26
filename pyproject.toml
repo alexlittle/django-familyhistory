@@ -29,7 +29,7 @@ package-dir = {"" = "."}
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["familyhistory*", "api*"]
+include = ["familyhistory*"]
 
 # Interrogate settings for checking existence of doc strings
 [tool.interrogate]
