@@ -5,15 +5,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('familyhistory', '0014_alter_document_event_involved_and_more'),
+        ("familyhistory", "0014_alter_document_event_involved_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='documentfile',
-            name='document',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='document_file', to='familyhistory.document'),
+            model_name="documentfile",
+            name="document",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="document_file",
+                to="familyhistory.document",
+            ),
         ),
     ]

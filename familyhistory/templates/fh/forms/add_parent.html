@@ -6,8 +6,8 @@
 <h2>Add Parent for {{ related_person.get_display_name }}</h2>
 <form method="post">
     {% csrf_token %}
-
-    <input type="text" id="searchPerson"  class="form-control search-field" placeholder="Search for a person...">
+    <label for="searchPerson" class="visually-hidden">{% trans 'Search for a person' %}</label>
+    <input type="text" id="searchPerson"  class="form-control search-field" placeholder="{% trans 'Search for a person...' %}">
     <div id="searchResults"></div>
 
     <div id="selectedPerson"></div>

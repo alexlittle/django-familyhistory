@@ -1,17 +1,17 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 from django.utils.dates import MONTHS
+from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 
-from .utils import format_partial_date
 from .person import Person
+from .utils import format_partial_date
 
 
 class Event(models.Model):
     title = models.CharField(max_length=200)
     description = HTMLField(blank=True)
     location = models.CharField(max_length=200, blank=True)
-    involved = models.ManyToManyField(Person, related_name='events_involved')
+    involved = models.ManyToManyField(Person, related_name="events_involved")
 
     start_year = models.IntegerField(null=True, blank=True)
     start_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
@@ -30,7 +30,10 @@ class Event(models.Model):
 
     def format_start_date(self):
         return format_partial_date(
-            self.start_day, self.start_month, self.start_year, self.start_date_is_approximate
+            self.start_day,
+            self.start_month,
+            self.start_year,
+            self.start_date_is_approximate,
         )
 
     def format_end_date(self):
@@ -42,5 +45,5 @@ class Event(models.Model):
         return f"{self.title}"
 
     class Meta:
-        verbose_name = _('Event')
-        verbose_name_plural = _('Events')
+        verbose_name = _("Event")
+        verbose_name_plural = _("Events")

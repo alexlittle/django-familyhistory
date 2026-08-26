@@ -5,24 +5,37 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('familyhistory', '0010_person_is_unknown'),
+        ("familyhistory", "0010_person_is_unknown"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='TreeCache',
+            name="TreeCache",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('tree', models.JSONField()),
-                ('person', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='familyhistory.person')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("tree", models.JSONField()),
+                (
+                    "person",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="familyhistory.person",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'TreeCache',
-                'verbose_name_plural': 'TreeCaches',
+                "verbose_name": "TreeCache",
+                "verbose_name_plural": "TreeCaches",
             },
         ),
     ]

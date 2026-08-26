@@ -1,15 +1,15 @@
 import os
+from typing import ClassVar
 
 from django.db import models
+from django.db.models import F
 from django.utils.dates import MONTHS
 from django.utils.translation import gettext_lazy as _
-from django.db.models import F
-
 from tinymce.models import HTMLField
 
-from .utils import DOCUMENT_CHOICES, format_partial_date
-from .person import Person
 from .event import Event
+from .person import Person
+from .utils import DOCUMENT_CHOICES, format_partial_date
 
 
 def doc_file_path(instance, filename):
@@ -22,8 +22,12 @@ class Document(models.Model):
     type = models.CharField(choices=DOCUMENT_CHOICES, max_length=100)
     type_other = models.CharField(max_length=100, blank=True)
 
-    person_involved = models.ManyToManyField(Person, related_name='document_people', blank=True)
-    event_involved = models.ManyToManyField(Event, related_name='document_event', blank=True)
+    person_involved = models.ManyToManyField(
+        Person, related_name="document_people", blank=True
+    )
+    event_involved = models.ManyToManyField(
+        Event, related_name="document_event", blank=True
+    )
 
     doc_year = models.IntegerField(null=True, blank=True)
     doc_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
@@ -34,11 +38,10 @@ class Document(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
     class Meta:
-        verbose_name = _('Document')
-        verbose_name_plural = _('Documents')
-        ordering = [
+        verbose_name = _("Document")
+        verbose_name_plural = _("Documents")
+        ordering: ClassVar[list] = [
             F("doc_year").asc(nulls_last=True),
             F("doc_month").asc(nulls_last=True),
             F("doc_day").asc(nulls_last=True),
@@ -60,7 +63,9 @@ class Document(models.Model):
 
 
 class DocumentFile(models.Model):
-    document = models.ForeignKey(Document, on_delete=models.CASCADE, related_name='document_file')
+    document = models.ForeignKey(
+        Document, on_delete=models.CASCADE, related_name="document_file"
+    )
     file = models.FileField(upload_to=doc_file_path)
     title = models.CharField(max_length=200, blank=True)
 
@@ -71,8 +76,8 @@ class DocumentFile(models.Model):
             return f"{self.document.title}"
 
     class Meta:
-        verbose_name = _('Document File')
-        verbose_name_plural = _('Document Files')
+        verbose_name = _("Document File")
+        verbose_name_plural = _("Document Files")
 
     def get_filename(self):
         return os.path.basename(self.file.name)

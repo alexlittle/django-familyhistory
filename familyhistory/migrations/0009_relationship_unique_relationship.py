@@ -4,14 +4,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('familyhistory', '0008_alter_person_options_document_created_at_and_more'),
+        ("familyhistory", "0008_alter_person_options_document_created_at_and_more"),
     ]
 
     operations = [
         migrations.AddConstraint(
-            model_name='relationship',
-            constraint=models.UniqueConstraint(fields=('person', 'type', 'related_person'), name='unique_relationship'),
+            model_name="relationship",
+            constraint=models.UniqueConstraint(
+                fields=("person", "type", "related_person"), name="unique_relationship"
+            ),
         ),
     ]

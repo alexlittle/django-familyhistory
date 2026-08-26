@@ -17,9 +17,9 @@ from django.core.management import call_command
 from django.urls import reverse
 from django.utils import translation
 
+from familyhistory.management.commands.data_report import Command, hyperlink
 from familyhistory.models import Person
 from familyhistory.models.utils import DECEASED
-from familyhistory.management.commands.data_report import Command, hyperlink
 
 COMMAND_NAME = "data_report"
 
@@ -27,6 +27,7 @@ COMMAND_NAME = "data_report"
 # ---------------------------------------------------------------------------
 # Fixtures and helpers
 # ---------------------------------------------------------------------------
+
 
 class TtyStringIO(StringIO):
     """A StringIO that claims to be a terminal, to exercise the OSC 8 branch."""
@@ -72,13 +73,14 @@ def assert_reported(output, person, message):
     lines = [line for line in output.splitlines() if message in line]
     assert lines, f"no line containing {message!r} in:\n{output}"
     assert any(
-        person.get_display_name() in line and f"/{person.pk}/" in line
-        for line in lines
+        person.get_display_name() in line and f"/{person.pk}/" in line for line in lines
     ), f"{person} not reported for {message!r}:\n{output}"
+
 
 # ---------------------------------------------------------------------------
 # hyperlink
 # ---------------------------------------------------------------------------
+
 
 class TestHyperlink:
     def test_wraps_text_in_osc8_sequence(self):
@@ -96,6 +98,7 @@ class TestHyperlink:
 # ---------------------------------------------------------------------------
 # person_link
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.django_db
 class TestPersonLink:
@@ -136,6 +139,7 @@ class TestPersonLink:
 # ---------------------------------------------------------------------------
 # missing_birth_dates
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.django_db
 class TestMissingBirthDates:
@@ -191,6 +195,7 @@ class TestMissingBirthDates:
 # is_deceased_not_set
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.django_db
 class TestIsDeceasedNotSet:
     def test_reports_unset_flag(self, site):
@@ -221,6 +226,7 @@ class TestIsDeceasedNotSet:
 # ---------------------------------------------------------------------------
 # missing_date_of_death
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.django_db
 class TestMissingDateOfDeath:
@@ -273,8 +279,7 @@ class TestMissingDateOfDeath:
         assert_reported(output, person, "missing year of death")
 
     def test_death_location_with_year_is_not_reported(self, site):
-        create_person(is_deceased=None, death_location="Harrogate",
-                      death_year=1980)
+        create_person(is_deceased=None, death_location="Harrogate", death_year=1980)
 
         output = run("missing_date_of_death")
 
@@ -294,8 +299,9 @@ class TestMissingDateOfDeath:
     # --- approximate branch -----------------------------------------------
 
     def test_approximate_death_year_is_reported(self, site):
-        person = create_person(is_deceased=True, death_year=1980,
-                               death_is_approximate=True)
+        person = create_person(
+            is_deceased=True, death_year=1980, death_is_approximate=True
+        )
         output = run("missing_date_of_death")
         assert_reported(output, person, "year of death is approximate only")
         assert "1 person with approximate year of death" in output
@@ -317,8 +323,7 @@ class TestMissingDateOfDeath:
         assert "2 people with no year of death" in run("missing_date_of_death")
 
     def test_missing_takes_precedence_over_approximate(self, site):
-        create_person(is_deceased=True, death_year=None,
-                      death_is_approximate=True)
+        create_person(is_deceased=True, death_year=None, death_is_approximate=True)
 
         output = run("missing_date_of_death")
 
@@ -328,9 +333,11 @@ class TestMissingDateOfDeath:
     def test_heading_always_written(self, site):
         assert "Checking missing date of death" in run("missing_date_of_death")
 
+
 # ---------------------------------------------------------------------------
 # handle — integration through call_command
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.django_db
 class TestHandle:

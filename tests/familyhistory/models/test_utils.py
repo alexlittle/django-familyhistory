@@ -35,7 +35,7 @@ class FormatPartialDateTests(SimpleTestCase):
             (None, None, 1990, "1990"),
             (None, 3, None, "Mar"),
             (15, 3, None, "15 Mar"),
-            (15, None, 1990, "1990"),   # day dropped: meaningless without a month
+            (15, None, 1990, "1990"),  # day dropped: meaningless without a month
         ]
         for day, month, year, expected in cases:
             with self.subTest(day=day, month=month, year=year):
@@ -61,8 +61,9 @@ class FormatPartialDateTests(SimpleTestCase):
 
     def test_day_only_approximate_returns_bare_prefix(self):
         """Same edge case, made more visible by the approximate prefix."""
-        self.assertEqual(str(format_partial_date(15, None, None, approximate=True)),
-                         "c. ")
+        self.assertEqual(
+            str(format_partial_date(15, None, None, approximate=True)), "c. "
+        )
 
     def test_returns_plain_string(self):
         self.assertIsInstance(format_partial_date(15, 3, 1990), str)
@@ -75,9 +76,8 @@ class FormatPartialDateTests(SimpleTestCase):
     def test_invalid_month_raises_key_error(self):
         """MONTHS_3 only has keys 1-12; anything else blows up loudly."""
         for month in (13, 99, -1):
-            with self.subTest(month=month):
-                with self.assertRaises(KeyError):
-                    format_partial_date(None, month, 1990)
+            with self.subTest(month=month), self.assertRaises(KeyError):
+                format_partial_date(None, month, 1990)
 
     def test_string_inputs_are_coerced(self):
         """Callers passing strings (e.g. straight from a form) still work."""
@@ -85,21 +85,24 @@ class FormatPartialDateTests(SimpleTestCase):
 
 
 class FormatPartialDateApproximateTests(SimpleTestCase):
-
     def test_approximate_prefixes_full_date(self):
-        self.assertEqual(str(format_partial_date(15, 3, 1990, approximate=True)),
-                         "c. 15 Mar 1990")
+        self.assertEqual(
+            str(format_partial_date(15, 3, 1990, approximate=True)), "c. 15 Mar 1990"
+        )
 
     def test_approximate_prefixes_year_only(self):
-        self.assertEqual(str(format_partial_date(None, None, 1990, approximate=True)),
-                         "c. 1990")
+        self.assertEqual(
+            str(format_partial_date(None, None, 1990, approximate=True)), "c. 1990"
+        )
 
     def test_approximate_ignored_when_no_date(self):
         self.assertIsNone(format_partial_date(None, None, None, approximate=True))
 
     def test_approximate_false_matches_default(self):
-        self.assertEqual(format_partial_date(15, 3, 1990, approximate=False),
-                         format_partial_date(15, 3, 1990))
+        self.assertEqual(
+            format_partial_date(15, 3, 1990, approximate=False),
+            format_partial_date(15, 3, 1990),
+        )
 
 
 class FormatPartialDateTranslationTests(SimpleTestCase):
@@ -107,10 +110,9 @@ class FormatPartialDateTranslationTests(SimpleTestCase):
 
     def test_month_follows_active_language(self):
         for code in ("en", "fr", "de", "es"):
-            with self.subTest(language=code):
-                with translation.override(code):
-                    expected = f"1 {MONTHS_3[3].title()} 1990"
-                    self.assertEqual(format_partial_date(1, 3, 1990), expected)
+            with self.subTest(language=code), translation.override(code):
+                expected = f"1 {MONTHS_3[3].title()} 1990"
+                self.assertEqual(format_partial_date(1, 3, 1990), expected)
 
     def test_french_month_differs_from_english(self):
         """Guards against MONTHS_3 being replaced by a hard-coded list."""
@@ -123,9 +125,9 @@ class FormatPartialDateTranslationTests(SimpleTestCase):
     def test_approximate_prefix_is_translatable(self):
         """The 'c. ' prefix is wrapped in gettext, so it can be overridden."""
         with translation.override("en"):
-            self.assertEqual(str(format_partial_date(None, None, 1990,
-                                                     approximate=True)),
-                             "c. 1990")
+            self.assertEqual(
+                str(format_partial_date(None, None, 1990, approximate=True)), "c. 1990"
+            )
 
 
 CHOICE_LISTS = {
@@ -180,15 +182,21 @@ class ChoiceContentTests(SimpleTestCase):
     def test_relationship_keys(self):
         self.assertEqual(
             [key for key, _label in RELATIONSHIP_CHOICES],
-            ["is_father_of", "is_mother_of", "is_married_to",
-             "in_relationship_with"],
+            ["is_father_of", "is_mother_of", "is_married_to", "in_relationship_with"],
         )
 
     def test_document_keys(self):
         self.assertEqual(
             [key for key, _label in DOCUMENT_CHOICES],
-            ["research", "birth_certificate", "marriage_certificate",
-             "death_certificate", "obituary", "identity_doc", "other"],
+            [
+                "research",
+                "birth_certificate",
+                "marriage_certificate",
+                "death_certificate",
+                "obituary",
+                "identity_doc",
+                "other",
+            ],
         )
 
     def test_gender_keys(self):
@@ -199,18 +207,16 @@ class ChoiceContentTests(SimpleTestCase):
 
     def test_english_labels(self):
         with translation.override("en"):
-            self.assertEqual(str(dict(RELATIONSHIP_CHOICES)["is_father_of"]),
-                             "is father of")
-            self.assertEqual(str(dict(DOCUMENT_CHOICES)["identity_doc"]),
-                             "Passport/ID")
+            self.assertEqual(
+                str(dict(RELATIONSHIP_CHOICES)["is_father_of"]), "is father of"
+            )
+            self.assertEqual(str(dict(DOCUMENT_CHOICES)["identity_doc"]), "Passport/ID")
             self.assertEqual(str(dict(GENDER_CHOICES)["female"]), "female")
 
 
 class LifeStatusConstantTests(SimpleTestCase):
-
     def test_values(self):
-        self.assertEqual((LIVING, DECEASED, UNKNOWN),
-                         ("living", "deceased", "unknown"))
+        self.assertEqual((LIVING, DECEASED, UNKNOWN), ("living", "deceased", "unknown"))
 
     def test_are_distinct(self):
         self.assertEqual(len({LIVING, DECEASED, UNKNOWN}), 3)

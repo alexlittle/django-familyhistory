@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('familyhistory', '0018_person_gender'),
+        ("familyhistory", "0018_person_gender"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='person',
-            name='is_deceased',
+            model_name="person",
+            name="is_deceased",
             field=models.BooleanField(default=False),
         ),
     ]

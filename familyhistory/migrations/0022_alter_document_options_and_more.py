@@ -4,19 +4,29 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('familyhistory', '0021_rename_start_date_description_document_doc_date_description_and_more'),
+        (
+            "familyhistory",
+            "0021_rename_start_date_description_document_doc_date_description_and_more",
+        ),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='document',
-            options={'ordering': [models.OrderBy(models.F('doc_year'), nulls_last=True), models.OrderBy(models.F('doc_month'), nulls_last=True), models.OrderBy(models.F('doc_day'), nulls_last=True)], 'verbose_name': 'Document', 'verbose_name_plural': 'Documents'},
+            name="document",
+            options={
+                "ordering": [
+                    models.OrderBy(models.F("doc_year"), nulls_last=True),
+                    models.OrderBy(models.F("doc_month"), nulls_last=True),
+                    models.OrderBy(models.F("doc_day"), nulls_last=True),
+                ],
+                "verbose_name": "Document",
+                "verbose_name_plural": "Documents",
+            },
         ),
         migrations.RenameField(
-            model_name='person',
-            old_name='description',
-            new_name='biography',
+            model_name="person",
+            old_name="description",
+            new_name="biography",
         ),
     ]

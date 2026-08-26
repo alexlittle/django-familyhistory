@@ -1,4 +1,7 @@
+from typing import ClassVar
+
 from rest_framework import serializers
+
 from familyhistory.models import Person
 
 
@@ -8,17 +11,19 @@ class PersonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Person
-        fields = ['id',
-                  'display_name',
-                  'first_name',
-                  'middle_name',
-                  'birth_surname',
-                  'second_surname',
-                  'current_surname',
-                  'other_surnames',
-                  'known_as',
-                  'birth_year',
-                  'birth_death_date',]
+        fields: ClassVar[list] = [
+            "id",
+            "display_name",
+            "first_name",
+            "middle_name",
+            "birth_surname",
+            "second_surname",
+            "current_surname",
+            "other_surnames",
+            "known_as",
+            "birth_year",
+            "birth_death_date",
+        ]
 
     def get_display_name(self, obj):
         return obj.get_display_name()

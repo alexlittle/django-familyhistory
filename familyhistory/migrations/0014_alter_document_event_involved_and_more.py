@@ -4,20 +4,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('familyhistory', '0013_remove_document_file_documentfile'),
+        ("familyhistory", "0013_remove_document_file_documentfile"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='document',
-            name='event_involved',
-            field=models.ManyToManyField(blank=True, related_name='document_event', to='familyhistory.event'),
+            model_name="document",
+            name="event_involved",
+            field=models.ManyToManyField(
+                blank=True, related_name="document_event", to="familyhistory.event"
+            ),
         ),
         migrations.AlterField(
-            model_name='document',
-            name='person_involved',
-            field=models.ManyToManyField(blank=True, related_name='document_people', to='familyhistory.person'),
+            model_name="document",
+            name="person_involved",
+            field=models.ManyToManyField(
+                blank=True, related_name="document_people", to="familyhistory.person"
+            ),
         ),
     ]

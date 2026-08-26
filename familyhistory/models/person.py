@@ -1,11 +1,11 @@
-from django.db import models
 from collections import Counter
-from django.utils.translation import gettext_lazy as _
-from django.utils.dates import MONTHS
 
+from django.db import models
+from django.utils.dates import MONTHS
+from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 
-from .utils import format_partial_date, GENDER_CHOICES, LIVING, DECEASED, UNKNOWN
+from .utils import DECEASED, GENDER_CHOICES, LIVING, UNKNOWN, format_partial_date
 
 
 def photo_path(instance, filename):
@@ -29,7 +29,6 @@ class Person(models.Model):
     biography = HTMLField(blank=True)
     photo = models.ImageField(upload_to=photo_path, blank=True)
 
-
     # Birth fields
     birth_year = models.IntegerField(null=True, blank=True)
     birth_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
@@ -51,9 +50,9 @@ class Person(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = _('Person')
-        verbose_name_plural = _('People')
-        ordering = ('birth_year', 'birth_month', 'birth_day')
+        verbose_name = _("Person")
+        verbose_name_plural = _("People")
+        ordering = ("birth_year", "birth_month", "birth_day")
 
     def __str__(self):
         return self.get_list_display_name()
@@ -83,11 +82,19 @@ class Person(models.Model):
     def get_display_name(self):
         if self.known_as:
             if self.known_as != self.middle_name:
-                display_name = f"{self.known_as} {self.middle_name}" if self.middle_name else f"{self.known_as}"
+                display_name = (
+                    f"{self.known_as} {self.middle_name}"
+                    if self.middle_name
+                    else f"{self.known_as}"
+                )
             else:
                 display_name = f"{self.known_as}"
         else:
-            display_name = f"{self.first_name} {self.middle_name}" if self.middle_name else f"{self.first_name}"
+            display_name = (
+                f"{self.first_name} {self.middle_name}"
+                if self.middle_name
+                else f"{self.first_name}"
+            )
 
         if self.current_surname:
             display_name += f" {self.current_surname}"
@@ -109,18 +116,15 @@ class Person(models.Model):
         return display_name
 
     def format_birth_date(self):
-        response = format_partial_date(self.birth_day,
-                                       self.birth_month,
-                                       self.birth_year,
-                                       self.birth_is_approximate)
+        response = format_partial_date(
+            self.birth_day, self.birth_month, self.birth_year, self.birth_is_approximate
+        )
         return response if response else "?"
 
-
     def format_death_date(self):
-        response = format_partial_date(self.death_day,
-                                       self.death_month,
-                                       self.death_year,
-                                       self.death_is_approximate)
+        response = format_partial_date(
+            self.death_day, self.death_month, self.death_year, self.death_is_approximate
+        )
         return response if response else "?"
 
     def get_birth_death_date(self):
@@ -149,21 +153,19 @@ class Person(models.Model):
             return f"{birth}–{death}"
         return birth
 
-
-
     def get_partners(self, as_id_list=False):
         partner_relationships = []
 
         # Find relationships where self is the person
         relationships_as_person = self.relationships_person.filter(
-            type__in=['is_married_to', 'in_relationship_with']
+            type__in=["is_married_to", "in_relationship_with"]
         )
         for relationship in relationships_as_person:
             partner = relationship.related_person
             partner_relationships.append((partner, relationship))
 
         relationships_as_related_person = self.relationships_related_person.filter(
-            type__in=['is_married_to', 'in_relationship_with']
+            type__in=["is_married_to", "in_relationship_with"]
         )
         for relationship in relationships_as_related_person:
             partner = relationship.person
@@ -174,9 +176,9 @@ class Person(models.Model):
                 x[1].end_year is None,
                 x[1].start_year or 9999,
                 x[1].start_month or 12,
-                x[1].start_day or 31
+                x[1].start_day or 31,
             ),
-            reverse=True
+            reverse=True,
         )
 
         if as_id_list:
@@ -187,8 +189,8 @@ class Person(models.Model):
     def get_parents(self):
         # Get the IDs of all parents
         parent_ids = self.relationships_related_person.filter(
-            type__in=['is_father_of', 'is_mother_of']
-        ).values_list('person_id', flat=True)
+            type__in=["is_father_of", "is_mother_of"]
+        ).values_list("person_id", flat=True)
 
         # Fetch the parent Person objects
         parents = Person.objects.filter(id__in=parent_ids).distinct()
@@ -196,10 +198,11 @@ class Person(models.Model):
 
     def get_siblings(self):
         from .relationship import Relationship
+
         # Get the IDs of all parents of the current person
         parent_ids = self.relationships_related_person.filter(
-            type__in=['is_father_of', 'is_mother_of']
-        ).values_list('person_id', flat=True)
+            type__in=["is_father_of", "is_mother_of"]
+        ).values_list("person_id", flat=True)
 
         # If no parents, return an empty queryset
         if not parent_ids:
@@ -207,17 +210,19 @@ class Person(models.Model):
 
         # Find all children of these parents (siblings)
         sibling_ids = Relationship.objects.filter(
-            person_id__in=parent_ids,
-            type__in=['is_father_of', 'is_mother_of']
-        ).values_list('related_person_id', flat=True)
+            person_id__in=parent_ids, type__in=["is_father_of", "is_mother_of"]
+        ).values_list("related_person_id", flat=True)
 
         # Exclude the current person from the siblings list
-        siblings = Person.objects.filter(id__in=sibling_ids).exclude(id=self.id).distinct()
+        siblings = (
+            Person.objects.filter(id__in=sibling_ids).exclude(id=self.id).distinct()
+        )
 
         return siblings
 
     def get_parent_id(self, type="is_mother_of"):
         from .relationship import Relationship
+
         try:
             father = Relationship.objects.get(related_person=self, type=type)
             return father.person.id
@@ -229,21 +234,23 @@ class Person(models.Model):
 
         # Find all relationships where the current person is the parent
         children_relationships = Relationship.objects.filter(
-            person=self,
-            type__in=['is_father_of', 'is_mother_of']
+            person=self, type__in=["is_father_of", "is_mother_of"]
         )
 
         # Extract the IDs of the children
-        children_ids = children_relationships.values_list('related_person_id', flat=True)
+        children_ids = children_relationships.values_list(
+            "related_person_id", flat=True
+        )
 
         # Fetch the children Person objects
         children = Person.objects.filter(id__in=children_ids).distinct()
         if as_id_list:
-            return [str(c_id) for c_id in children.values_list('id', flat=True)]
+            return [str(c_id) for c_id in children.values_list("id", flat=True)]
         return children
 
     def get_tree(self):
         from .treecache import TreeCache
+
         try:
             tree_obj = TreeCache.objects.get(person=self)
             return tree_obj.tree
@@ -282,8 +289,7 @@ class Person(models.Model):
     def search(query):
         return Person.objects.extra(
             where=[
-                "MATCH(first_name, middle_name, birth_surname, second_surname, current_surname, known_as) AGAINST (%s IN NATURAL LANGUAGE MODE)"],
-            params=[query]
+                "MATCH(first_name, middle_name, birth_surname, second_surname, current_surname, known_as) AGAINST (%s IN NATURAL LANGUAGE MODE)"
+            ],
+            params=[query],
         )
-
-

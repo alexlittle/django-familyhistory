@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('familyhistory', '0011_treecache'),
+        ("familyhistory", "0011_treecache"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='treecache',
-            name='tree',
+            model_name="treecache",
+            name="tree",
             field=models.JSONField(blank=True, default=dict),
         ),
     ]

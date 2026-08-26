@@ -5,30 +5,29 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('familyhistory', '0006_alter_document_type_other'),
+        ("familyhistory", "0006_alter_document_type_other"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='person',
-            name='description',
+            model_name="person",
+            name="description",
             field=tinymce.models.HTMLField(blank=True),
         ),
         migrations.AlterField(
-            model_name='document',
-            name='description',
+            model_name="document",
+            name="description",
             field=tinymce.models.HTMLField(blank=True),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='description',
+            model_name="event",
+            name="description",
             field=tinymce.models.HTMLField(blank=True),
         ),
         migrations.AlterField(
-            model_name='relationship',
-            name='description',
+            model_name="relationship",
+            name="description",
             field=tinymce.models.HTMLField(blank=True),
         ),
     ]

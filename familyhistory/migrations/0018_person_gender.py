@@ -4,15 +4,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('familyhistory', '0017_alter_person_fulltextsearch'),
+        ("familyhistory", "0017_alter_person_fulltextsearch"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='person',
-            name='gender',
-            field=models.CharField(choices=[('male', 'male'), ('female', 'female'), ('other', 'other'), ('unknown', 'unknown')], default='unknown', max_length=20),
+            model_name="person",
+            name="gender",
+            field=models.CharField(
+                choices=[
+                    ("male", "male"),
+                    ("female", "female"),
+                    ("other", "other"),
+                    ("unknown", "unknown"),
+                ],
+                default="unknown",
+                max_length=20,
+            ),
         ),
     ]

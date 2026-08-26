@@ -4,15 +4,25 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('familyhistory', '0015_alter_documentfile_document'),
+        ("familyhistory", "0015_alter_documentfile_document"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='document',
-            name='type',
-            field=models.CharField(choices=[('research', 'Research'), ('birth_certificate', 'Birth Certificate'), ('marriage_certificate', 'Marriage Certificate'), ('death_certificate', 'Death Certificate'), ('obituary', 'Obituary'), ('identity_doc', 'Passport/ID'), ('other', 'Other')], max_length=100),
+            model_name="document",
+            name="type",
+            field=models.CharField(
+                choices=[
+                    ("research", "Research"),
+                    ("birth_certificate", "Birth Certificate"),
+                    ("marriage_certificate", "Marriage Certificate"),
+                    ("death_certificate", "Death Certificate"),
+                    ("obituary", "Obituary"),
+                    ("identity_doc", "Passport/ID"),
+                    ("other", "Other"),
+                ],
+                max_length=100,
+            ),
         ),
     ]

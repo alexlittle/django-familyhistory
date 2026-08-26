@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('familyhistory', '0005_document'),
+        ("familyhistory", "0005_document"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='document',
-            name='type_other',
+            model_name="document",
+            name="type_other",
             field=models.CharField(blank=True, max_length=100),
         ),
     ]

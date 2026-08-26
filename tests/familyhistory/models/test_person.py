@@ -1,5 +1,4 @@
-"""Tests for the Person model.
-"""
+"""Tests for the Person model."""
 
 import pytest
 from django.db import connection
@@ -7,12 +6,12 @@ from django.db import connection
 from familyhistory.models.person import Person, photo_path
 from familyhistory.models.relationship import Relationship
 from familyhistory.models.treecache import TreeCache
-from familyhistory.models.utils import LIVING, DECEASED, UNKNOWN
-
+from familyhistory.models.utils import DECEASED, LIVING, UNKNOWN
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def make_person(**kwargs):
     """Unsaved Person, for testing pure-Python methods without a DB hit."""
@@ -32,6 +31,7 @@ def create_person(**kwargs):
 # photo_path
 # ---------------------------------------------------------------------------
 
+
 class TestPhotoPath:
     def test_uses_lowercased_birth_surname(self):
         person = make_person(birth_surname="MacDonald")
@@ -47,6 +47,7 @@ class TestPhotoPath:
 # ---------------------------------------------------------------------------
 # death_status
 # ---------------------------------------------------------------------------
+
 
 class TestDeathStatus:
     @pytest.mark.parametrize("field", ["death_year", "death_month", "death_day"])
@@ -75,6 +76,7 @@ class TestDeathStatus:
 # ---------------------------------------------------------------------------
 # Display names
 # ---------------------------------------------------------------------------
+
 
 class TestGetDisplayName:
     def test_first_name_and_birth_surname(self):
@@ -153,6 +155,7 @@ class TestGetTreeDisplayName:
 # Date formatting
 # ---------------------------------------------------------------------------
 
+
 class TestDateFormatting:
     def test_birth_date_falls_back_to_question_mark(self):
         assert make_person().format_birth_date() == "?"
@@ -199,6 +202,7 @@ class TestGetBirthDeathDate:
 # ---------------------------------------------------------------------------
 # Relationships (DB required)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.django_db
 class TestGetParents:
@@ -397,12 +401,18 @@ class TestGetPartners:
         second = create_person(first_name="Second")
 
         Relationship.objects.create(
-            person=alice, related_person=first,
-            type="is_married_to", start_year=1980, end_year=1990,
+            person=alice,
+            related_person=first,
+            type="is_married_to",
+            start_year=1980,
+            end_year=1990,
         )
         Relationship.objects.create(
-            person=alice, related_person=second,
-            type="is_married_to", start_year=1995, end_year=2005,
+            person=alice,
+            related_person=second,
+            type="is_married_to",
+            start_year=1995,
+            end_year=2005,
         )
 
         assert [p for p, _ in alice.get_partners()] == [second, first]
@@ -424,26 +434,28 @@ class TestGetTree:
 # get_surname_counts
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.django_db
 class TestGetSurnameCounts:
     def test_counts_each_surname_field(self):
         create_person(first_name="A", birth_surname="Smith")
-        create_person(
-            first_name="B", birth_surname="Jones", current_surname="Smith"
-        )
-        create_person(
-            first_name="C", birth_surname="Garcia", second_surname="Lopez"
-        )
+        create_person(first_name="B", birth_surname="Jones", current_surname="Smith")
+        create_person(first_name="C", birth_surname="Garcia", second_surname="Lopez")
 
         assert Person.get_surname_counts() == [
-            ("Garcia", 1), ("Jones", 1), ("Lopez", 1), ("Smith", 2),
+            ("Garcia", 1),
+            ("Jones", 1),
+            ("Lopez", 1),
+            ("Smith", 2),
         ]
 
     def test_includes_other_surnames(self):
         create_person(birth_surname="Smith", other_surnames=["Smyth", "Smithe"])
 
         assert Person.get_surname_counts() == [
-            ("Smith", 1), ("Smithe", 1), ("Smyth", 1),
+            ("Smith", 1),
+            ("Smithe", 1),
+            ("Smyth", 1),
         ]
 
     def test_person_counted_once_per_surname(self):
@@ -470,13 +482,16 @@ class TestGetSurnameCounts:
             create_person(birth_surname=surname)
 
         assert [s for s, _ in Person.get_surname_counts()] == [
-            "Apple", "Mango", "Zebra",
+            "Apple",
+            "Mango",
+            "Zebra",
         ]
 
 
 # ---------------------------------------------------------------------------
 # search — MySQL only (uses MATCH ... AGAINST)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.django_db(transaction=True)
 @pytest.mark.skipif(

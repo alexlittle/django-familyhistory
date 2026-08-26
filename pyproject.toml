@@ -31,6 +31,11 @@ package-dir = {"" = "."}
 where = ["."]
 include = ["familyhistory*"]
 
+
+[tool.ruff]
+extend-exclude = ["*/migrations/*.py"]
+
+
 # Interrogate settings for checking existence of doc strings
 [tool.interrogate]
 ignore-init-method = true

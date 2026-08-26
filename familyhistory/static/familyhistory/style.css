@@ -154,10 +154,6 @@ form div {
   .navbar-wrapper .navbar {
     padding-right: 0;
     padding-left: 0;
-  }
-
-  /* The navbar becomes detached from the top, so we round the corners */
-  .navbar-wrapper .navbar {
     border-radius: 4px;
   }
 }

@@ -141,7 +141,9 @@ class TestStrippedContent:
         assert sanitize("<script>alert(1)</script>") == ""
 
     def test_script_is_removed_without_disturbing_siblings(self):
-        assert sanitize("<p>a</p><script>alert(1)</script><p>b</p>") == "<p>a</p><p>b</p>"
+        assert (
+            sanitize("<p>a</p><script>alert(1)</script><p>b</p>") == "<p>a</p><p>b</p>"
+        )
 
     def test_style_tag_and_its_contents_are_removed(self):
         assert sanitize("<style>body{display:none}</style>visible") == "visible"
