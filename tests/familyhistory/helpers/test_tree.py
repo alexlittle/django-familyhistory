@@ -140,7 +140,7 @@ class PersonToNodeTests(SimpleTestCase):
     def _person(**overrides):
         defaults = {
             "id": 1,
-            "first_nam": "Ada",
+            "first_name": "Ada",
             "birth_surname": "Lovelace",
             "gender": "female",
             "photo": None,
