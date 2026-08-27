@@ -6,11 +6,7 @@
 <h2>Add Parent for {{ related_person.get_display_name }}</h2>
 <form method="post">
     {% csrf_token %}
-    <label for="searchPerson" class="visually-hidden">{% trans 'Search for a person' %}</label>
-    <input type="text" id="searchPerson"  class="form-control search-field" placeholder="{% trans 'Search for a person...' %}">
-    <div id="searchResults"></div>
-
-    <div id="selectedPerson"></div>
+    {% include 'fh/includes/person-search-widget.html' with target_input_id='id_person' %}
 
     {{ form.as_div }}
 
@@ -19,30 +15,5 @@
     <button type="submit">Save</button>
 </form>
 
-
-<script>
-document.getElementById('searchPerson').addEventListener('input', function() {
-    const query = this.value;
-    if (query.length > 1) {
-        fetch(`{% url 'fh_data:person_search' %}?q=${query}`)
-            .then(response => response.json())
-            .then(data => {
-                const resultsDiv = document.getElementById('searchResults');
-                resultsDiv.innerHTML = '';
-                data.forEach(person => {
-                    const div = document.createElement('div');
-                    div.textContent = person.display_name + " " + person.birth_death_date;
-                    div.onclick = () => {
-                        document.getElementById('id_person').value = person.id;
-                        // Display the selected person's name
-                        document.getElementById('selectedPerson').textContent =
-                            "Selected: " + person.display_name + " " + person.birth_death_date;
-                        resultsDiv.innerHTML = '';
-                    };
-                    resultsDiv.appendChild(div);
-                });
-            });
-    }
-});
-</script>
+<script src="{% static 'familyhistory/person-search-widget.js' %}" defer></script>
 {% endblock %}

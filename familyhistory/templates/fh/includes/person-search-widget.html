@@ -1,0 +1,6 @@
+{% load i18n %}
+<label for="searchPerson" class="visually-hidden">{% trans 'Search for a person' %}</label>
+<input type="text" id="searchPerson" class="form-control search-field" placeholder="{% trans 'Search for a person...' %}" data-target-input="{{ target_input_id }}">
+<div id="searchResults"></div>
+
+<div id="selectedPerson"></div>
