@@ -1,15 +1,15 @@
 from typing import ClassVar
 
 from django.db import models
-from django.utils.dates import MONTHS
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 
 from . import Person
+from .mixins import DateRangeModel
 from .utils import RELATIONSHIP_CHOICES, format_partial_date
 
 
-class Relationship(models.Model):
+class Relationship(DateRangeModel):
     person = models.ForeignKey(
         Person, on_delete=models.CASCADE, related_name="relationships_person"
     )
@@ -18,21 +18,6 @@ class Relationship(models.Model):
     )
     type = models.CharField(choices=RELATIONSHIP_CHOICES, max_length=100)
     description = HTMLField(blank=True)
-
-    start_year = models.IntegerField(null=True, blank=True)
-    start_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
-    start_day = models.IntegerField(null=True, blank=True)
-    start_date_is_approximate = models.BooleanField(default=False)
-    start_date_description = models.CharField(max_length=100, blank=True)
-
-    end_year = models.IntegerField(null=True, blank=True)
-    end_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
-    end_day = models.IntegerField(null=True, blank=True)
-    end_date_is_approximate = models.BooleanField(default=False)
-    end_date_description = models.CharField(max_length=100, blank=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = _("Relationship")

@@ -1,32 +1,17 @@
 from django.db import models
-from django.utils.dates import MONTHS
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 
+from .mixins import DateRangeModel
 from .person import Person
 from .utils import format_partial_date
 
 
-class Event(models.Model):
+class Event(DateRangeModel):
     title = models.CharField(max_length=200)
     description = HTMLField(blank=True)
     location = models.CharField(max_length=200, blank=True)
     involved = models.ManyToManyField(Person, related_name="events_involved")
-
-    start_year = models.IntegerField(null=True, blank=True)
-    start_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
-    start_day = models.IntegerField(null=True, blank=True)
-    start_date_is_approximate = models.BooleanField(default=False)
-    start_date_description = models.CharField(max_length=100, blank=True)
-
-    end_year = models.IntegerField(null=True, blank=True)
-    end_month = models.IntegerField(null=True, blank=True, choices=MONTHS)
-    end_day = models.IntegerField(null=True, blank=True)
-    end_date_is_approximate = models.BooleanField(default=False)
-    end_date_description = models.CharField(max_length=100, blank=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     def format_start_date(self):
         return format_partial_date(
