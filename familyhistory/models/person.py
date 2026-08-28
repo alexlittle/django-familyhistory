@@ -1,5 +1,6 @@
 """The `Person` model: the core entity everything else attaches to."""
 
+import re
 from collections import Counter
 
 from django.db import models
@@ -419,18 +420,32 @@ class Person(models.Model):
 
     @staticmethod
     def search(query):
-        """Full-text search people by name fields.
+        """Full-text prefix search people by name fields.
+
+        Each word in `query` is matched as a required prefix (boolean mode's
+        `word*`) rather than a whole word, so a live-search box gets results
+        as soon as a few characters are typed (e.g. "barb" matches
+        "Barbara") instead of only once the full word is entered, which is
+        all natural language mode allows.
 
         Args:
-            query: The search query, passed to MySQL's `MATCH ... AGAINST`
-                in natural language mode.
+            query: The raw search text. Non-word characters are stripped
+                out before building the `MATCH ... AGAINST` boolean query,
+                so user input can't inject boolean-mode operators.
 
         Returns:
-            A `Person` queryset matching the query.
+            A `Person` queryset matching the query, or an empty queryset if
+            it contained no searchable words.
         """
+        words = re.findall(r"\w+", query)
+        if not words:
+            return Person.objects.none()
+
+        boolean_query = " ".join(f"+{word}*" for word in words)
+
         return Person.objects.extra(
             where=[
-                "MATCH(first_name, middle_name, birth_surname, second_surname, current_surname, known_as) AGAINST (%s IN NATURAL LANGUAGE MODE)"
+                "MATCH(first_name, middle_name, birth_surname, second_surname, current_surname, known_as) AGAINST (%s IN BOOLEAN MODE)"
             ],
-            params=[query],
+            params=[boolean_query],
         )

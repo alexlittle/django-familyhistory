@@ -509,3 +509,21 @@ class TestSearch:
         create_person(first_name="Robert", birth_surname="Smith")
 
         assert list(Person.search("Fotheringay")) == []
+
+    def test_matches_on_partial_word_prefix(self):
+        """A live-search box shouldn't need the whole word typed."""
+        target = create_person(first_name="Barbara", birth_surname="Smith")
+        create_person(first_name="Alice", birth_surname="Jones")
+
+        assert list(Person.search("barb")) == [target]
+
+    def test_matches_multiple_word_prefixes(self):
+        target = create_person(first_name="Barbara", birth_surname="Fotheringay")
+        create_person(first_name="Barbara", birth_surname="Jones")
+
+        assert list(Person.search("barb foth")) == [target]
+
+    def test_query_with_no_word_characters_returns_empty(self):
+        create_person(first_name="Robert", birth_surname="Smith")
+
+        assert list(Person.search("!!!")) == []
