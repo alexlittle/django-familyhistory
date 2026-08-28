@@ -1,3 +1,5 @@
+"""Admin configuration for `Document` and `DocumentFile`."""
+
 from typing import ClassVar
 
 from django.contrib import admin
@@ -7,15 +9,27 @@ from familyhistory.models import Document, DocumentFile
 
 
 class DocumentFileInline(admin.TabularInline):
+    """Inline editor for a `Document`'s `DocumentFile`s."""
+
     model = DocumentFile
 
 
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
+    """Admin list/edit views for `Document`, with `DocumentFile`s inline."""
+
     list_display = ("title", "type", "type_other", "format_doc_date")
     search_fields: ClassVar[list] = ["title", "type", "type_other"]
 
     def format_doc_date(self, obj):
+        """Render the document's formatted date for the change list.
+
+        Args:
+            obj: The `Document` being displayed.
+
+        Returns:
+            The formatted document date.
+        """
         return obj.format_doc_date()
 
     format_doc_date.short_description = _("Date")

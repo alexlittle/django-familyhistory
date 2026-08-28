@@ -1,3 +1,5 @@
+"""Admin configuration for `Person`."""
+
 from typing import ClassVar
 
 from django.contrib import admin
@@ -8,6 +10,8 @@ from familyhistory.models import Person
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
+    """Admin list/edit views for `Person`."""
+
     list_display = (
         "get_display_name",
         "gender",
@@ -26,11 +30,27 @@ class PersonAdmin(admin.ModelAdmin):
     ]
 
     def format_birth_date(self, obj):
+        """Render the person's formatted birth date for the change list.
+
+        Args:
+            obj: The `Person` being displayed.
+
+        Returns:
+            The formatted birth date.
+        """
         return obj.format_birth_date()
 
     format_birth_date.short_description = _("Birth Date")
 
     def format_death_date(self, obj):
+        """Render the person's formatted death date for the change list.
+
+        Args:
+            obj: The `Person` being displayed.
+
+        Returns:
+            The formatted death date.
+        """
         return obj.format_death_date()
 
     format_death_date.short_description = _("Death Date")

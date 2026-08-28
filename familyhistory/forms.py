@@ -1,3 +1,5 @@
+"""Forms for the live person-search box and add-relationship/add-parent pages."""
+
 from typing import ClassVar
 
 from django import forms
@@ -6,6 +8,8 @@ from .models import Relationship
 
 
 class PersonSearchForm(forms.Form):
+    """Single search-box form used by the home, search, and surname pages."""
+
     search = forms.CharField(
         label="",
         widget=forms.TextInput(
@@ -21,7 +25,17 @@ class PersonSearchForm(forms.Form):
 
 
 class RelationshipForm(forms.ModelForm):
+    """Add a partner or child `Relationship` from a given source person.
+
+    `related_person` is set via the view (hidden in the rendered form)
+    rather than chosen by the user, so it's hidden here and the extra
+    `person_id` kwarg the view passes is discarded before the standard
+    `ModelForm` init runs.
+    """
+
     class Meta:
+        """Model metadata: bound model and editable fields."""
+
         model = Relationship
         fields: ClassVar[list] = ["type", "related_person"]
 
@@ -32,7 +46,16 @@ class RelationshipForm(forms.ModelForm):
 
 
 class ParentForm(forms.ModelForm):
+    """Add a parent `Relationship` for a given related person.
+
+    `person` (the parent) is set via the view rather than chosen by the
+    user, so it's hidden here and the extra `related_person_id` kwarg the
+    view passes is discarded before the standard `ModelForm` init runs.
+    """
+
     class Meta:
+        """Model metadata: bound model and editable fields."""
+
         model = Relationship
         fields: ClassVar[list] = ["type", "person"]
 

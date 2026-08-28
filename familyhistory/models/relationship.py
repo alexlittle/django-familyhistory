@@ -1,3 +1,5 @@
+"""The `Relationship` model: directed edges between two people."""
+
 from typing import ClassVar
 
 from django.db import models
@@ -10,6 +12,14 @@ from .utils import RELATIONSHIP_CHOICES, format_partial_date
 
 
 class Relationship(DateRangeModel):
+    """A directed, typed edge between two `Person`s.
+
+    `type` is one of `familyhistory.models.utils.RELATIONSHIP_CHOICES`
+    (parent/child or partner types). Family-tree structure is derived
+    entirely from these edges - see `familyhistory.helpers.tree` - rather
+    than stored as a tree itself.
+    """
+
     person = models.ForeignKey(
         Person, on_delete=models.CASCADE, related_name="relationships_person"
     )
@@ -20,6 +30,8 @@ class Relationship(DateRangeModel):
     description = HTMLField(blank=True)
 
     class Meta:
+        """Model metadata: display names and the person/type/related_person uniqueness constraint."""
+
         verbose_name = _("Relationship")
         verbose_name_plural = _("Relationships")
         constraints: ClassVar[list] = [
@@ -30,7 +42,12 @@ class Relationship(DateRangeModel):
         ]
 
     def format_date(self):
+        """Format the relationship's start/end date range for display.
 
+        Returns:
+            `"start - end"` if both are known, just `start` if only the
+            start is known, or `"?"` if neither is known.
+        """
         start = format_partial_date(
             self.start_day,
             self.start_month,

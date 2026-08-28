@@ -1,3 +1,5 @@
+"""Admin configuration for `Relationship`."""
+
 from typing import ClassVar
 
 from django.contrib import admin
@@ -8,6 +10,8 @@ from familyhistory.models import Relationship
 
 @admin.register(Relationship)
 class RelationshipAdmin(admin.ModelAdmin):
+    """Admin list/edit views for `Relationship`."""
+
     list_display = ("person", "type", "related_person", "format_date")
     search_fields: ClassVar[list] = [
         "person__first_name",
@@ -25,6 +29,14 @@ class RelationshipAdmin(admin.ModelAdmin):
     ]
 
     def format_date(self, obj):
+        """Render the relationship's formatted date range for the change list.
+
+        Args:
+            obj: The `Relationship` being displayed.
+
+        Returns:
+            The formatted date range.
+        """
         return obj.format_date()
 
     format_date.short_description = _("Dates")

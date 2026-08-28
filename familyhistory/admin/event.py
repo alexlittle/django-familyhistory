@@ -1,3 +1,5 @@
+"""Admin configuration for `Event`."""
+
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
@@ -6,14 +8,32 @@ from familyhistory.models import Event
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
+    """Admin list/edit views for `Event`."""
+
     list_display = ("title", "format_start_date", "format_end_date")
 
     def format_start_date(self, obj):
+        """Render the event's formatted start date for the change list.
+
+        Args:
+            obj: The `Event` being displayed.
+
+        Returns:
+            The formatted start date.
+        """
         return obj.format_start_date()
 
     format_start_date.short_description = _("Start Date")
 
     def format_end_date(self, obj):
+        """Render the event's formatted end date for the change list.
+
+        Args:
+            obj: The `Event` being displayed.
+
+        Returns:
+            The formatted end date.
+        """
         return obj.format_end_date()
 
     format_end_date.short_description = _("End Date")

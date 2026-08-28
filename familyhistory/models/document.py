@@ -1,3 +1,5 @@
+"""The `Document`/`DocumentFile` models: documents and their attached files."""
+
 import os
 from typing import ClassVar
 
@@ -18,10 +20,21 @@ from .utils import (
 
 
 def doc_file_path(instance, filename):
+    """Build the upload path for a `DocumentFile`, grouped by document type.
+
+    Args:
+        instance: The `DocumentFile` the file is being uploaded for.
+        filename: Original uploaded filename.
+
+    Returns:
+        The relative storage path for the file.
+    """
     return f"document/{instance.document.type}/{filename}"
 
 
 class Document(models.Model):
+    """A document (certificate, research note, etc.) linked to people and/or events."""
+
     title = models.CharField(max_length=200)
     description = HTMLField(blank=True)
     type = models.CharField(choices=DOCUMENT_CHOICES, max_length=100)
@@ -44,6 +57,8 @@ class Document(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        """Model metadata: display names and default ordering by document date."""
+
         verbose_name = _("Document")
         verbose_name_plural = _("Documents")
         ordering: ClassVar[list] = [
@@ -53,6 +68,11 @@ class Document(models.Model):
         ]
 
     def format_doc_date(self):
+        """Format the document's date for display.
+
+        Returns:
+            The formatted document date, or `None` if nothing is recorded.
+        """
         return format_partial_date(
             self.doc_day, self.doc_month, self.doc_year, self.doc_date_is_approximate
         )
@@ -61,6 +81,12 @@ class Document(models.Model):
         return f"{self.title}"
 
     def get_doc_type(self):
+        """Human-readable document type, using `type_other` when set.
+
+        Returns:
+            `type_other` if the document's type is `"other"` and a custom
+            value was given, otherwise the display value of `type`.
+        """
         if self.type_other:
             return self.type_other
         else:
@@ -68,6 +94,13 @@ class Document(models.Model):
 
 
 class DocumentFile(models.Model):
+    """A single uploaded file attached to a `Document`.
+
+    A `Document` may have several `DocumentFile`s (e.g. multiple scanned
+    pages of the same certificate). `file` is restricted to
+    `familyhistory.models.utils.ALLOWED_DOCUMENT_FILE_EXTENSIONS`.
+    """
+
     document = models.ForeignKey(
         Document, on_delete=models.CASCADE, related_name="document_file"
     )
@@ -86,8 +119,15 @@ class DocumentFile(models.Model):
             return f"{self.document.title}"
 
     class Meta:
+        """Model metadata: display names."""
+
         verbose_name = _("Document File")
         verbose_name_plural = _("Document Files")
 
     def get_filename(self):
+        """Get the file's name without its storage path.
+
+        Returns:
+            The base filename.
+        """
         return os.path.basename(self.file.name)

@@ -1,3 +1,5 @@
+"""Abstract model mixins shared by multiple `familyhistory` models."""
+
 from django.db import models
 from django.utils.dates import MONTHS
 
@@ -21,4 +23,6 @@ class DateRangeModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        """Marks this model abstract; not a concrete database table."""
+
         abstract = True

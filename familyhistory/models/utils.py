@@ -1,3 +1,5 @@
+"""Shared choice lists and formatting helpers used across the models package."""
+
 from django.utils.dates import MONTHS_3
 from django.utils.translation import gettext_lazy as _
 
@@ -54,7 +56,24 @@ ALLOWED_DOCUMENT_FILE_EXTENSIONS = [
 
 
 def format_partial_date(day, month, year, approximate=False):
-    """Format day/month/year where any part may be missing."""
+    """Format day/month/year where any part may be missing.
+
+    Genealogical dates are often only known to the year, or the month and
+    year, so this renders whatever combination is available (e.g. "Mar
+    1892", "1892") rather than requiring a complete date.
+
+    Args:
+        day: Day of month, or `None` if unknown. Ignored unless `month` is
+            also given, since a day without a month is meaningless.
+        month: Month number (1-12), or `None` if unknown.
+        year: Year, or `None` if unknown.
+        approximate: Whether the date is approximate, in which case the
+            result is prefixed with "c." (circa).
+
+    Returns:
+        The formatted date string, or `None` if day, month, and year are
+        all missing.
+    """
     if not (day or month or year):
         return None
 

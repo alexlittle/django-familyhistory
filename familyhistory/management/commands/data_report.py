@@ -1,3 +1,5 @@
+"""`manage.py data_report`: report on people with missing or approximate data."""
+
 from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 from django.urls import reverse
@@ -9,15 +11,35 @@ from familyhistory.models.utils import DECEASED
 
 
 def hyperlink(text, url):
-    """Wrap text in an OSC 8 terminal hyperlink."""
+    """Wrap text in an OSC 8 terminal hyperlink.
+
+    Args:
+        text: The visible link text.
+        url: The URL the text should link to.
+
+    Returns:
+        The text wrapped in OSC 8 escape sequences.
+    """
     return f"\033]8;;{url}\033\\{text}\033]8;;\033\\"
 
 
 class Command(BaseCommand):
+    """Report on `Person` records with missing or approximate data.
+
+    Checks birth dates, the `is_deceased` flag, and death dates, writing
+    a summary of gaps to stdout (as clickable terminal hyperlinks when
+    stdout is a TTY, otherwise as plain `name <url>` text).
+    """
+
     help = _("Report for missing data")
 
     def handle(self, *args, **options):
+        """Run all the individual data-quality checks in turn.
 
+        Args:
+            *args: Unused positional arguments.
+            **options: Unused parsed command options.
+        """
         # find missing birthdates
         self.missing_birth_dates()
 
@@ -30,6 +52,15 @@ class Command(BaseCommand):
         # missing photo
 
     def person_link(self, person):
+        """Build a link to a person's admin change page for terminal output.
+
+        Args:
+            person: The `Person` to link to.
+
+        Returns:
+            An OSC 8 terminal hyperlink if stdout is a TTY, otherwise a
+            plain `"name <url>"` string.
+        """
         path = reverse("admin:familyhistory_person_change", args=[person.pk])
         url = f"https://{Site.objects.get_current().domain}{path}"
         name = self.style.NOTICE(person.get_display_name())
@@ -38,9 +69,7 @@ class Command(BaseCommand):
         return hyperlink(name, url)
 
     def missing_birth_dates(self):
-        """
-        Checks for missing or approximate birthdates
-        """
+        """Check for and report on people with missing or approximate birth years."""
         counter_missing = counter_approx = 0
         self.stdout.write(
             self.style.MIGRATE_HEADING(gettext("Checking missing birth dates"))
@@ -80,6 +109,7 @@ class Command(BaseCommand):
         )
 
     def is_deceased_not_set(self):
+        """Check for and report on people with no `is_deceased` flag set."""
         self.stdout.write(
             self.style.MIGRATE_HEADING(gettext("Checking is_deceased for all persons"))
         )
@@ -103,9 +133,7 @@ class Command(BaseCommand):
         )
 
     def missing_date_of_death(self):
-        """
-        Checks for missing or approximate dates of death
-        """
+        """Check for and report on deceased people with missing or approximate death years."""
         counter_missing = counter_approx = 0
         self.stdout.write(
             self.style.MIGRATE_HEADING(gettext("Checking missing date of death"))
