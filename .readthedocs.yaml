@@ -1,0 +1,28 @@
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html
+
+version: 2
+
+build:
+  os: ubuntu-24.04
+  tools:
+    python: "3.12"
+  jobs:
+    pre_create_environment:
+      - asdf plugin add uv
+      - asdf install uv latest
+      - asdf global uv latest
+    create_environment:
+      - uv venv "${READTHEDOCS_VIRTUALENV_PATH}"
+    install:
+      # Deliberately skips the "local"/"deploy" uv groups (django-extensions,
+      # mod_wsgi, etc.) - docs only need the app itself plus the "dev" group,
+      # which already carries Sphinx and the RTD theme (see pyproject.toml).
+      - UV_PROJECT_ENVIRONMENT="${READTHEDOCS_VIRTUALENV_PATH}" uv sync --no-default-groups --group dev --locked
+    build:
+      html:
+        - "${READTHEDOCS_VIRTUALENV_PATH}/bin/python" -m sphinx -T -b html -d docs/_build/doctrees docs $READTHEDOCS_OUTPUT/html
+
+sphinx:
+  configuration: docs/conf.py
+  fail_on_warning: false

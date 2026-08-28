@@ -12,6 +12,19 @@ This is still a work in progress, but the basics are already set up for:
 Very happy for anyone to reuse and/or send any pull requests etc
 
 
+## Documentation
+
+[![Docs](https://readthedocs.org/projects/django-familyhistory/badge/?version=latest)](https://django-familyhistory.readthedocs.io/en/latest/?badge=latest)
+
+Full docs (architecture, installation, and an autodoc-generated API
+reference) are built with Sphinx and published on Read the Docs. Build them
+locally with:
+
+```bash
+uv sync --no-default-groups --group dev
+uv run sphinx-build -b html docs docs/_build/html
+```
+
 ## CI & Code Quality
 
 ### Continuous Integration
