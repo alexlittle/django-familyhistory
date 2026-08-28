@@ -21,11 +21,11 @@ Very happy for anyone to reuse and/or send any pull requests etc
 ### SonarCloud - Quality Overview
 
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_django-familyhistory&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_django-familyhistory)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_django-familyhistory&metric=coverage)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xaicompare)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_django-familyhistory&metric=coverage)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_django-familyhistory)
 
 ### Detailed Metrics
 
-[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_django-familyhistory&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xaicompare)
+[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_django-familyhistory&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_django-familyhistory)
 [![Reliability](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_django-familyhistory&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_django-familyhistory)
 [![Security](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_django-familyhistory&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_django-familyhistory)
 

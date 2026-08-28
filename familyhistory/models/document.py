@@ -1,6 +1,7 @@
 import os
 from typing import ClassVar
 
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models import F
 from django.utils.dates import MONTHS
@@ -9,7 +10,11 @@ from tinymce.models import HTMLField
 
 from .event import Event
 from .person import Person
-from .utils import DOCUMENT_CHOICES, format_partial_date
+from .utils import (
+    ALLOWED_DOCUMENT_FILE_EXTENSIONS,
+    DOCUMENT_CHOICES,
+    format_partial_date,
+)
 
 
 def doc_file_path(instance, filename):
@@ -66,7 +71,12 @@ class DocumentFile(models.Model):
     document = models.ForeignKey(
         Document, on_delete=models.CASCADE, related_name="document_file"
     )
-    file = models.FileField(upload_to=doc_file_path)
+    file = models.FileField(
+        upload_to=doc_file_path,
+        validators=[
+            FileExtensionValidator(allowed_extensions=ALLOWED_DOCUMENT_FILE_EXTENSIONS)
+        ],
+    )
     title = models.CharField(max_length=200, blank=True)
 
     def __str__(self):

@@ -18,9 +18,9 @@ dependencies = [
     "django-tinymce==5.0.0",
     "mysqlclient==2.2.8",
     "Pillow==12.3.0",
-    "sorl-thumbnail>=12.4,<13.0",
-    "djangorestframework==3.17.1",
-    "nh3==0.3.6"
+    "sorl-thumbnail==13.1.0",
+    "djangorestframework==3.18.0",
+    "nh3==0.3.7"
 ]
 
 # Tell setuptools where to find code and how to determine the version
@@ -68,18 +68,18 @@ omit = ["*/migrations/*", "*/tests/*", "*/settings*.py", "manage.py", "env/*", "
 
 [dependency-groups]
 dev = [
-    "pytest==9.0.3",
+    "pytest==9.1.1",
     "pytest-django==4.14.0",
-    "twine==6.2.0",
-    "build==1.4.0",
-    "wheel==0.46.3",
+    "twine==7.0.0",
+    "build==1.6.0",
+    "wheel==0.48.0",
     "pytest-cov==7.1.0",
     "Sphinx==9.1.0",
     "sphinx_rtd_theme==3.1.0",
     "interrogate==1.7.0",
     "pydoclint==0.9.1",
-    "setuptools==83.0.0",
-    "djangorestframework-stubs==3.17.0"
+    "setuptools==84.0.0",
+    "djangorestframework-stubs==3.18.1"
 ]
 local = [
     "django-extensions==4.1",

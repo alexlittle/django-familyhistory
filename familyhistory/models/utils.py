@@ -30,6 +30,29 @@ GENDER_CHOICES = [
 LIVING, DECEASED, UNKNOWN = "living", "deceased", "unknown"
 
 
+# Images, PDFs, and common text/office document formats - the kinds of
+# files people actually attach as historical documents/certificates.
+ALLOWED_DOCUMENT_FILE_EXTENSIONS = [
+    # images
+    "jpg",
+    "jpeg",
+    "png",
+    "gif",
+    "bmp",
+    "tif",
+    "tiff",
+    "webp",
+    # documents
+    "pdf",
+    "doc",
+    "docx",
+    "odt",
+    "rtf",
+    "txt",
+    "csv",
+]
+
+
 def format_partial_date(day, month, year, approximate=False):
     """Format day/month/year where any part may be missing."""
     if not (day or month or year):

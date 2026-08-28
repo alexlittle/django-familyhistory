@@ -2,10 +2,10 @@
 Django settings for django-familyhistory project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/1.6/topics/settings/
+https://docs.djangoproject.com/en/stable/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
+https://docs.djangoproject.com/en/stable/ref/settings/
 """
 
 import os
@@ -112,6 +112,30 @@ AUTHENTICATION_BACKENDS = [
 
 
 #####################################################################
+# Security
+# Secure-cookie flags are safe as a shared default: they only affect
+# the Set-Cookie header, so they don't break local dev (Makefile serves
+# dev over HTTPS via runserver_plus) or the test client. Override to
+# False in local_settings.py only if an environment genuinely serves
+# plain HTTP.
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Deliberately NOT enabled by default here: SECURE_SSL_REDIRECT would
+# 301-redirect every request, which breaks the Django test client (it
+# issues plain HTTP requests) and this settings module doubles as the
+# test settings (see pyproject.toml [tool.pytest.ini_options]). HSTS is
+# similarly deployment-specific — the browser caches it for the given
+# duration regardless of this app. Set both explicitly in the
+# production local_settings.py, e.g.:
+#   SECURE_SSL_REDIRECT = True
+#   SECURE_HSTS_SECONDS = 31536000
+#   SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#   SECURE_HSTS_PRELOAD = True
+#####################################################################
+
+
+#####################################################################
 # Logging
 LOGGING = {
     "version": 1,
@@ -152,8 +176,6 @@ LOGGING = {
 #####################################################################
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
-BLOG_ENABLED = False
-PROJECTS_ENABLED = False
 
 SESSION_COOKIE_NAME = "familyhistory"
 
