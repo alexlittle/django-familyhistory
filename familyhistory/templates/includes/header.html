@@ -13,6 +13,11 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarScroll">
       <ul class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll" >
+        <li class="nav-item nav-search">
+          <label for="navSearchPerson" class="visually-hidden">{% trans 'Search for a person' %}</label>
+          <input type="text" id="navSearchPerson" class="form-control form-control-sm" autocomplete="off" placeholder="{% trans 'Search for a person...' %}">
+          <ul id="navSearchResults" class="nav-search-results"></ul>
+        </li>
         <li class="nav-item">
           <a href="{% url 'fh:tree' %}" class="nav-link">{% trans 'Tree' %}</a>
         </li>

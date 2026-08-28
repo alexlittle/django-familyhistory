@@ -62,9 +62,55 @@ body {
 	color: var(--primary-color);
 }
 
-.navbar-light .navbar-nav > .active  a.nav-link, 
-.navbar-light .navbar-nav > .nav-item .active > a.nav-link:focus, 
+.navbar-light .navbar-nav > .active  a.nav-link,
+.navbar-light .navbar-nav > .nav-item .active > a.nav-link:focus,
 .navbar-light .navbar-nav > .nav-item .active > a.nav-link:hover {
+    color: var(--primary-color);
+}
+
+.nav-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+}
+
+.nav-search input {
+    width: 220px;
+}
+
+.nav-search-results {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    margin: 2px 0 0;
+    padding: 0;
+    list-style: none;
+    max-height: 320px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: 0 2px 6px var(--shadow-color);
+}
+
+.nav-search-results:not(:empty) {
+    display: block;
+}
+
+.nav-search-results li a {
+    display: block;
+    padding: 6px 12px;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.nav-search-results li a:hover,
+.nav-search-results li a:focus {
+    background-color: var(--bg-color);
     color: var(--primary-color);
 }
 
