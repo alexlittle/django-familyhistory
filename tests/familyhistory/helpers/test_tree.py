@@ -218,7 +218,7 @@ class CreateTreeIntegrationTests(TestCase):
             lambda self: f"{self.first_name} {self.birth_surname}",
         )
         birth_death_patcher = patch.object(
-            Person, "get_birth_death_date", lambda self: ""
+            Person, "get_birth_death_date", return_value=""
         )
         self.addCleanup(display_name_patcher.stop)
         self.addCleanup(birth_death_patcher.stop)
