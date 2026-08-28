@@ -21,7 +21,7 @@ build:
       - UV_PROJECT_ENVIRONMENT="${READTHEDOCS_VIRTUALENV_PATH}" uv sync --no-default-groups --group dev --locked
     build:
       html:
-        - "${READTHEDOCS_VIRTUALENV_PATH}/bin/python" -m sphinx -T -b html -d docs/_build/doctrees docs $READTHEDOCS_OUTPUT/html
+        - ${READTHEDOCS_VIRTUALENV_PATH}/bin/python -m sphinx -T -b html -d docs/_build/doctrees docs $READTHEDOCS_OUTPUT/html
 
 sphinx:
   configuration: docs/conf.py
