@@ -1,10 +1,10 @@
 const searchPerson = document.getElementById('searchPerson');
-const apiUrls = document.getElementById('api-urls').dataset;
+const widgetApiUrls = document.getElementById('api-urls').dataset;
 
 searchPerson.addEventListener('input', function () {
     const query = this.value;
     if (query.length > 1) {
-        fetch(`${apiUrls.personSearch}?q=${query}`)
+        fetch(`${widgetApiUrls.personSearch}?q=${query}`)
             .then(response => response.json())
             .then(data => {
                 const resultsDiv = document.getElementById('searchResults');
