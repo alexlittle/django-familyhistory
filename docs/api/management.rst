@@ -10,3 +10,8 @@ familyhistory.management.commands
    :members:
    :undoc-members:
    :show-inheritance:
+
+.. automodule:: familyhistory.management.commands.check_document_files
+   :members:
+   :undoc-members:
+   :show-inheritance:

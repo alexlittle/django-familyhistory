@@ -12,6 +12,7 @@ interactive family tree rendered client-side with `family-chart.js
 
    installation
    architecture
+   management_commands
    api/index
 
 Indices and tables
