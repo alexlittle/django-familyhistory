@@ -52,3 +52,15 @@ class PersonViewTests(TestCase):
             + f"?person_involved={person.id}"
         )
         self.assertContains(response, expected_url)
+
+    def test_add_event_button_links_to_admin_with_person_preselected(self):
+        person = make_person(first_name="Ada", birth_surname="Lovelace")
+
+        response = self.client.get(
+            reverse("fh:person_detail", kwargs={"person_id": person.id})
+        )
+
+        expected_url = (
+            reverse("admin:familyhistory_event_add") + f"?involved={person.id}"
+        )
+        self.assertContains(response, expected_url)
