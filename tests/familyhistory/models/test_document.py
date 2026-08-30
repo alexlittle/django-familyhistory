@@ -1,8 +1,11 @@
 """Tests for the Document and DocumentFile models."""
 
+import os
+
 import pytest
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import override_settings
 
 from familyhistory.models.document import Document, DocumentFile, doc_file_path
 
@@ -93,3 +96,37 @@ def test_disallowed_extensions_fail_validation(filename):
     )
     with pytest.raises(ValidationError):
         doc_file.full_clean()
+
+
+# ---------------------------------------------------------------------------
+# delete_document_file_from_disk signal
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.django_db
+class TestDeleteDocumentFileFromDiskSignal:
+    def test_deleting_a_document_file_removes_it_from_disk(self, tmp_path):
+        with override_settings(MEDIA_ROOT=tmp_path):
+            document_file = DocumentFile.objects.create(
+                document=create_document(),
+                file=SimpleUploadedFile("scan.pdf", b"content"),
+            )
+            file_path = document_file.file.path
+            assert os.path.exists(file_path)
+
+            document_file.delete()
+
+            assert not os.path.exists(file_path)
+
+    def test_deleting_the_parent_document_also_removes_the_file(self, tmp_path):
+        with override_settings(MEDIA_ROOT=tmp_path):
+            document = create_document()
+            document_file = DocumentFile.objects.create(
+                document=document,
+                file=SimpleUploadedFile("scan.pdf", b"content"),
+            )
+            file_path = document_file.file.path
+
+            document.delete()
+
+            assert not os.path.exists(file_path)

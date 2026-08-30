@@ -6,6 +6,8 @@ from typing import ClassVar
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models import F
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.utils.dates import MONTHS
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
@@ -131,3 +133,19 @@ class DocumentFile(models.Model):
             The base filename.
         """
         return os.path.basename(self.file.name)
+
+
+@receiver(post_delete, sender=DocumentFile)
+def delete_document_file_from_disk(sender, instance, **kwargs):
+    """Remove a `DocumentFile`'s underlying file from storage once its row is gone.
+
+    Django never does this on its own, so without this the file is left
+    behind on disk both when a `DocumentFile` is deleted directly and when
+    its parent `Document` is deleted (cascading to this row).
+
+    Args:
+        sender: The model class sending the signal (`DocumentFile`).
+        instance: The `DocumentFile` instance that was just deleted.
+        **kwargs: Unused signal kwargs.
+    """
+    instance.file.delete(save=False)
