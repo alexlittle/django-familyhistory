@@ -64,3 +64,14 @@ class PersonViewTests(TestCase):
             reverse("admin:familyhistory_event_add") + f"?involved={person.id}"
         )
         self.assertContains(response, expected_url)
+
+    def test_document_with_no_title_displays_person_and_doc_type_instead(self):
+        person = make_person(first_name="Ada", birth_surname="Lovelace")
+        document = Document.objects.create(title="", type="birth_certificate")
+        document.person_involved.add(person)
+
+        response = self.client.get(
+            reverse("fh:person_detail", kwargs={"person_id": person.id})
+        )
+
+        self.assertContains(response, document.get_display_title())

@@ -37,7 +37,7 @@ def doc_file_path(instance, filename):
 class Document(models.Model):
     """A document (certificate, research note, etc.) linked to people and/or events."""
 
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, blank=True)
     description = HTMLField(blank=True)
     type = models.CharField(choices=DOCUMENT_CHOICES, max_length=100)
     type_other = models.CharField(max_length=100, blank=True)
@@ -80,7 +80,7 @@ class Document(models.Model):
         )
 
     def __str__(self):
-        return f"{self.title}"
+        return self.get_display_title()
 
     def get_doc_type(self):
         """Human-readable document type, using `type_other` when set.
@@ -93,6 +93,28 @@ class Document(models.Model):
             return self.type_other
         else:
             return self.get_type_display()
+
+    def get_display_title(self):
+        """Title to show for this document, falling back when none was given.
+
+        `title` is optional - certificates etc. usually don't need one,
+        since the people involved and the document type already say what
+        it is. Falls back to those instead of showing nothing.
+
+        Returns:
+            `title` if set, otherwise "<people involved> - <doc type>" (or
+            just the doc type, if no people are linked yet).
+        """
+        if self.title:
+            return self.title
+
+        people = ", ".join(
+            person.get_display_name() for person in self.person_involved.all()
+        )
+        doc_type = self.get_doc_type()
+        if people:
+            return f"{people} - {doc_type}"
+        return doc_type
 
 
 class DocumentFile(models.Model):
@@ -116,9 +138,9 @@ class DocumentFile(models.Model):
 
     def __str__(self):
         if self.title:
-            return f"{self.document.title} {self.title}"
+            return f"{self.document.get_display_title()} {self.title}"
         else:
-            return f"{self.document.title}"
+            return f"{self.document.get_display_title()}"
 
     class Meta:
         """Model metadata: display names."""

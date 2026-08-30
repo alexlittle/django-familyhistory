@@ -8,6 +8,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 
 from familyhistory.models.document import Document, DocumentFile, doc_file_path
+from tests.familyhistory.views.helpers import make_person
 
 
 def create_document(**kwargs):
@@ -41,6 +42,11 @@ class TestDocumentStr:
     def test_str_returns_title(self):
         assert str(Document(title="Birth certificate")) == "Birth certificate"
 
+    @pytest.mark.django_db
+    def test_str_falls_back_like_get_display_title(self):
+        document = create_document(title="", type="birth_certificate")
+        assert str(document) == document.get_display_title()
+
 
 class TestGetDocType:
     def test_uses_type_other_when_set(self):
@@ -50,6 +56,39 @@ class TestGetDocType:
     def test_falls_back_to_type_display(self):
         document = Document(type="birth_certificate")
         assert document.get_doc_type() == document.get_type_display()
+
+
+class TestGetDisplayTitle:
+    def test_returns_title_when_set(self):
+        document = Document(title="Marriage certificate", type="marriage_certificate")
+        assert document.get_display_title() == "Marriage certificate"
+
+    @pytest.mark.django_db
+    def test_falls_back_to_doc_type_when_no_title_and_no_people(self):
+        document = create_document(title="", type="birth_certificate")
+        assert document.get_display_title() == document.get_doc_type()
+
+    @pytest.mark.django_db
+    def test_falls_back_to_person_and_doc_type_when_no_title(self):
+        document = create_document(title="", type="birth_certificate")
+        person = make_person(first_name="Ada", birth_surname="Lovelace")
+        document.person_involved.add(person)
+
+        assert document.get_display_title() == (
+            f"{person.get_display_name()} - {document.get_doc_type()}"
+        )
+
+    @pytest.mark.django_db
+    def test_joins_multiple_people_with_a_comma(self):
+        document = create_document(title="", type="birth_certificate")
+        ada = make_person(first_name="Ada", birth_surname="Lovelace")
+        bob = make_person(first_name="Bob", birth_surname="Smith")
+        document.person_involved.add(ada, bob)
+
+        assert document.get_display_title() == (
+            f"{ada.get_display_name()}, {bob.get_display_name()} - "
+            f"{document.get_doc_type()}"
+        )
 
 
 # ---------------------------------------------------------------------------

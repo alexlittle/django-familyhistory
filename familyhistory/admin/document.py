@@ -18,8 +18,22 @@ class DocumentFileInline(admin.TabularInline):
 class DocumentAdmin(admin.ModelAdmin):
     """Admin list/edit views for `Document`, with `DocumentFile`s inline."""
 
-    list_display = ("title", "type", "type_other", "format_doc_date")
+    list_display = ("get_display_title", "type", "type_other", "format_doc_date")
     search_fields: ClassVar[list] = ["title", "type", "type_other"]
+
+    def get_display_title(self, obj):
+        """Render the document's display title for the change list.
+
+        Args:
+            obj: The `Document` being displayed.
+
+        Returns:
+            `obj.get_display_title()`.
+        """
+        return obj.get_display_title()
+
+    get_display_title.short_description = _("Title")
+    get_display_title.admin_order_field = "title"
 
     def format_doc_date(self, obj):
         """Render the document's formatted date for the change list.
