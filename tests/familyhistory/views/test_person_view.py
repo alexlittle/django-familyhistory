@@ -39,3 +39,16 @@ class PersonViewTests(TestCase):
         fetched = response.context["person"]
         self.assertEqual(list(fetched.events_involved.all()), [event])
         self.assertEqual(list(fetched.document_people.all()), [document])
+
+    def test_add_document_button_links_to_admin_with_person_preselected(self):
+        person = make_person(first_name="Ada", birth_surname="Lovelace")
+
+        response = self.client.get(
+            reverse("fh:person_detail", kwargs={"person_id": person.id})
+        )
+
+        expected_url = (
+            reverse("admin:familyhistory_document_add")
+            + f"?person_involved={person.id}"
+        )
+        self.assertContains(response, expected_url)

@@ -303,6 +303,13 @@
       {% else %}
         <p class="text-muted">{% trans 'No documents recorded.' %}</p>
       {% endif %}
+      <div class="actions">
+         <ul class="list-group list-group-flush">
+            <li class="list-group-item p-0 text-end">
+              <a href="{% url 'admin:familyhistory_document_add' %}?person_involved={{ person.id }}"
+                class="btn btn-sm btn-outline-primary" target="_blank">{% trans 'Add' %}</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
