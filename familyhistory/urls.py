@@ -19,5 +19,6 @@ urlpatterns = [
         views.AddParentView.as_view(),
         name="add_parent",
     ),
+    path("surnames", views.SurnameListView.as_view(), name="surname_list"),
     path("surname/<str:surname>", views.SurnameView.as_view(), name="surname_detail"),
 ]

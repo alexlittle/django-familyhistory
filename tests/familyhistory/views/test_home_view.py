@@ -31,16 +31,6 @@ class HomeViewTests(TestCase):
         self.assertEqual(people[0], newer)
         self.assertIn(older, people)
 
-    def test_context_includes_surname_counts(self):
-        make_person(birth_surname="Smith")
-        make_person(birth_surname="Smith")
-        make_person(birth_surname="Jones")
-
-        response = self.client.get(reverse("fh:home"))
-
-        self.assertIn(("Jones", 1), response.context["surnames"])
-        self.assertIn(("Smith", 2), response.context["surnames"])
-
     def test_context_includes_search_form(self):
         response = self.client.get(reverse("fh:home"))
         self.assertIsInstance(response.context["searchform"], PersonSearchForm)

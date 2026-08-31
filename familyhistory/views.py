@@ -9,7 +9,7 @@ from .models import Person, Relationship
 
 
 class HomeView(ListView):
-    """Home page: recently-updated people, surname counts, and the search box."""
+    """Home page: recently-updated people and the search box."""
 
     template_name = "fh/home.html"
     paginate_by = 20
@@ -24,13 +24,12 @@ class HomeView(ListView):
         return Person.objects.all().order_by("-updated_at")
 
     def get_context_data(self, **kwargs):
-        """Add surname counts and the search form to the template context.
+        """Add the search form to the template context.
 
         Returns:
-            The template context, with `surnames` and `searchform` added.
+            The template context, with `searchform` added.
         """
         context = super().get_context_data(**kwargs)
-        context["surnames"] = Person.get_surname_counts()
         context["searchform"] = PersonSearchForm(self.request.GET or None)
         return context
 
@@ -59,6 +58,22 @@ class TreeView(TemplateView):
     """The interactive family tree page, rendered client-side by family-chart.js."""
 
     template_name = "fh/tree.html"
+
+
+class SurnameListView(TemplateView):
+    """Listing of all surnames in use, with a count of people per surname."""
+
+    template_name = "fh/surnames.html"
+
+    def get_context_data(self, **kwargs):
+        """Add surname counts to the template context.
+
+        Returns:
+            The template context, with `surnames` added.
+        """
+        context = super().get_context_data(**kwargs)
+        context["surnames"] = Person.get_surname_counts()
+        return context
 
 
 class SurnameView(ListView):
