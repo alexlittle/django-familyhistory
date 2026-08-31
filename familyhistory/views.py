@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, TemplateView
 
 from .forms import ParentForm, PersonSearchForm, RelationshipForm
+from .helpers.settings import get_homepage_people_count
 from .models import Person, Relationship
 
 
@@ -12,8 +13,18 @@ class HomeView(ListView):
     """Home page: recently-updated people and the search box."""
 
     template_name = "fh/home.html"
-    paginate_by = 20
     context_object_name = "people"
+
+    def get_paginate_by(self, queryset):
+        """Read the page size from `SiteSetting` instead of hard-coding it.
+
+        Args:
+            queryset: Unused; accepted for signature compatibility.
+
+        Returns:
+            The configured number of people to show per page.
+        """
+        return get_homepage_people_count()
 
     def get_queryset(self):
         """List all people, most recently updated first.

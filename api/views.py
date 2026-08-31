@@ -1,11 +1,11 @@
 """JSON endpoints for the browser-side family tree widget and person-search box."""
 
-from django.conf import settings
 from django.http import JsonResponse
 from django.views import View
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from familyhistory.helpers.settings import get_tree_start_person_id
 from familyhistory.helpers.tree import create_tree
 from familyhistory.models import Person
 
@@ -24,9 +24,9 @@ class FamilyTreeDataView(View):
         Returns:
             A `JsonResponse` containing the list of tree node dicts.
         """
-        start_person_id = self.kwargs.get(
-            "start_person_id", settings.TREE_START_PERSON_ID
-        )
+        start_person_id = self.kwargs.get("start_person_id")
+        if start_person_id is None:
+            start_person_id = get_tree_start_person_id()
         data = create_tree(start_person_id)
 
         return JsonResponse(data, safe=False)

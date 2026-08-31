@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from familyhistory.forms import PersonSearchForm
-from familyhistory.models import Person
+from familyhistory.models import Person, SiteSetting
 from tests.familyhistory.views.helpers import make_person
 
 
@@ -46,3 +46,13 @@ class HomeViewTests(TestCase):
 
         second_page = self.client.get(reverse("fh:home"), {"page": 2})
         self.assertEqual(len(second_page.context["people"]), 1)
+
+    def test_pagination_size_is_configurable_via_site_setting(self):
+        SiteSetting.objects.create(key="homepage_people_count", value="5")
+        for i in range(6):
+            make_person(first_name=f"Person{i}")
+
+        response = self.client.get(reverse("fh:home"))
+
+        self.assertEqual(len(response.context["people"]), 5)
+        self.assertTrue(response.context["is_paginated"])

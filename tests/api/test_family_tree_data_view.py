@@ -1,8 +1,10 @@
 from unittest.mock import patch
 
-from django.test import RequestFactory, SimpleTestCase, override_settings
+from django.test import RequestFactory, SimpleTestCase, TestCase
 
 from api.views import FamilyTreeDataView
+from familyhistory.models import SiteSetting
+from tests.familyhistory.views.helpers import make_person
 
 # create_tree() is mocked throughout, so these tests don't touch the
 # database and don't re-test create_tree's own logic (that lives in
@@ -10,7 +12,6 @@ from api.views import FamilyTreeDataView
 # start_person_id it passes on, and how it wraps the result.
 
 
-@override_settings(TREE_START_PERSON_ID=42)
 class FamilyTreeDataViewTests(SimpleTestCase):
     def setUp(self):
         self.factory = RequestFactory()
@@ -23,18 +24,6 @@ class FamilyTreeDataViewTests(SimpleTestCase):
         FamilyTreeDataView.as_view()(request, start_person_id=5)
 
         mock_create_tree.assert_called_once_with(5)
-
-    @patch("api.views.create_tree")
-    def test_falls_back_to_settings_when_no_start_person_id_given(
-        self, mock_create_tree
-    ):
-        mock_create_tree.return_value = []
-
-        request = self.factory.get("/fh-data/tree/")
-        FamilyTreeDataView.as_view()(request)
-
-        # TREE_START_PERSON_ID=42 comes from the class-level override_settings
-        mock_create_tree.assert_called_once_with(42)
 
     @patch("api.views.create_tree")
     def test_returns_the_tree_data_as_a_json_array(self, mock_create_tree):
@@ -57,3 +46,23 @@ class FamilyTreeDataViewTests(SimpleTestCase):
 
         self.assertEqual(response.status_code, 405)
         mock_create_tree.assert_not_called()
+
+
+class FamilyTreeDataViewSettingsFallbackTests(TestCase):
+    # Uses TestCase (not SimpleTestCase) because it hits the database, via
+    # SiteSetting.get() and the fallback person.
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    @patch("api.views.create_tree")
+    def test_falls_back_to_site_setting_when_no_start_person_id_given(
+        self, mock_create_tree
+    ):
+        mock_create_tree.return_value = []
+        person = make_person()
+        SiteSetting.objects.create(key="tree_start_person_id", value=str(person.id))
+
+        request = self.factory.get("/fh-data/tree/")
+        FamilyTreeDataView.as_view()(request)
+
+        mock_create_tree.assert_called_once_with(person.id)

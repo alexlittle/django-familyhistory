@@ -70,6 +70,15 @@ HTTP requests and that would break the suite. Deployment-only settings like that
 - `TreeCache` — a per-`Person` JSON cache of that person's rendered tree (see below).
 - `DateRangeModel` (`models/mixins.py`) — abstract base providing the shared
   start/end partial-date fields used by `Relationship` (e.g. marriage date ranges).
+- `SiteSetting` — a generic key/value row (`key`, `value`, both `CharField`) for
+  admin-editable config that would otherwise be hardcoded, e.g. the tree's default start
+  person (`tree_start_person_id`) and the homepage page size (`homepage_people_count`). New
+  settings are added as new rows from the admin, no migration needed. `SiteSetting.get(key,
+  default=...)` returns the raw string value (or `default` if the key is missing/blank);
+  `familyhistory/helpers/settings.py` defines the well-known keys and wraps them in typed
+  getters (`get_tree_start_person_id()`, `get_homepage_people_count()`) — add a new getter
+  there, not a Django setting, for values that should be DB-editable rather than code
+  constants.
 
 **Tree generation** (`familyhistory/helpers/tree.py`): `create_tree(start_person_id)` loads
 all people and parent/partner relationships in bulk, builds in-memory parent/children/partner
@@ -88,8 +97,9 @@ pages: home, person detail, tree, search, surname listing, add-relationship/add-
 and `api.urls` (namespace `fh_data`, JSON endpoints under `/api/`) at the root and `/api/`
 respectively.
 
-**Settings unique to this project**: `TREE_START_PERSON_ID` (default person to root the tree
-view on).
+**Settings unique to this project**: none currently — admin-editable, environment-independent
+config like the tree's default start person lives in `SiteSettings` instead (see above), not
+in `config/settings.py`.
 
 ## Code quality tooling
 
