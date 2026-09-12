@@ -14,12 +14,12 @@ authors = [
 ]
 
 dependencies = [
-    "django==6.0.7",
+    "django==6.1.1",
     "django-tinymce==5.0.0",
     "mysqlclient==2.2.8",
     "Pillow==12.3.0",
     "sorl-thumbnail==13.1.0",
-    "djangorestframework==3.18.0",
+    "djangorestframework==3.18.1",
     "nh3==0.3.7"
 ]
 
