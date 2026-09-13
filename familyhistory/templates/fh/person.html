@@ -172,7 +172,7 @@
                     <div class="actions">
                        <ul class="list-group list-group-flush">
                           <li class="list-group-item p-0 text-end">
-                            <a href="{% url 'fh:add_relationship' person.id %}?type=is_father_of"
+                            <a href="{% url 'fh:add_relationship' person.id %}?type={% if person.gender == 'female' %}is_mother_of{% else %}is_father_of{% endif %}"
                               class="btn btn-sm btn-outline-primary">{% trans 'Add' %}</a></li>
                       </ul>
                     </div>
