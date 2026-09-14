@@ -19,6 +19,7 @@ class PersonAdmin(admin.ModelAdmin):
         "format_birth_date",
         "format_death_date",
         "is_deceased",
+        "notes",
     )
     search_fields: ClassVar[list] = [
         "first_name",
@@ -76,6 +77,13 @@ class PersonAdmin(admin.ModelAdmin):
             _("Biography"),
             {
                 "fields": ("biography",),
+                "classes": ("collapse",),
+            },
+        ),
+        (
+            _("Notes"),
+            {
+                "fields": ("notes",),
                 "classes": ("collapse",),
             },
         ),

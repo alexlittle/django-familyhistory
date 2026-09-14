@@ -50,6 +50,7 @@ class Person(models.Model):
 
     biography = HTMLField(blank=True)
     photo = models.ImageField(upload_to=photo_path, blank=True)
+    notes = models.TextField(blank=True)
 
     # Birth fields
     birth_year = models.IntegerField(null=True, blank=True)
