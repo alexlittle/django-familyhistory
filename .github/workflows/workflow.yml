@@ -11,7 +11,7 @@ on:
 jobs:
   build-test-sonar:
     name: Build, Test, Analyze
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     env:
       UV_NO_SYNC: "1"
     permissions:
@@ -27,7 +27,7 @@ jobs:
     # -------------------------
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:8.4
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.CI_MYSQL_ROOT_PASSWORD }}
         ports:
