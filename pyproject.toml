@@ -16,7 +16,7 @@ authors = [
 dependencies = [
     "django==6.1.1",
     "django-tinymce==5.0.0",
-    "mysqlclient==2.2.8",
+    "mysqlclient==2.3.0",
     "Pillow==12.3.0",
     "sorl-thumbnail==13.1.0",
     "djangorestframework==3.18.1",
@@ -80,7 +80,7 @@ dev = [
     "pydoclint==0.9.1",
     "setuptools==84.0.0",
     "djangorestframework-stubs==3.18.1",
-    "ruff==0.16.7"
+    "ruff==0.16.8"
 ]
 local = [
     "django-extensions==4.1",
