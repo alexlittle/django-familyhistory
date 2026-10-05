@@ -77,10 +77,10 @@ dev = [
     "Sphinx==9.1.0",
     "sphinx_rtd_theme==3.1.0",
     "interrogate==1.7.0",
-    "pydoclint==0.9.1",
+    "pydoclint==0.11.0",
     "setuptools==84.0.0",
     "djangorestframework-stubs==3.18.1",
-    "ruff==0.16.9"
+    "ruff==0.16.10"
 ]
 local = [
     "django-extensions==4.1",
@@ -88,7 +88,7 @@ local = [
     "pyOpenSSL==26.4.0"
 ]
 deploy = [
-    "mod-wsgi==6.0.6"
+    "mod-wsgi==6.1.0"
 ]
 
 [tool.uv]
