@@ -8,7 +8,7 @@ available on Read the Docs. The docs build never opens a database connection,
 so these are throwaway values good only for populating Django's app registry.
 """
 
-from config.settings import *  # NOSONAR
+from config.base import *  # NOSONAR
 
 DATABASES = {
     "default": {

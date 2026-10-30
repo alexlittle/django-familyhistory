@@ -1,5 +1,4 @@
-# config/settings_ci.py
-from config.settings import *  # NOSONAR
+from config.base import *  # NOSONAR
 
 DATABASES = {
     "default": {

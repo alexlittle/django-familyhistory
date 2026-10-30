@@ -12,7 +12,7 @@ DOCS_DIR = Path(__file__).resolve().parent
 BASE_DIR = DOCS_DIR.parent
 sys.path.insert(0, str(BASE_DIR))
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings_docs")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.docs")
 
 import django
 

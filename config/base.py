@@ -192,12 +192,3 @@ TINYMCE_DEFAULT_CONFIG = {
     "a11ycheck ltr rtl | showcomments addcomment code",
     "custom_undo_redo_levels": 10,
 }
-
-try:
-    from config.local_settings import *  # NOSONAR
-except ImportError:
-    import warnings
-
-    warnings.warn(
-        "Using default settings. Add `config/local_settings.py` for custom settings."
-    )
