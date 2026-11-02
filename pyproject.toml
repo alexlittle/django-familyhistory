@@ -18,7 +18,7 @@ dependencies = [
     "django-tinymce==5.0.0",
     "mysqlclient==2.3.0",
     "Pillow==13.0.0",
-    "sorl-thumbnail==13.2.0",
+    "sorl-thumbnail==13.4.0",
     "djangorestframework==3.18.3",
     "nh3==0.3.7"
 ]
@@ -68,7 +68,7 @@ omit = ["*/migrations/*", "*/tests/*", "*/settings*.py", "manage.py", "env/*", "
 
 [dependency-groups]
 dev = [
-    "pytest==9.1.1",
+    "pytest==9.2.0",
     "pytest-django==4.14.0",
     "twine==7.0.0",
     "build==1.6.1",
@@ -77,10 +77,10 @@ dev = [
     "Sphinx==9.1.0",
     "sphinx_rtd_theme==3.1.0",
     "interrogate==1.7.0",
-    "pydoclint==0.11.1",
+    "pydoclint==0.12.0",
     "setuptools==84.2.1",
     "djangorestframework-stubs==3.18.1",
-    "ruff==0.17.2"
+    "ruff==0.17.3"
 ]
 local = [
     "django-extensions==4.1",
