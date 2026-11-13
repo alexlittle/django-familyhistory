@@ -30,29 +30,33 @@ python manage.py makemigrations --check --dry-run   # verify no missing migratio
 python manage.py check --deploy                     # Django's deployment security checklist
 ```
 
-Tests use `DJANGO_SETTINGS_MODULE=config.settings` by default (set in `pyproject.toml`
-`[tool.pytest.ini_options]`), which loads whatever local dev DB is configured in the
-gitignored `settings`. CI instead uses `config.settings_ci` (MySQL via env
-vars) — see `.github/workflows/workflow.yml`.
+Tests use `DJANGO_SETTINGS_MODULE=settings.ci` (set in `pyproject.toml`
+`[tool.pytest.ini_options]` and in `.github/workflows/workflow.yml`), which connects to
+MySQL using `DB_NAME`/`DB_USER`/`DB_PASSWORD`/`DB_HOST`/`DB_PORT` env vars (defaults to
+root@127.0.0.1:3306, database `familyhistory`). `manage.py` defaults to `settings.dev`.
 
 ## Architecture
 
-**Settings**: `settings` holds the shared/default config and is also what the test
-suite runs under. It ends with `from config.local_settings import *`, which is a gitignored,
-per-environment override file (see `settings` for the required
-shape: `SECRET_KEY`, `DATABASES`, `DEBUG`, `ALLOWED_HOSTS`). `settings` layers
-CI-specific DB/secret settings on top of `config.settings` for GitHub Actions.
-Because `config.settings` is shared with the test client, don't add settings there that
-assume real HTTPS traffic (e.g. `SECURE_SSL_REDIRECT`) — the Django test client makes plain
-HTTP requests and that would break the suite. Deployment-only settings like that belong in
-`local_settings.py`/`local_settings_template.py` instead.
+**Settings** (`settings/` package, which is also the Django project package — it holds
+`urls.py` and `wsgi.py` too): `settings/base.py` has the shared config. Each environment
+has a module that does `from settings.base import *` and adds its own `SECRET_KEY`,
+`DATABASES`, `DEBUG` and `ALLOWED_HOSTS`:
+- `settings.dev` — local development (the `manage.py` default). Gitignored.
+- `settings.live` — production. Gitignored.
+- `settings.ci` — tests and GitHub Actions (MySQL via env vars, throwaway secret key).
+- `settings.docs` — Sphinx/Read the Docs build only (in-memory SQLite, throwaway key).
+
+Because `settings.base` is shared with `settings.ci` and so the test client, don't add
+settings there that assume real HTTPS traffic (e.g. `SECURE_SSL_REDIRECT`) — the Django
+test client makes plain HTTP requests and that would break the suite. Deployment-only
+settings like that belong in `settings/live.py` instead.
 
 **Three Django apps**:
 - `familyhistory` — the models, server-rendered views/templates, forms, admin, and management
   commands. This is where the actual data model lives.
 - `api` — a thin DRF layer (`api/views.py`, `api/serializers.py`) that exposes JSON for the
   browser-side family tree widget and the live person-search box. Not a general-purpose API.
-- `config` — Django project config (settings, root URLconf, WSGI).
+- `settings` — Django project package (per-environment settings modules, root URLconf, WSGI).
 
 **Models** (`familyhistory/models/`, all re-exported from `models/__init__.py`):
 - `Person` — the core entity. Names are split into several optional fields
@@ -92,14 +96,14 @@ call it.
   live is too slow. Nothing currently reads from `TreeCache` automatically — check whether a
   view/consumer has been wired up before assuming the cache is live.
 
-**URL layout**: `settings` mounts `familyhistory.urls` (namespace `fh`, server-rendered
+**URL layout**: `settings/urls.py` mounts `familyhistory.urls` (namespace `fh`, server-rendered
 pages: home, person detail, tree, search, surname listing, add-relationship/add-parent forms)
 and `api.urls` (namespace `fh_data`, JSON endpoints under `/api/`) at the root and `/api/`
 respectively.
 
 **Settings unique to this project**: none currently — admin-editable, environment-independent
 config like the tree's default start person lives in `SiteSettings` instead (see above), not
-in `settings`.
+in the settings modules.
 
 ## Code quality tooling
 

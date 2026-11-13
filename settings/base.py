@@ -68,6 +68,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.request",
                 "django.contrib.messages.context_processors.messages",
+                "familyhistory.context_processors.app_version",
             ],
         },
     },
@@ -116,7 +117,7 @@ AUTHENTICATION_BACKENDS = [
 # Secure-cookie flags are safe as a shared default: they only affect
 # the Set-Cookie header, so they don't break local dev (Makefile serves
 # dev over HTTPS via runserver_plus) or the test client. Override to
-# False in local_settings.py only if an environment genuinely serves
+# False in the environment's settings module only if an environment genuinely serves
 # plain HTTP.
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
@@ -127,7 +128,7 @@ CSRF_COOKIE_SECURE = True
 # test settings (see pyproject.toml [tool.pytest.ini_options]). HSTS is
 # similarly deployment-specific — the browser caches it for the given
 # duration regardless of this app. Set both explicitly in the
-# production local_settings.py, e.g.:
+# production settings/live.py, e.g.:
 #   SECURE_SSL_REDIRECT = True
 #   SECURE_HSTS_SECONDS = 31536000
 #   SECURE_HSTS_INCLUDE_SUBDOMAINS = True

@@ -38,7 +38,7 @@ body {
   width: 100%;
   background-color: var(--bg-color);
   border-top: 1px solid var(--border-color);
-  padding-top:10px;
+  padding:20px 0;
 }
 
 /* Customise the navbar */
