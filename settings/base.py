@@ -19,9 +19,9 @@ ADMINS = ()
 
 SITE_ID = 1
 
-ROOT_URLCONF = "config.urls"
+ROOT_URLCONF = "settings.urls"
 
-WSGI_APPLICATION = "config.wsgi.application"
+WSGI_APPLICATION = "settings.wsgi.application"
 
 
 INSTALLED_APPS = [

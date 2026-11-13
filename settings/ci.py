@@ -1,4 +1,4 @@
-from config.base import *  # NOSONAR
+from settings.base import *  # NOSONAR
 
 DATABASES = {
     "default": {

@@ -216,5 +216,5 @@ __marimo__/
 /familyhistory/static/tinymce/
 /certs/
 /tasks.md
-/config/dev.py
-/config/live.py
+/settings/dev.py
+/settings/live.py

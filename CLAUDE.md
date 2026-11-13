@@ -32,15 +32,15 @@ python manage.py check --deploy                     # Django's deployment securi
 
 Tests use `DJANGO_SETTINGS_MODULE=config.settings` by default (set in `pyproject.toml`
 `[tool.pytest.ini_options]`), which loads whatever local dev DB is configured in the
-gitignored `config/local_settings.py`. CI instead uses `config.settings_ci` (MySQL via env
+gitignored `settings`. CI instead uses `config.settings_ci` (MySQL via env
 vars) — see `.github/workflows/workflow.yml`.
 
 ## Architecture
 
-**Settings**: `config/settings.py` holds the shared/default config and is also what the test
+**Settings**: `settings` holds the shared/default config and is also what the test
 suite runs under. It ends with `from config.local_settings import *`, which is a gitignored,
-per-environment override file (see `config/local_settings_template.py` for the required
-shape: `SECRET_KEY`, `DATABASES`, `DEBUG`, `ALLOWED_HOSTS`). `config/settings_ci.py` layers
+per-environment override file (see `settings` for the required
+shape: `SECRET_KEY`, `DATABASES`, `DEBUG`, `ALLOWED_HOSTS`). `settings` layers
 CI-specific DB/secret settings on top of `config.settings` for GitHub Actions.
 Because `config.settings` is shared with the test client, don't add settings there that
 assume real HTTPS traffic (e.g. `SECURE_SSL_REDIRECT`) — the Django test client makes plain
@@ -92,14 +92,14 @@ call it.
   live is too slow. Nothing currently reads from `TreeCache` automatically — check whether a
   view/consumer has been wired up before assuming the cache is live.
 
-**URL layout**: `config/urls.py` mounts `familyhistory.urls` (namespace `fh`, server-rendered
+**URL layout**: `settings` mounts `familyhistory.urls` (namespace `fh`, server-rendered
 pages: home, person detail, tree, search, surname listing, add-relationship/add-parent forms)
 and `api.urls` (namespace `fh_data`, JSON endpoints under `/api/`) at the root and `/api/`
 respectively.
 
 **Settings unique to this project**: none currently — admin-editable, environment-independent
 config like the tree's default start person lives in `SiteSettings` instead (see above), not
-in `config/settings.py`.
+in `settings`.
 
 ## Code quality tooling
 
