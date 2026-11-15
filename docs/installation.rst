@@ -23,9 +23,8 @@ Running the app and tests
 
 .. code-block:: bash
 
-   make run                     # runserver_plus over HTTPS using certs/ (django-extensions)
-   make test                    # pytest
-   make cov                     # pytest --cov --cov-report=term-missing
+   uv run python manage.py runserver      # dev server
+   uv run pytest --cov --cov-report=term-missing   # with coverage
 
    uv run pytest                                  # full suite
    uv run pytest path/to/test_file.py::TestName   # single test/class/module

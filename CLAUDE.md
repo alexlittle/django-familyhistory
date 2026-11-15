@@ -14,10 +14,10 @@ Dependencies and the venv are managed with `uv`; the pinned Python version is in
 
 ```bash
 uv sync --group dev          # install/update dependencies (dev group: pytest, ruff via pre-commit, etc.)
+# tests also need DB_PASSWORD (env var or a gitignored .env file) for the MySQL root user
 
-make run                     # runserver_plus over HTTPS using certs/ (django-extensions, "local" uv group)
-make test                    # pytest
-make cov                     # pytest --cov --cov-report=term-missing
+uv run python manage.py runserver      # dev server
+uv run pytest --cov --cov-report=term-missing   # with coverage
 
 uv run pytest                                  # full suite
 uv run pytest path/to/test_file.py::TestName   # single test/class/module

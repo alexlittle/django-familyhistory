@@ -20,7 +20,8 @@ dependencies = [
     "Pillow==13.0.0",
     "sorl-thumbnail==13.4.0",
     "djangorestframework==3.18.3",
-    "nh3==0.3.7"
+    "nh3==0.3.7",
+
 ]
 
 # Tell setuptools where to find code and how to determine the version
@@ -58,6 +59,7 @@ exclude = "tests|docs"
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "settings.ci"
 python_files = ["test_*.py"]
+env_files = [".env"]
 
 [tool.coverage.run]
 relative_files = true
@@ -80,11 +82,12 @@ dev = [
     "pydoclint==0.12.0",
     "setuptools==84.2.1",
     "djangorestframework-stubs==3.18.2",
-    "ruff==0.17.4"
+    "ruff==0.17.4",
+    "django-debug-toolbar",
+    "pytest-dotenv==0.5.2",
 ]
 local = [
     "django-extensions==4.1",
-    "django-debug-toolbar",
 ]
 deploy = [
     "mod-wsgi==6.1.1"

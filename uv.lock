@@ -1,5 +1,5 @@
 version = 1
-revision = 5
+revision = 3
 requires-python = ">=3.12"
 
 [[package]]
@@ -520,7 +520,6 @@ wheels = [
 name = "familyhistory"
 version = "0.1.0"
 source = { editable = "." }
-default-groups = ["deploy", "local"]
 dependencies = [
     { name = "django" },
     { name = "django-tinymce" },
@@ -537,12 +536,14 @@ deploy = [
 ]
 dev = [
     { name = "build" },
+    { name = "django-debug-toolbar" },
     { name = "djangorestframework-stubs" },
     { name = "interrogate" },
     { name = "pydoclint" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-django" },
+    { name = "pytest-dotenv" },
     { name = "ruff" },
     { name = "setuptools" },
     { name = "sphinx" },
@@ -551,7 +552,6 @@ dev = [
     { name = "wheel" },
 ]
 local = [
-    { name = "django-debug-toolbar" },
     { name = "django-extensions" },
 ]
 
@@ -570,12 +570,14 @@ requires-dist = [
 deploy = [{ name = "mod-wsgi", specifier = "==6.1.1" }]
 dev = [
     { name = "build", specifier = "==1.6.1" },
+    { name = "django-debug-toolbar" },
     { name = "djangorestframework-stubs", specifier = "==3.18.2" },
     { name = "interrogate", specifier = "==1.7.0" },
     { name = "pydoclint", specifier = "==0.12.0" },
     { name = "pytest", specifier = "==9.2.0" },
     { name = "pytest-cov", specifier = "==7.1.0" },
     { name = "pytest-django", specifier = "==4.14.0" },
+    { name = "pytest-dotenv", specifier = "==0.5.2" },
     { name = "ruff", specifier = "==0.17.4" },
     { name = "setuptools", specifier = "==84.2.1" },
     { name = "sphinx", specifier = "==9.1.0" },
@@ -583,10 +585,7 @@ dev = [
     { name = "twine", specifier = "==7.0.0" },
     { name = "wheel", specifier = "==0.48.0" },
 ]
-local = [
-    { name = "django-debug-toolbar" },
-    { name = "django-extensions", specifier = "==4.1" },
-]
+local = [{ name = "django-extensions", specifier = "==4.1" }]
 
 [[package]]
 name = "id"
@@ -1050,6 +1049,28 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/44/f6/3851312120c2bf2f19cafff931e75059aad1ba670703cd751e2fde9bc942/pytest_django-4.14.0.tar.gz", hash = "sha256:26787dd3f422cfbab8f55b80a776e2edea7a11092cb74e960bef1312515708ef", size = 94700, upload-time = "2026-08-10T14:13:08.319Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9c/03/850bffad2b581c440ca51c039d74504d5a422c94bda0bdb8a8ba5068d48b/pytest_django-4.14.0-py3-none-any.whl", hash = "sha256:c533b08d89cc675efcd5398eea270b34547e35f9a3608e2c9748dd88428ea187", size = 27067, upload-time = "2026-08-10T14:13:06.998Z" },
+]
+
+[[package]]
+name = "pytest-dotenv"
+version = "0.5.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+    { name = "python-dotenv" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/cd/b0/cafee9c627c1bae228eb07c9977f679b3a7cb111b488307ab9594ba9e4da/pytest-dotenv-0.5.2.tar.gz", hash = "sha256:2dc6c3ac6d8764c71c6d2804e902d0ff810fa19692e95fe138aefc9b1aa73732", size = 3782, upload-time = "2020-06-16T12:38:03.4Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d0/da/9da67c67b3d0963160e3d2cbc7c38b6fae342670cc8e6d5936644b2cf944/pytest_dotenv-0.5.2-py3-none-any.whl", hash = "sha256:40a2cece120a213898afaa5407673f6bd924b1fa7eafce6bda0e8abffe2f710f", size = 3993, upload-time = "2020-06-16T12:38:01.139Z" },
+]
+
+[[package]]
+name = "python-dotenv"
+version = "1.2.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/74/26/2fbeedb218a787a5eea551c7532cac4e009f83d689dd2faa0d0353473f86/python_dotenv-1.2.4.tar.gz", hash = "sha256:f0d53e69935a851c0dcc78f3ab7aaccd8cabef0b92382b576b824212902873c0", size = 60824, upload-time = "2026-10-01T05:36:10Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/60/d1/38f3a3405989a89ac18390803e70c6ad7c7760da4f9b83cbeca0c44a0c72/python_dotenv-1.2.4-py3-none-any.whl", hash = "sha256:42269a8a5b3fd54ffa6f3d84b18abed50064717576b4ecf03dc4a55d8aa04fdc", size = 23266, upload-time = "2026-10-01T05:36:08.633Z" },
 ]
 
 [[package]]
