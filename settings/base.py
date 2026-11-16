@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/stable/ref/settings/
 
 import os
 import sys
+import tempfile
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 if BASE_DIR not in sys.path:
@@ -104,7 +105,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "..", "media")
 MAILERS = {
     "default": {
         "BACKEND": "django.core.mail.backends.filebased.EmailBackend",
-        "OPTIONS": {"file_path": "/tmp/app-messages"},
+        "OPTIONS": {"file_path": tempfile.mkdtemp(prefix="app-messages-")},
     },
 }
 
