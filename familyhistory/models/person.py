@@ -38,6 +38,7 @@ class Person(models.Model):
     uncertain - see `familyhistory.models.utils.format_partial_date`.
     """
 
+    title = models.CharField(max_length=100, blank=True)
     first_name = models.CharField(max_length=100, blank=True)
     middle_name = models.CharField(max_length=100, blank=True)
     birth_surname = models.CharField(max_length=100, blank=True)
@@ -154,6 +155,8 @@ class Person(models.Model):
         if self.second_surname:
             display_name += f" {self.second_surname}"
 
+        if self.title:
+            display_name = self.title + " " + display_name
         return display_name
 
     def get_tree_display_name(self):
@@ -167,6 +170,8 @@ class Person(models.Model):
             return _("Unknown")
 
         display_name = f"{self.first_name} {self.birth_surname}"
+        if self.title:
+            display_name = self.title + " " + display_name
         if self.second_surname:
             display_name += f" {self.second_surname}"
         return display_name

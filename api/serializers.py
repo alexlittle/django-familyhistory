@@ -19,6 +19,7 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
         fields: ClassVar[list] = [
             "id",
+            "title",
             "display_name",
             "first_name",
             "middle_name",

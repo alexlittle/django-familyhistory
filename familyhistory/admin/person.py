@@ -61,6 +61,7 @@ class PersonAdmin(admin.ModelAdmin):
             None,
             {
                 "fields": (
+                    "title",
                     "first_name",
                     "middle_name",
                     "birth_surname",

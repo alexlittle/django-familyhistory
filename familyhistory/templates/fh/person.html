@@ -42,6 +42,10 @@
                 <!-- Basic Info -->
                 <div class="col-md-8">
                     <dl class="row mb-0">
+                        {% if person.title %}
+                            <dt class="col-sm-3">{% trans 'Title:' %}</dt>
+                            <dd class="col-sm-8">{{ person.title }}</dd>
+                        {% endif %}
                         {% if person.first_name %}
                             <dt class="col-sm-3">{% trans 'First name:' %}</dt>
                             <dd class="col-sm-8">{{ person.first_name }}</dd>
