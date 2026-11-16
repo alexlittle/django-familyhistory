@@ -15,7 +15,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
-ADMINS = ()
+ADMINS = (("Alex Little", "alex@alexlittle.net"),)
 
 SITE_ID = 1
 
@@ -99,9 +99,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "..", "media")
 
 
 #####################################################################
-# Email not configured as not used
+# Email
 #####################################################################
-
+MAILERS = {
+    "default": {
+        "BACKEND": "django.core.mail.backends.filebased.EmailBackend",
+        "OPTIONS": {"file_path": "/tmp/app-messages"},
+    },
+}
 
 #####################################################################
 # Authentication
