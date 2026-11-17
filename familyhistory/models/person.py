@@ -148,7 +148,7 @@ class Person(models.Model):
             )
 
         if self.current_surname:
-            display_name += f" {self.current_surname}"
+            display_name += f" {self.birth_surname} ({self.current_surname})"
         else:
             display_name += f" {self.birth_surname}"
 
