@@ -124,9 +124,9 @@ class Person(models.Model):
     def get_display_name(self):
         """Build this person's preferred display name.
 
-        Prefers `known_as` over `first_name` for the given name, and
-        `current_surname` over `birth_surname` for the family name, with
-        `second_surname` appended when set.
+        Prefers `known_as` over `first_name` for the given name. The family
+        name is `birth_surname`, followed by `current_surname` in brackets
+        when set, then `second_surname` when set. `title` is prefixed when set.
 
         Returns:
             The assembled display name.

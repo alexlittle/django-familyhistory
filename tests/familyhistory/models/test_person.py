@@ -99,9 +99,9 @@ class TestGetDisplayName:
         person = make_person(known_as="Bob")
         assert person.get_display_name() == "Bob Smith"
 
-    def test_current_surname_preferred_over_birth_surname(self):
+    def test_current_surname_shown_in_brackets_after_birth_surname(self):
         person = make_person(birth_surname="Smith", current_surname="Jones")
-        assert person.get_display_name() == "Robert Jones"
+        assert person.get_display_name() == "Robert Smith (Jones)"
 
     def test_second_surname_appended(self):
         person = make_person(birth_surname="Garcia", second_surname="Lopez")
@@ -111,7 +111,26 @@ class TestGetDisplayName:
         person = make_person(
             birth_surname="Garcia", current_surname="Marquez", second_surname="Lopez"
         )
-        assert person.get_display_name() == "Robert Marquez Lopez"
+        assert person.get_display_name() == "Robert Garcia (Marquez) Lopez"
+
+    def test_title_prefixed(self):
+        person = make_person(title="Dr")
+        assert person.get_display_name() == "Dr Robert Smith"
+
+    def test_title_prefixed_with_all_name_parts(self):
+        person = make_person(
+            title="Rev",
+            known_as="Bob",
+            middle_name="James",
+            birth_surname="Smith",
+            current_surname="Jones",
+            second_surname="Lopez",
+        )
+        assert person.get_display_name() == "Rev Bob James Smith (Jones) Lopez"
+
+    def test_blank_title_adds_no_prefix(self):
+        person = make_person(title="")
+        assert person.get_display_name() == "Robert Smith"
 
     def test_no_surname_leaves_trailing_space(self):
         """Documents current behaviour — see notes, this is arguably a bug."""
@@ -120,6 +139,10 @@ class TestGetDisplayName:
 
 
 class TestGetListDisplayName:
+    def test_includes_title_and_birth_year(self):
+        person = make_person(title="Dr", birth_year=1901)
+        assert person.get_list_display_name() == "Dr Robert Smith (b.1901)"
+
     def test_appends_birth_year(self):
         person = make_person(birth_year=1901)
         assert person.get_list_display_name() == "Robert Smith (b.1901)"
@@ -144,6 +167,18 @@ class TestGetTreeDisplayName:
     def test_includes_second_surname(self):
         person = make_person(birth_surname="Garcia", second_surname="Lopez")
         assert person.get_tree_display_name() == "Robert Garcia Lopez"
+
+    def test_title_prefixed(self):
+        person = make_person(title="Dr")
+        assert person.get_tree_display_name() == "Dr Robert Smith"
+
+    def test_title_before_name_and_second_surname_after(self):
+        person = make_person(title="Dr", birth_surname="Garcia", second_surname="Lopez")
+        assert person.get_tree_display_name() == "Dr Robert Garcia Lopez"
+
+    def test_unknown_person_ignores_title(self):
+        person = make_person(is_unknown=True, title="Dr")
+        assert person.get_tree_display_name() == "Unknown"
 
     def test_ignores_current_surname(self):
         """Tree nodes show the birth surname, not the married one."""

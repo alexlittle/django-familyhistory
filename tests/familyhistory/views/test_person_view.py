@@ -17,6 +17,27 @@ class PersonViewTests(TestCase):
         self.assertTemplateUsed(response, "fh/person.html")
         self.assertEqual(response.context["person"], person)
 
+    def test_title_shown_when_set(self):
+        person = make_person(
+            first_name="Ada", birth_surname="Lovelace", title="Countess"
+        )
+
+        response = self.client.get(
+            reverse("fh:person_detail", kwargs={"person_id": person.id})
+        )
+
+        self.assertContains(response, "Title:")
+        self.assertContains(response, "Countess")
+
+    def test_title_hidden_when_blank(self):
+        person = make_person(first_name="Ada", birth_surname="Lovelace")
+
+        response = self.client.get(
+            reverse("fh:person_detail", kwargs={"person_id": person.id})
+        )
+
+        self.assertNotContains(response, "Title:")
+
     def test_missing_person_returns_404(self):
         response = self.client.get(
             reverse("fh:person_detail", kwargs={"person_id": 999999})
