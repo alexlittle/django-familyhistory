@@ -20,7 +20,7 @@
 			@import url('https://fonts.googleapis.com/css2?family=Faculty+Glyphic&display=swap');
 		</style>
 
-		<link href="{% static 'familyhistory/style.css' %}" rel="stylesheet">
+
 		<script src="{% static 'familyhistory/fh.js' %}" defer></script>
 
 		<link rel="apple-touch-icon" sizes="180x180" href="{% static 'familyhistory/favicons/apple-touch-icon.png' %} ">
@@ -32,6 +32,7 @@
 
         {% block extra_scripts %}
 	    {% endblock extra_scripts %}
+        <link href="{% static 'familyhistory/style.css' %}" rel="stylesheet">
 	</head>
 	<body>
 	

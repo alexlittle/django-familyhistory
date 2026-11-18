@@ -244,3 +244,10 @@ form div {
   opacity: 1;
   background: var(--tree-link-bg-hover);
 }
+
+/* Auto-added "Unknown" parent card in the family tree */
+.f3 div.card-to-add .card-inner{
+    background-color: lightgray;   /* or var(--genderless-color) */
+    color: #333;                   /* keep the label readable on grey */
+    border-color: #999;
+}
