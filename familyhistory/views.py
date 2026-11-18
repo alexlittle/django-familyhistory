@@ -111,7 +111,7 @@ class SurnameView(ListView):
 
         Returns:
             `Person`s matching the `surname` URL kwarg across
-            `birth_surname`, `second_surname`, `current_surname`, and
+            `birth_surname`, `second_surname`, `married_surname`, and
             `other_surnames`, or all `Person`s if no surname was given.
         """
         # Get the surname from the URL
@@ -122,7 +122,7 @@ class SurnameView(ListView):
             queryset = Person.objects.filter(
                 Q(birth_surname__iexact=surname)
                 | Q(second_surname__iexact=surname)
-                | Q(current_surname__iexact=surname)
+                | Q(married_surname__iexact=surname)
                 | Q(other_surnames__contains=[surname])
             ).order_by("birth_year", "birth_month", "birth_day")
         else:

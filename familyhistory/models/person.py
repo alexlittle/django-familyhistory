@@ -43,7 +43,7 @@ class Person(models.Model):
     middle_name = models.CharField(max_length=100, blank=True)
     birth_surname = models.CharField(max_length=100, blank=True)
     second_surname = models.CharField(max_length=100, blank=True)
-    current_surname = models.CharField(max_length=100, blank=True)
+    married_surname = models.CharField(max_length=100, blank=True)
     other_surnames = models.JSONField(default=list, blank=True)
     known_as = models.CharField(max_length=100, blank=True)
     is_unknown = models.BooleanField(default=False)
@@ -147,8 +147,8 @@ class Person(models.Model):
                 else f"{self.first_name}"
             )
 
-        if self.current_surname:
-            display_name += f" {self.birth_surname} ({self.current_surname})"
+        if self.married_surname:
+            display_name += f" {self.birth_surname} ({self.married_surname})"
         else:
             display_name += f" {self.birth_surname}"
 
@@ -407,8 +407,8 @@ class Person(models.Model):
                 surnames.add(person.birth_surname)
             if person.second_surname:
                 surnames.add(person.second_surname)
-            if person.current_surname:
-                surnames.add(person.current_surname)
+            if person.married_surname:
+                surnames.add(person.married_surname)
             if person.other_surnames:
                 surnames.update(person.other_surnames)
             person_surnames.append(surnames)
@@ -451,7 +451,7 @@ class Person(models.Model):
 
         return Person.objects.extra(
             where=[
-                "MATCH(first_name, middle_name, birth_surname, second_surname, current_surname, known_as) AGAINST (%s IN BOOLEAN MODE)"
+                "MATCH(first_name, middle_name, birth_surname, second_surname, married_surname, known_as) AGAINST (%s IN BOOLEAN MODE)"
             ],
             params=[boolean_query],
         )

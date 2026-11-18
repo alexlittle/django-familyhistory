@@ -23,7 +23,7 @@ All models live under ``familyhistory/models/`` and are re-exported from
 
 - :class:`~familyhistory.models.person.Person` — the core entity. Names are
   split into several optional fields (``first_name``, ``birth_surname``,
-  ``current_surname``, ``other_surnames``, etc.) because historical records
+  ``married_surname``, ``other_surnames``, etc.) because historical records
   rarely agree on a single "full name". Life/death dates are stored as
   separate nullable year/month/day fields with an ``_is_approximate`` flag
   rather than a single ``DateField``, since genealogical dates are often

@@ -25,7 +25,7 @@ class PersonSerializer(serializers.ModelSerializer):
             "middle_name",
             "birth_surname",
             "second_surname",
-            "current_surname",
+            "married_surname",
             "other_surnames",
             "known_as",
             "birth_year",

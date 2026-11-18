@@ -18,13 +18,13 @@ class RelationshipAdmin(admin.ModelAdmin):
         "person__middle_name",
         "person__birth_surname",
         "person__second_surname",
-        "person__current_surname",
+        "person__married_surname",
         "person__known_as",
         "related_person__first_name",
         "related_person__middle_name",
         "related_person__birth_surname",
         "related_person__second_surname",
-        "related_person__current_surname",
+        "related_person__married_surname",
         "related_person__known_as",
     ]
 

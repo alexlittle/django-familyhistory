@@ -29,7 +29,7 @@
                             <img
                               src="{{ thumb.url }}"
                               class="img-fluid rounded"
-                              alt="{{ person.first_name }} {{ person.current_surname }}"
+                              alt="{{ person.first_name }} {{ person.birth_surname }}"
                               style="width: 200px; object-fit: cover;">
                         {% endthumbnail %}
                     {% else %}
@@ -58,9 +58,9 @@
                             <dt class="col-sm-3">{% trans 'Birth Surname:' %}</dt>
                             <dd class="col-sm-8">{{ person.birth_surname }}</dd>
                         {% endif %}
-                        {% if person.current_surname %}
-                            <dt class="col-sm-3">{% trans 'Current Surname:' %}</dt>
-                            <dd class="col-sm-8">{{ person.current_surname }}</dd>
+                        {% if person.married_surname %}
+                            <dt class="col-sm-3">{% trans 'Married Surname:' %}</dt>
+                            <dd class="col-sm-8">{{ person.married_surname }}</dd>
                         {% endif %}
                         {% if person.second_surname %}
                             <dt class="col-sm-3">{% trans 'Second Surname:' %}</dt>

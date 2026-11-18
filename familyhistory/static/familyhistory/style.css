@@ -251,3 +251,13 @@ form div {
     color: #333;                   /* keep the label readable on grey */
     border-color: #999;
 }
+
+.f3 div.card .person-icon {
+    display: none;
+}
+/* Centre name/dates in the space left after the photo (if any) */
+.f3 div.card-image-rect div.card-label {
+    flex: 1;
+    text-align: center;
+    padding: 0 8px;
+}

@@ -99,17 +99,17 @@ class TestGetDisplayName:
         person = make_person(known_as="Bob")
         assert person.get_display_name() == "Bob Smith"
 
-    def test_current_surname_shown_in_brackets_after_birth_surname(self):
-        person = make_person(birth_surname="Smith", current_surname="Jones")
+    def test_married_surname_shown_in_brackets_after_birth_surname(self):
+        person = make_person(birth_surname="Smith", married_surname="Jones")
         assert person.get_display_name() == "Robert Smith (Jones)"
 
     def test_second_surname_appended(self):
         person = make_person(birth_surname="Garcia", second_surname="Lopez")
         assert person.get_display_name() == "Robert Garcia Lopez"
 
-    def test_second_surname_appended_after_current_surname(self):
+    def test_second_surname_appended_after_married_surname(self):
         person = make_person(
-            birth_surname="Garcia", current_surname="Marquez", second_surname="Lopez"
+            birth_surname="Garcia", married_surname="Marquez", second_surname="Lopez"
         )
         assert person.get_display_name() == "Robert Garcia (Marquez) Lopez"
 
@@ -123,7 +123,7 @@ class TestGetDisplayName:
             known_as="Bob",
             middle_name="James",
             birth_surname="Smith",
-            current_surname="Jones",
+            married_surname="Jones",
             second_surname="Lopez",
         )
         assert person.get_display_name() == "Rev Bob James Smith (Jones) Lopez"
@@ -134,7 +134,7 @@ class TestGetDisplayName:
 
     def test_no_surname_leaves_trailing_space(self):
         """Documents current behaviour — see notes, this is arguably a bug."""
-        person = make_person(birth_surname="", current_surname="")
+        person = make_person(birth_surname="", married_surname="")
         assert person.get_display_name() == "Robert "
 
 
@@ -180,9 +180,9 @@ class TestGetTreeDisplayName:
         person = make_person(is_unknown=True, title="Dr")
         assert person.get_tree_display_name() == "Unknown"
 
-    def test_ignores_current_surname(self):
+    def test_ignores_married_surname(self):
         """Tree nodes show the birth surname, not the married one."""
-        person = make_person(birth_surname="Smith", current_surname="Jones")
+        person = make_person(birth_surname="Smith", married_surname="Jones")
         assert person.get_tree_display_name() == "Robert Smith"
 
 
@@ -474,7 +474,7 @@ class TestGetTree:
 class TestGetSurnameCounts:
     def test_counts_each_surname_field(self):
         create_person(first_name="A", birth_surname="Smith")
-        create_person(first_name="B", birth_surname="Jones", current_surname="Smith")
+        create_person(first_name="B", birth_surname="Jones", married_surname="Smith")
         create_person(first_name="C", birth_surname="Garcia", second_surname="Lopez")
 
         assert Person.get_surname_counts() == [
@@ -496,7 +496,7 @@ class TestGetSurnameCounts:
     def test_person_counted_once_per_surname(self):
         """Same surname in several fields must not inflate the count."""
         create_person(
-            birth_surname="Smith", current_surname="Smith", other_surnames=["Smith"]
+            birth_surname="Smith", married_surname="Smith", other_surnames=["Smith"]
         )
 
         assert Person.get_surname_counts() == [("Smith", 1)]
@@ -508,7 +508,7 @@ class TestGetSurnameCounts:
         assert Person.get_surname_counts() == [("Jones", 1)]
 
     def test_blank_surnames_ignored(self):
-        create_person(birth_surname="", current_surname="", second_surname="")
+        create_person(birth_surname="", married_surname="", second_surname="")
 
         assert Person.get_surname_counts() == []
 

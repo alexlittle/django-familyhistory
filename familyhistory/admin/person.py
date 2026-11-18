@@ -26,7 +26,7 @@ class PersonAdmin(admin.ModelAdmin):
         "middle_name",
         "birth_surname",
         "second_surname",
-        "current_surname",
+        "married_surname",
         "known_as",
     ]
 
@@ -66,7 +66,7 @@ class PersonAdmin(admin.ModelAdmin):
                     "middle_name",
                     "birth_surname",
                     "second_surname",
-                    "current_surname",
+                    "married_surname",
                     "known_as",
                     "is_unknown",
                     "gender",

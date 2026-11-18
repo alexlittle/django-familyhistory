@@ -29,8 +29,8 @@ class SurnameViewTests(TestCase):
 
         self.assertIn(match, response.context["people"])
 
-    def test_matches_current_surname(self):
-        match = make_person(birth_surname="Lee", current_surname="Smith")
+    def test_matches_married_surname(self):
+        match = make_person(birth_surname="Lee", married_surname="Smith")
 
         response = self.client.get(
             reverse("fh:surname_detail", kwargs={"surname": "Smith"})

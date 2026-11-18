@@ -60,7 +60,7 @@ settings like that belong in `settings/live.py` instead.
 
 **Models** (`familyhistory/models/`, all re-exported from `models/__init__.py`):
 - `Person` — the core entity. Names are split into several optional fields
-  (`first_name`, `birth_surname`, `current_surname`, `other_surnames` JSON list, etc.)
+  (`first_name`, `birth_surname`, `married_surname`, `other_surnames` JSON list, etc.)
   because historical records rarely agree on a single "full name". Life/death dates are
   stored as separate nullable year/month/day fields with an `_is_approximate` flag rather
   than a single `DateField`, since genealogical dates are often partial or uncertain
