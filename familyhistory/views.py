@@ -1,7 +1,9 @@
 """Server-rendered pages: home, person detail, tree, search, surname listing, add-relationship/parent forms."""
 
+from urllib.parse import urlencode
+
 from django.db.models import Q
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, TemplateView
 
 from .forms import ParentForm, PersonSearchForm, RelationshipForm
@@ -146,6 +148,9 @@ class SearchPageView(TemplateView):
         return context
 
 
+SAVE_AND_ADD_ANOTHER_TYPES = ("is_mother_of", "is_father_of")
+
+
 class AddRelationshipView(CreateView):
     """Form to add a partner or child relationship from a given person."""
 
@@ -187,14 +192,24 @@ class AddRelationshipView(CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        """Redirect back to the source person's detail page after saving.
+        """Redirect after saving.
+
+        Normally goes back to the source person's detail page. If "save and
+        add another" was used for a mother/father relationship, returns to
+        a fresh form with the same type pre-selected.
 
         Returns:
-            The URL of the source person's detail page.
+            The URL to redirect to.
         """
-        return reverse_lazy(
-            "fh:person_detail", kwargs={"person_id": self.kwargs["person_id"]}
-        )
+        person_id = self.kwargs["person_id"]
+        rel_type = self.request.POST.get("type", "")
+        if (
+            "save_and_add_another" in self.request.POST
+            and rel_type in SAVE_AND_ADD_ANOTHER_TYPES
+        ):
+            url = reverse("fh:add_relationship", kwargs={"person_id": person_id})
+            return f"{url}?{urlencode({'type': rel_type})}"
+        return reverse_lazy("fh:person_detail", kwargs={"person_id": person_id})
 
     def get_context_data(self, **kwargs):
         """Add the source person and requested relationship type to the context.
@@ -206,6 +221,7 @@ class AddRelationshipView(CreateView):
         context = super().get_context_data(**kwargs)
         context["person"] = Person.objects.get(id=self.kwargs["person_id"])
         context["relationship_type"] = self.request.GET.get("type", "")
+        context["save_and_add_another_types"] = SAVE_AND_ADD_ANOTHER_TYPES
         return context
 
 

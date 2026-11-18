@@ -10,7 +10,23 @@
     {% include 'fh/includes/person-search-widget.html' with target_input_id='id_related_person' %}
 
     <button type="submit">Save</button>
+    <button type="submit" name="save_and_add_another" value="1" id="save-and-add-another" hidden>
+        {% trans 'Save and add another' %}
+    </button>
 </form>
+
+{{ save_and_add_another_types|json_script:"save-and-add-another-types" }}
+<script>
+    (function () {
+        const typeSelect = document.getElementById('id_type');
+        const button = document.getElementById('save-and-add-another');
+        const types = JSON.parse(document.getElementById('save-and-add-another-types').textContent);
+        if (!typeSelect || !button) return;
+        function toggle() { button.hidden = !types.includes(typeSelect.value); }
+        typeSelect.addEventListener('change', toggle);
+        toggle();
+    })();
+</script>
 
 <script src="{% static 'familyhistory/person-search-widget.js' %}" defer></script>
 {% endblock %}

@@ -121,3 +121,53 @@ class AddRelationshipViewLogicTests(TestCase):
             view.get_success_url(),
             reverse("fh:person_detail", kwargs={"person_id": self.person.id}),
         )
+
+
+class AddRelationshipSaveAndAddAnotherTests(TestCase):
+    def setUp(self):
+        self.person = make_person(first_name="Parent")
+        self.child = make_person(first_name="Child")
+        self.url = reverse("fh:add_relationship", kwargs={"person_id": self.person.id})
+
+    def _post(self, rel_type, **extra):
+        data = {"type": rel_type, "related_person": self.child.id, **extra}
+        return self.client.post(self.url, data)
+
+    def test_button_rendered_in_form(self):
+        response = self.client.get(self.url)
+        self.assertContains(response, "save_and_add_another")
+
+    def test_save_and_add_another_redirects_to_new_form_for_mother(self):
+        response = self._post("is_mother_of", save_and_add_another="1")
+
+        self.assertRedirects(
+            response, f"{self.url}?type=is_mother_of", fetch_redirect_response=False
+        )
+        self.assertTrue(
+            Relationship.objects.filter(
+                person=self.person, related_person=self.child, type="is_mother_of"
+            ).exists()
+        )
+
+    def test_save_and_add_another_redirects_to_new_form_for_father(self):
+        response = self._post("is_father_of", save_and_add_another="1")
+
+        self.assertRedirects(
+            response, f"{self.url}?type=is_father_of", fetch_redirect_response=False
+        )
+
+    def test_normal_save_redirects_to_person_page(self):
+        response = self._post("is_mother_of")
+
+        self.assertRedirects(
+            response,
+            reverse("fh:person_detail", kwargs={"person_id": self.person.id}),
+        )
+
+    def test_save_and_add_another_ignored_for_other_types(self):
+        response = self._post("is_married_to", save_and_add_another="1")
+
+        self.assertRedirects(
+            response,
+            reverse("fh:person_detail", kwargs={"person_id": self.person.id}),
+        )
