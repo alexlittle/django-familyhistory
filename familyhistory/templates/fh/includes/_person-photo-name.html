@@ -2,26 +2,24 @@
 {% load thumbnail %}
 
 <!-- Photo Column -->
-<div class="col-12 col-md-3">
+<div class="col-auto">
     {% if person.photo %}
         {% thumbnail person.photo "100x100" as thumb %}
         <img
             src="{{ thumb.url }}"
-            class="img-fluid rounded"
-            alt="{{ person.first_name }} {{ person.birth_surname }}"
-            style="width: 100px; height: 100px; object-fit: cover;">
+            class="img-fluid rounded row-image"
+            alt="{{ person.first_name }} {{ person.birth_surname }}">
         {% endthumbnail %}
     {% else %}
         <div
-            class="d-flex align-items-center justify-content-center bg-light rounded"
-            style="width: 100px; height: 100px; color: #aaa;">
+            class="d-flex align-items-center justify-content-center rounded row-image row-image-placeholder">
             <i class="bi bi-person-fill" style="font-size: 2rem;"></i>
         </div>
     {% endif %}
 </div>
 
 <!-- Name/DOB/DOD Column -->
-<div class="col-12 col-md-{{ name_col_md }}">
+<div class="col">
     <h5 class="mb-1">
         <a href="{% url 'fh:person_detail' person.id %}">
             {{ person.get_display_name }}

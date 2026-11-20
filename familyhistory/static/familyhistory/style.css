@@ -186,6 +186,20 @@ form div {
     margin: 20px 0;
 }
 
+
+.row-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 10px;
+    max-width: 100%;
+}
+
+
+.row-image-placeholder {
+    background-color: #ddd;
+}
+
 /* RESPONSIVE CSS
 -------------------------------------------------- */
 

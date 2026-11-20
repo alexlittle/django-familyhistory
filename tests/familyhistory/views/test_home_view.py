@@ -35,13 +35,13 @@ class HomeViewTests(TestCase):
         response = self.client.get(reverse("fh:home"))
         self.assertIsInstance(response.context["searchform"], PersonSearchForm)
 
-    def test_pagination_is_20_per_page(self):
-        for i in range(21):
+    def test_default_pagination_per_page(self):
+        for i in range(55):
             make_person(first_name=f"Person{i}")
 
         response = self.client.get(reverse("fh:home"))
 
-        self.assertEqual(len(response.context["people"]), 20)
+        self.assertEqual(len(response.context["people"]), 54)
         self.assertTrue(response.context["is_paginated"])
 
         second_page = self.client.get(reverse("fh:home"), {"page": 2})
