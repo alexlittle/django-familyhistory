@@ -291,6 +291,19 @@ class Person(models.Model):
         parents = Person.objects.filter(id__in=parent_ids).distinct()
         return parents
 
+    def get_parent_relationships(self):
+        """Find this person's parents along with the relationship linking them.
+
+        Returns:
+            A list of `(Person, Relationship)` tuples, one per parent
+            relationship. A person with two recorded fathers gets two tuples.
+        """
+        relationships = self.relationships_related_person.filter(
+            type__in=["is_father_of", "is_mother_of"]
+        ).select_related("person")
+
+        return [(rel.person, rel) for rel in relationships]
+
     def get_siblings(self):
         """Find this person's siblings: other children of the same parents.
 
@@ -368,6 +381,19 @@ class Person(models.Model):
         if as_id_list:
             return [str(c_id) for c_id in children.values_list("id", flat=True)]
         return children
+
+    def get_child_relationships(self):
+        """Find this person's children along with the relationship linking them.
+
+        Returns:
+            A list of `(Person, Relationship)` tuples, one per child
+            relationship.
+        """
+        relationships = self.relationships_person.filter(
+            type__in=["is_father_of", "is_mother_of"]
+        ).select_related("related_person")
+
+        return [(rel.related_person, rel) for rel in relationships]
 
     def get_tree(self):
         """Look up this person's precomputed tree from `TreeCache`.

@@ -1,6 +1,18 @@
+{% load i18n %}
 {% block content %}
      <div class="row g-0 align-items-center mb-3">
         {% include 'fh/includes/_person-photo-name.html' with person=person name_col_md=6 %}
+
+        {% if relationship %}
+        <div class="col-2 col-md-2">
+            <small class="text-muted">
+                 <a href="{% url 'admin:familyhistory_relationship_change' relationship.id %}"
+                          target="_blank" class="btn btn-sm btn-outline-primary">
+                     {% trans 'Edit' %}
+                 </a>
+            </small>
+        </div>
+        {% endif %}
     </div>
 
 {% endblock %}

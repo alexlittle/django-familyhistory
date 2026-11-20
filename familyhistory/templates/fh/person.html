@@ -166,8 +166,8 @@
                     <h5 class="card-title">{% trans 'Children' %}</h5>
                     {% if person.get_children %}
                         <div class="row row-cols-1 row-cols-md-1 row-cols-lg-1 g-1">
-                            {% for child in person.get_children %}
-                                {% include 'fh/includes/person-row.html' with person=child %}
+                            {% for child, relationship in person.get_child_relationships %}
+                                {% include 'fh/includes/person-row.html' with person=child relationship=relationship %}
                             {% endfor %}
                         </div>
                     {% else %}
@@ -194,8 +194,8 @@
                     <h5 class="card-title">{% trans 'Parents' %}</h5>
                     {% if person.get_parents %}
                         <div class="row row-cols-1 row-cols-md-1 row-cols-lg-1 g-1">
-                            {% for parent in person.get_parents %}
-                                {% include 'fh/includes/person-row.html' with person=parent %}
+                            {% for parent, relationship in person.get_parent_relationships %}
+                                {% include 'fh/includes/person-row.html' with person=parent relationship=relationship %}
                             {% endfor %}
                         </div>
                     {% else %}
