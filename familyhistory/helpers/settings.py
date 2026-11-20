@@ -5,7 +5,7 @@ from familyhistory.models import SiteSetting
 TREE_START_PERSON_ID_KEY = "tree_start_person_id"
 HOMEPAGE_PEOPLE_COUNT_KEY = "homepage_people_count"
 
-DEFAULT_HOMEPAGE_PEOPLE_COUNT = 20
+DEFAULT_HOMEPAGE_PEOPLE_COUNT = 54
 
 
 def get_tree_start_person_id():
